@@ -33,4 +33,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Exercise::class, 'favorite_exercises', 'user_id', 'exercise_id')
             ->withTimestamps();
     }
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class)->latestOfMany();
+    }
+
+    // Method to check if user has an active subscription
+    public function hasActiveSubscription()
+    {
+        return $this->subscription()->where('status', 'active')
+                    ->where('end_date', '>=', now())
+                    ->exists();
+    }
 }

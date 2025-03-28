@@ -8,6 +8,7 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\FavoriteExerciseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -108,4 +109,21 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/cart/{id}', [CartController::class, 'update']);
     Route::delete('/cart/{id}', [CartController::class, 'remove']);
     Route::delete('/cart', [CartController::class, 'clear']);
+});
+
+// In routes/api.php
+
+// Public routes
+Route::get('/plans', [SubscriptionController::class, 'getPlans']);
+
+// Protected routes for clients
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/subscribe', [SubscriptionController::class, 'createSubscription']);
+    Route::get('/my-subscription', [SubscriptionController::class, 'getUserSubscription']);
+});
+
+// Admin routes for subscription management
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/admin/subscriptions', [SubscriptionController::class, 'adminGetSubscriptions']);
+    Route::delete('/admin/subscriptions/{id}', [SubscriptionController::class, 'cancelSubscription']);
 });

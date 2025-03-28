@@ -20,6 +20,7 @@ import ProductForm from "./Components/Product/ProductForm";
 import ClientProductList from "./Components/Product/ClientProductList ";
 import ProductDetail from "./Components/Product/ProductDetail";
 import UserManagement from "./Components/User/UserManagement ";
+import PricingManagement from "./Components/Landing Page/PricingManagement";
 import AppProvider from "./Context/AppContext";
 import "remixicon/fonts/remixicon.css";
 
@@ -165,6 +166,17 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/pricing"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <PricingManagement />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Public Pricing Route */}
+        <Route path="/pricing" element={<Price />} />
 
         {/* Fallback Route for Unmatched Paths */}
         <Route path="*" element={<NotFoundPage />} />
