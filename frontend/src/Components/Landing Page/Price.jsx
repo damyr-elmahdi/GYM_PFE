@@ -3,13 +3,14 @@ import "./LandingPage.css";
 import price1 from "../../Assets/price-1.png";
 import price2 from "../../Assets/price-2.png";
 import price3 from "../../Assets/price-3.png";
+import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
 import { toast } from 'react-toastify';
 
 const Price = () => {
   const [plans, setPlans] = useState([]);
   const { user, token } = useContext(AppContext);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchPlans = async () => {
       try {
@@ -33,31 +34,15 @@ const Price = () => {
       toast.error('Please log in to subscribe');
       return;
     }
-
-    try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          plan_type: planType,
-          user_id: user.id
-        })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success(`Successfully subscribed to ${planType} plan!`);
-      } else {
-        toast.error(data.message || 'Subscription failed');
-      }
-    } catch (error) {
-      console.error('Subscription error:', error);
-      toast.error('An error occurred while subscribing');
-    }
+    
+    // Navigate to payment page with plan information
+    navigate('/payment', { 
+      state: { 
+        planType, 
+        planName: plans.find(plan => plan.type === planType).name,
+        planPrice: plans.find(plan => plan.type === planType).price 
+      } 
+    });
   };
 
   return (

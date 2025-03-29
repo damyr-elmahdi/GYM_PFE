@@ -23,6 +23,7 @@ import UserManagement from "./Components/User/UserManagement ";
 import PricingManagement from "./Components/Landing Page/PricingManagement";
 import AppProvider from "./Context/AppContext";
 import "remixicon/fonts/remixicon.css";
+import Payment from "./Components/Landing Page/Payment";
 
 const NotFoundPage = () => (
   <div className="flex justify-center items-center h-screen">
@@ -122,7 +123,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
+        // In your routes file
+        <Route path="/payment" element={<Payment />} />
         {/* Client Routes */}
         <Route
           path="/client/dashboard"

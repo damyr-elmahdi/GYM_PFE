@@ -6,6 +6,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\FavoriteExerciseController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubscriptionController;
@@ -89,6 +90,7 @@ Route::get('/exercises/{id}', [ExerciseController::class, 'show']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/exercises/{id}/favorite', [FavoriteExerciseController::class, 'toggleFavorite']);
     Route::get('/favorites', [FavoriteExerciseController::class, 'getFavorites']);
+    Route::post('/process-payment', [PaymentController::class, 'processPayment']);
 });
 
 
