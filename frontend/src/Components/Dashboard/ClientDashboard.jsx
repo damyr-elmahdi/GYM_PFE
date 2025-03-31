@@ -128,7 +128,7 @@ const ClientDashboard = () => {
               </div>
               <div className="md:col-span-2">
                 <Link
-                  to="/pricing"
+                  to="/client/subscription"
                   className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-300 inline-block"
                 >
                   Manage Subscription

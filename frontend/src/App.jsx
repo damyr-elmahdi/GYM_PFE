@@ -21,6 +21,7 @@ import ClientProductList from "./Components/Product/ClientProductList ";
 import ProductDetail from "./Components/Product/ProductDetail";
 import UserManagement from "./Components/User/UserManagement ";
 import PricingManagement from "./Components/Landing Page/PricingManagement";
+import SubscriptionManagement from "./Components/Subscription/SubscriptionManagement";
 import AppProvider from "./Context/AppContext";
 import "remixicon/fonts/remixicon.css";
 import Payment from "./Components/Landing Page/Payment";
@@ -123,8 +124,10 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        // In your routes file
+        
+        {/* Payment Route */}
         <Route path="/payment" element={<Payment />} />
+        
         {/* Client Routes */}
         <Route
           path="/client/dashboard"
@@ -147,6 +150,16 @@ export default function App() {
           element={
             <ProtectedRoute requiredRole="client">
               <ExerciseDetail />
+            </ProtectedRoute>
+          }
+        />
+        
+        {/* Subscription Management Route */}
+        <Route
+          path="/client/subscription"
+          element={
+            <ProtectedRoute requiredRole="client">
+              <SubscriptionManagement />
             </ProtectedRoute>
           }
         />
