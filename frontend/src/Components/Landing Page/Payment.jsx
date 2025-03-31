@@ -37,8 +37,7 @@ const Payment = () => {
     setLoading(true);
     
     try {
-      console.log("Processing payment...");
-      // Step 1: Process payment (mock for now)
+      // Step 1: Process payment
       const paymentResponse = await fetch('/api/process-payment', {
         method: 'POST',
         headers: {
@@ -52,13 +51,11 @@ const Payment = () => {
       });
       
       const paymentData = await paymentResponse.json();
-      console.log("Payment response:", paymentData);
       
       if (!paymentResponse.ok) {
         throw new Error(paymentData.message || 'Payment processing failed');
       }
       
-      console.log("Creating subscription...");
       // Step 2: Create subscription
       const subscriptionResponse = await fetch('/api/subscribe', {
         method: 'POST',
@@ -73,19 +70,15 @@ const Payment = () => {
       });
       
       const subscriptionData = await subscriptionResponse.json();
-      console.log("Subscription response:", subscriptionData);
       
       if (!subscriptionResponse.ok) {
         throw new Error(subscriptionData.message || 'Subscription failed');
       }
       
       toast.success(`Successfully subscribed to ${planName}!`);
-      console.log("Navigating to dashboard...");
       
-      // Try an alternative navigation approach
-      setTimeout(() => {
-        navigate('/client/dashboard');
-      }, 1000);
+      // Fixed navigation - directly navigate without setTimeout
+      navigate('/client/dashboard', { replace: true });
       
     } catch (error) {
       console.error('Payment/subscription error:', error);
