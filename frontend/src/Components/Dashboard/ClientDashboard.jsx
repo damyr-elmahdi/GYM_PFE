@@ -74,7 +74,15 @@ const ClientDashboard = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
-        <h1 className="text-2xl font-bold">Client Dashboard</h1>
+        <div className="flex items-center space-x-4">
+          <h1 className="text-2xl font-bold">Client Dashboard</h1>
+          <Link
+            to="/"
+            className="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg transition duration-300"
+          >
+            Return to Home
+          </Link>
+        </div>
         <div className="flex items-center space-x-4">
           <span className="text-lg">Welcome, {user?.name}</span>
           <button

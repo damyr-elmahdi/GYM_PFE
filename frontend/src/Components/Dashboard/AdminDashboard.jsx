@@ -14,22 +14,18 @@ const AdminDashboard = () => {
   });
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [subscriptionsLoading, setSubscriptionsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDashboardData = async () => {
       try {
         setLoading(true);
         // Fetch dashboard stats
         const statsResponse = await fetch("/api/admin/dashboard", {
           headers: {
             Authorization: `Bearer ${token}`,
-          },
-        });
-
-        // Fetch subscriptions
-        const subscriptionsResponse = await fetch("/api/admin/subscriptions", {
-          headers: {
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
           },
         });
 
@@ -38,7 +34,6 @@ const AdminDashboard = () => {
         }
 
         const statsData = await statsResponse.json();
-        const subscriptionsData = await subscriptionsResponse.json();
 
         if (statsData.data) {
           setStats({
@@ -47,18 +42,44 @@ const AdminDashboard = () => {
             activeSessions: statsData.data.activeSessions || 0,
           });
         }
-
-        setSubscriptions(subscriptionsData);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching dashboard data:", error);
         toast.error("Failed to load dashboard data");
       } finally {
         setLoading(false);
       }
     };
 
+    const fetchSubscriptions = async () => {
+      try {
+        setSubscriptionsLoading(true);
+        // Fetch subscriptions
+        const response = await fetch("/api/admin/subscriptions", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch subscriptions");
+        }
+
+        const data = await response.json();
+        console.log("Fetched subscriptions:", data);
+        setSubscriptions(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("Error fetching subscriptions:", error);
+        toast.error("Failed to load subscription data");
+      } finally {
+        setSubscriptionsLoading(false);
+      }
+    };
+
     if (token) {
-      fetchData();
+      fetchDashboardData();
+      fetchSubscriptions();
     }
   }, [token]);
 
@@ -68,6 +89,8 @@ const AdminDashboard = () => {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
         },
       });
 
@@ -76,7 +99,8 @@ const AdminDashboard = () => {
         // Remove the cancelled subscription from the list
         setSubscriptions(subscriptions.filter(sub => sub.id !== subscriptionId));
       } else {
-        toast.error("Failed to cancel subscription");
+        const errorData = await response.json();
+        toast.error(errorData.message || "Failed to cancel subscription");
       }
     } catch (error) {
       console.error("Error cancelling subscription:", error);
@@ -106,7 +130,15 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
-        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <div className="flex items-center space-x-4">
+          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+          <Link 
+            to="/" 
+            className="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg transition duration-300"
+          >
+            Return to Home
+          </Link>
+        </div>
         <div className="flex items-center space-x-4">
           <span className="text-lg">Welcome, {user?.name}</span>
           <button
@@ -159,50 +191,62 @@ const AdminDashboard = () => {
         {/* Subscriptions Section */}
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Subscriptions Management</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full bg-white">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="p-3 text-left">User</th>
-                  <th className="p-3 text-left">Plan</th>
-                  <th className="p-3 text-left">Start Date</th>
-                  <th className="p-3 text-left">End Date</th>
-                  <th className="p-3 text-left">Status</th>
-                  <th className="p-3 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {subscriptions.map((subscription) => (
-                  <tr key={subscription.id} className="border-b">
-                    <td className="p-3">{subscription.user.name}</td>
-                    <td className="p-3">{subscription.plan_type.toUpperCase()} Plan</td>
-                    <td className="p-3">{new Date(subscription.start_date).toLocaleDateString()}</td>
-                    <td className="p-3">{new Date(subscription.end_date).toLocaleDateString()}</td>
-                    <td className="p-3">
-                      <span className={`
-                        px-2 py-1 rounded-full text-xs font-bold
-                        ${subscription.status === 'active' ? 'bg-green-100 text-green-800' : 
-                          subscription.status === 'cancelled' ? 'bg-red-100 text-red-800' : 
-                          'bg-yellow-100 text-yellow-800'}
-                      `}>
-                        {subscription.status.toUpperCase()}
-                      </span>
-                    </td>
-                    <td className="p-3">
-                      {subscription.status === 'active' && (
-                        <button 
-                          onClick={() => handleCancelSubscription(subscription.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm"
-                        >
-                          Cancel
-                        </button>
-                      )}
-                    </td>
+          {subscriptionsLoading ? (
+            <div className="flex justify-center items-center p-8">
+              <div className="text-xl text-blue-600 font-semibold animate-pulse">
+                Loading subscriptions...
+              </div>
+            </div>
+          ) : subscriptions.length === 0 ? (
+            <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-md">
+              <p className="text-yellow-700">No subscriptions found. Subscriptions will appear here once users subscribe to plans.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full bg-white">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="p-3 text-left">User</th>
+                    <th className="p-3 text-left">Plan</th>
+                    <th className="p-3 text-left">Start Date</th>
+                    <th className="p-3 text-left">End Date</th>
+                    <th className="p-3 text-left">Status</th>
+                    <th className="p-3 text-left">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {subscriptions.map((subscription) => (
+                    <tr key={subscription.id} className="border-b">
+                      <td className="p-3">{subscription.user?.name || 'Unknown User'}</td>
+                      <td className="p-3 capitalize">{subscription.plan_type} Plan</td>
+                      <td className="p-3">{new Date(subscription.start_date).toLocaleDateString()}</td>
+                      <td className="p-3">{new Date(subscription.end_date).toLocaleDateString()}</td>
+                      <td className="p-3">
+                        <span className={`
+                          px-2 py-1 rounded-full text-xs font-bold
+                          ${subscription.status === 'active' ? 'bg-green-100 text-green-800' : 
+                            subscription.status === 'cancelled' ? 'bg-red-100 text-red-800' : 
+                            'bg-yellow-100 text-yellow-800'}
+                        `}>
+                          {subscription.status.toUpperCase()}
+                        </span>
+                      </td>
+                      <td className="p-3">
+                        {subscription.status === 'active' && (
+                          <button 
+                            onClick={() => handleCancelSubscription(subscription.id)}
+                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm"
+                          >
+                            Cancel
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* Admin Tools */}

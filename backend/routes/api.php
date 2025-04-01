@@ -99,7 +99,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     Route::get('/admin/products', [ProductController::class, 'index']);
-    Route::post('subscriptions/{id}/cancel', [SubscriptionController::class, 'cancelUserSubscription']);
+    
 });
 
 // Public product routes
@@ -120,9 +120,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::get('/plans', [SubscriptionController::class, 'getPlans']);
 
 // Protected routes for clients
+// Protected routes for clients
+// Protected routes for clients
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/subscribe', [SubscriptionController::class, 'createSubscription']);
     Route::get('/my-subscription', [SubscriptionController::class, 'getUserSubscription']);
+    // Add this new route for cancellation
+    Route::post('/my-subscription/cancel', [SubscriptionController::class, 'cancelUserSubscription']);
 });
 
 // Admin routes for subscription management

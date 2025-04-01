@@ -63,12 +63,13 @@ const SubscriptionManagement = () => {
 
   const handleCancelSubscription = async () => {
     try {
-      const response = await fetch(`/api/subscriptions/${subscription.id}/cancel`, {
-        method: 'POST', // Changed from DELETE to POST
+      const response = await fetch(`/api/my-subscription/cancel`, {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
+        body: JSON.stringify({ id: subscription.id }) // Include the subscription ID in the request body
       });
   
       if (response.ok) {

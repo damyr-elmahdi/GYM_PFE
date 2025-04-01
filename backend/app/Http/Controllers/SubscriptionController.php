@@ -87,26 +87,31 @@ class SubscriptionController extends Controller
         return response()->json(['message' => 'Subscription cancelled successfully']);
     }
 
-    public function cancelUserSubscription(Request $request, $id)
-    {
-        $user = $request->user();
-        $subscription = Subscription::findOrFail($id);
-        
-        // Check if subscription belongs to user
-        if ($subscription->user_id !== $user->id) {
-            return response()->json([
-                'message' => 'Unauthorized to cancel this subscription'
-            ], 403);
-        }
-        
-        $subscription->update([
-            'status' => 'cancelled',
-            'end_date' => now()
-        ]);
-
+    public function cancelUserSubscription(Request $request)
+{
+    $user = $request->user();
+    $validatedData = $request->validate([
+        'id' => 'required|exists:subscriptions,id'
+    ]);
+    
+    $subscription = Subscription::findOrFail($validatedData['id']);
+    
+    // Check if subscription belongs to user
+    if ($subscription->user_id !== $user->id) {
         return response()->json([
-            'message' => 'Subscription cancelled successfully',
-            'subscription' => $subscription
-        ]);
+            'message' => 'Unauthorized to cancel this subscription'
+        ], 403);
     }
+    
+    $subscription->update([
+        'status' => 'cancelled',
+        'end_date' => now()
+    ]);
+
+    return response()->json([
+        'message' => 'Subscription cancelled successfully',
+        'subscription' => $subscription
+    ]);
+}
+
 }
