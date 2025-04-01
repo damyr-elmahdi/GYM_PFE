@@ -99,6 +99,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     Route::get('/admin/products', [ProductController::class, 'index']);
+    Route::post('subscriptions/{id}/cancel', [SubscriptionController::class, 'cancelUserSubscription']);
 });
 
 // Public product routes

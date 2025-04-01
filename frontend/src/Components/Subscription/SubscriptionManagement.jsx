@@ -63,16 +63,22 @@ const SubscriptionManagement = () => {
 
   const handleCancelSubscription = async () => {
     try {
-      const response = await fetch(`/api/admin/subscriptions/${subscription.id}`, {
-        method: 'DELETE',
+      const response = await fetch(`/api/subscriptions/${subscription.id}/cancel`, {
+        method: 'POST', // Changed from DELETE to POST
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
       });
-
+  
       if (response.ok) {
         toast.success("Subscription cancelled successfully");
-        navigate("/client/dashboard");
+        // Update the local subscription state to reflect cancellation
+        setSubscription({
+          ...subscription,
+          status: 'cancelled',
+          end_date: new Date().toISOString().split('T')[0]
+        });
       } else {
         const errorData = await response.json();
         toast.error(errorData.message || "Failed to cancel subscription");
