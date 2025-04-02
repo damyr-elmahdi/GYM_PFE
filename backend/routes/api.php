@@ -47,7 +47,7 @@ Route::prefix('client')->middleware(['auth:sanctum', 'role:client'])->group(func
     
 });
 
-// routes/api.php
+// Admin dashboard route
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return response()->json([
@@ -61,6 +61,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     });
 });
 
+// Client dashboard route
 Route::middleware(['auth:sanctum', 'role:client'])->group(function () {
     Route::get('/client/dashboard', function () {
         $user = request()->user();
@@ -93,7 +94,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/process-payment', [PaymentController::class, 'processPayment']);
 });
 
-
+// Product management routes (admin only)
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
@@ -106,6 +107,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
 
+// Cart routes
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart/add', [CartController::class, 'add']);
@@ -114,23 +116,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/cart', [CartController::class, 'clear']);
 });
 
-// In routes/api.php
-
-// Public routes
+// Subscription management - Public routes
 Route::get('/plans', [SubscriptionController::class, 'getPlans']);
 
-// Protected routes for clients
-// Protected routes for clients
-// Protected routes for clients
+// Subscription management - Client routes
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/subscribe', [SubscriptionController::class, 'createSubscription']);
     Route::get('/my-subscription', [SubscriptionController::class, 'getUserSubscription']);
-    // Add this new route for cancellation
     Route::post('/my-subscription/cancel', [SubscriptionController::class, 'cancelUserSubscription']);
 });
 
-// Admin routes for subscription management
+// Subscription management - Admin routes
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/subscriptions', [SubscriptionController::class, 'adminGetSubscriptions']);
     Route::delete('/admin/subscriptions/{id}', [SubscriptionController::class, 'cancelSubscription']);
+    
+    // Plan management routes
+    Route::post('/admin/plans', [SubscriptionController::class, 'createPlan']);
+    Route::put('/admin/plans/{planType}', [SubscriptionController::class, 'updatePlan']);
+    Route::delete('/admin/plans/{planType}', [SubscriptionController::class, 'deletePlan']);
 });
