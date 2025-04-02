@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class Subscription extends Model
 {
@@ -37,8 +39,8 @@ class Subscription extends Model
                      ->where('end_date', '>=', now());
     }
 
-    // Static method to get plan details
-    public static function getPlanDetails()
+    // Default plans - used as fallback
+    public static function getDefaultPlans()
     {
         return [
             'basic' => [
@@ -70,5 +72,36 @@ class Subscription extends Model
                 ]
             ]
         ];
+    }
+
+    // Get plan details including custom plans
+    public static function getPlanDetails()
+    {
+        // Use cache to avoid frequent database queries for plan data
+        return Cache::remember('subscription_plans', 60 * 60, function () {
+            $plans = self::getDefaultPlans();
+            
+            // Check if plan_details table exists
+            if (DB::getSchemaBuilder()->hasTable('plan_details')) {
+                // Fetch custom plans from the database
+                $customPlans = DB::table('plan_details')->get();
+                
+                foreach ($customPlans as $plan) {
+                    $plans[$plan->plan_type] = [
+                        'name' => $plan->name,
+                        'price' => (float) $plan->price,
+                        'features' => json_decode($plan->features)
+                    ];
+                }
+            }
+            
+            return $plans;
+        });
+    }
+
+    // Clear plan cache
+    public static function clearPlanCache()
+    {
+        Cache::forget('subscription_plans');
     }
 }
