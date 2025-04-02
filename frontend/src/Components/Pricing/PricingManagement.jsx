@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const PricingManagement = () => {
   const { token } = useContext(AppContext);
-  const [plans, setPlans] = useState([]);
+  const [plans, setPlans] = useState({});
   const [loading, setLoading] = useState(true);
   const [editingPlan, setEditingPlan] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -36,6 +36,7 @@ const PricingManagement = () => {
       }
 
       const data = await response.json();
+      console.log("Fetched plans:", data);
       setPlans(data);
     } catch (error) {
       console.error("Error fetching plans:", error);
@@ -76,15 +77,12 @@ const PricingManagement = () => {
     });
   };
 
-  const handleEdit = (plan) => {
-    const planType = Object.keys(plan)[0];
-    const planDetails = plan[planType];
-    
+  const handleEdit = (planType, planDetails) => {
     setFormData({
       name: planDetails.name,
       plan_type: planType,
       price: planDetails.price.toString(),
-      features: planDetails.features
+      features: Array.isArray(planDetails.features) ? planDetails.features : []
     });
     
     setEditingPlan(planType);
@@ -124,8 +122,14 @@ const PricingManagement = () => {
     }
 
     try {
-      const endpoint = isCreating ? "/api/admin/plans" : `/api/admin/plans/${formData.plan_type}`;
+      const endpoint = isCreating 
+        ? "/api/admin/plans" 
+        : `/api/admin/plans/${encodeURIComponent(formData.plan_type)}`;
+      
       const method = isCreating ? "POST" : "PUT";
+      
+      console.log(`Submitting to ${endpoint} with method ${method}`);
+      console.log("Form data:", formData);
       
       const response = await fetch(endpoint, {
         method: method,
@@ -136,15 +140,17 @@ const PricingManagement = () => {
         },
         body: JSON.stringify({
           name: formData.name,
-          plan_type: formData.plan_type,
           price: parseFloat(formData.price),
-          features: formData.features
+          features: formData.features,
+          ...(isCreating && { plan_type: formData.plan_type })
         })
       });
 
+      const responseData = await response.json();
+      console.log("Response:", responseData);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to save plan");
+        throw new Error(responseData.message || "Failed to save plan");
       }
 
       toast.success(isCreating ? "Plan created successfully" : "Plan updated successfully");
@@ -155,6 +161,35 @@ const PricingManagement = () => {
     } catch (error) {
       console.error("Error saving plan:", error);
       toast.error(error.message || "Failed to save plan");
+    }
+  };
+
+  const handleDelete = async (planType) => {
+    if (!confirm(`Are you sure you want to delete the ${planType} plan?`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/plans/${encodeURIComponent(planType)}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete plan");
+      }
+
+      toast.success("Plan deleted successfully");
+      fetchPlans();
+    } catch (error) {
+      console.error("Error deleting plan:", error);
+      toast.error(error.message || "Failed to delete plan");
     }
   };
 
@@ -213,7 +248,7 @@ const PricingManagement = () => {
                       name="plan_type"
                       value={formData.plan_type}
                       onChange={handleInputChange}
-                      className="w-full p-2 border border-gray-300 rounded"
+                      className={`w-full p-2 border border-gray-300 rounded ${!!editingPlan ? 'bg-gray-100' : ''}`}
                       placeholder="e.g. basic"
                       disabled={!!editingPlan}
                       required
@@ -248,6 +283,12 @@ const PricingManagement = () => {
                       onChange={(e) => setNewFeature(e.target.value)}
                       className="flex-grow p-2 border border-gray-300 rounded-l"
                       placeholder="Add a feature"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddFeature();
+                        }
+                      }}
                     />
                     <button
                       type="button"
@@ -308,16 +349,26 @@ const PricingManagement = () => {
                 <div key={planType} className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-xl font-bold text-gray-800">{plan.name}</h3>
-                    <button
-                      onClick={() => handleEdit({[planType]: plan})}
-                      className="text-blue-500 hover:text-blue-700"
-                    >
-                      <i className="ri-edit-line text-lg"></i>
-                    </button>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleEdit(planType, plan)}
+                        className="text-blue-500 hover:text-blue-700"
+                        title="Edit plan"
+                      >
+                        <i className="ri-edit-line text-lg"></i>
+                      </button>
+                      <button
+                        onClick={() => handleDelete(planType)}
+                        className="text-red-500 hover:text-red-700"
+                        title="Delete plan"
+                      >
+                        <i className="ri-delete-bin-line text-lg"></i>
+                      </button>
+                    </div>
                   </div>
-                  <p className="text-3xl font-bold text-blue-600 mb-4">${plan.price.toFixed(2)}</p>
+                  <p className="text-3xl font-bold text-blue-600 mb-4">${parseFloat(plan.price).toFixed(2)}</p>
                   <div className="divide-y">
-                    {plan.features.map((feature, index) => (
+                    {Array.isArray(plan.features) && plan.features.map((feature, index) => (
                       <div key={index} className="py-2 flex items-center">
                         <i className="ri-check-line text-green-500 mr-2"></i>
                         <span>{feature}</span>
