@@ -15,33 +15,51 @@ const ExerciseDetail = () => {
       try {
         const response = await fetch(`/api/exercises/${id}`);
         if (!response.ok) {
-          throw new Error("Failed to fetch exercise details");
+          throw new Error(`Failed to fetch exercise details: ${response.status}`);
         }
         const data = await response.json();
-        console.log("Image path from API:", data.image);
-        console.log("Full image URL:", `/storage/${data.image}`);
         setExercise(data);
-
+    
         if (token) {
-          const favResponse = await fetch("/api/favorites", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          if (favResponse.ok) {
+          try {
+            const favResponse = await fetch("/api/favorites", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            
+            if (!favResponse.ok) {
+              const errorData = await favResponse.text();
+              console.error("Favorites error:", favResponse.status, errorData);
+              throw new Error(`Failed to fetch favorites: ${favResponse.status}`);
+            }
+            
             const favorites = await favResponse.json();
-            setIsFavorite(
-              favorites.some((fav) => fav.idExercice === parseInt(id))
-            );
+            console.log("Favorites data:", favorites);
+            
+            // Check if we have an array of exercise objects
+            if (Array.isArray(favorites)) {
+              // Extract IDs from the objects if they have an idExercice property
+              const favoriteIds = favorites.map(fav => 
+                typeof fav === 'object' && fav.idExercice ? fav.idExercice : fav
+              );
+              setIsFavorite(favoriteIds.includes(parseInt(id)));
+            } else {
+              console.error("Unexpected favorites format:", favorites);
+            }
+          } catch (favError) {
+            console.error("Error fetching favorites:", favError);
+            // Don't set the main error state, just log the favorites error
           }
         }
       } catch (err) {
+        console.error("Exercise detail error:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchExerciseDetails();
   }, [id, token]);
 
@@ -49,6 +67,7 @@ const ExerciseDetail = () => {
     if (!token) {
       return;
     }
+    
     try {
       const response = await fetch(`/api/exercises/${id}/favorite`, {
         method: "POST",
@@ -57,15 +76,19 @@ const ExerciseDetail = () => {
           "Content-Type": "application/json",
         },
       });
-
+  
       if (!response.ok) {
-        throw new Error("Failed to toggle favorite status");
+        const errorText = await response.text();
+        console.error("Toggle favorite error:", response.status, errorText);
+        throw new Error(`Failed to toggle favorite: ${response.status}`);
       }
-
+  
       const result = await response.json();
+      console.log("Toggle favorite result:", result);
       setIsFavorite(result.isFavorite);
     } catch (err) {
-      setError(err.message);
+      console.error("Error toggling favorite:", err);
+      setError(`Failed to update favorite status: ${err.message}`);
     }
   };
 
