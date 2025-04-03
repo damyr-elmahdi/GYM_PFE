@@ -22,6 +22,7 @@ const ClientDashboard = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +37,18 @@ const ClientDashboard = () => {
         if (subscriptionResponse.ok) {
           const subscriptionData = await subscriptionResponse.json();
           setSubscription(subscriptionData);
+        }
+
+        // Fetch cart items count
+        const cartResponse = await fetch("/api/cart", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (cartResponse.ok) {
+          const cartData = await cartResponse.json();
+          setCartItemCount(cartData.items?.length || 0);
         }
 
         // Placeholder for other stats - replace with actual API calls
@@ -98,6 +111,10 @@ const ClientDashboard = () => {
   const navigateToProfile = () => {
     navigate("/client/profile");
     setShowProfileDropdown(false);
+  };
+
+  const navigateToCart = () => {
+    navigate("/client/cart");
   };
 
   // Custom tab renderer to avoid HeaderBody duplication
@@ -237,16 +254,16 @@ const ClientDashboard = () => {
           </div>
           <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-xl font-semibold text-gray-700">
-              Profile Settings
+              Shopping Cart
             </h3>
             <p className="text-gray-600 mt-2">
-              Update your profile and preferences
+              View your cart and checkout items
             </p>
             <button
-              onClick={navigateToProfile}
-              className="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition duration-300 inline-block"
+              onClick={navigateToCart}
+              className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-300 inline-block"
             >
-              Settings
+              Go to Cart {cartItemCount > 0 && `(${cartItemCount})`}
             </button>
           </div>
         </div>
@@ -267,52 +284,75 @@ const ClientDashboard = () => {
             Return to Home
           </Link>
         </div>
-        <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
-          <button 
-            onClick={toggleProfileDropdown}
-            className="flex items-center space-x-2 focus:outline-none"
+        <div className="flex items-center space-x-4">
+          {/* Cart Button */}
+          <button
+            onClick={navigateToCart}
+            className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg transition duration-300 flex items-center space-x-2"
           >
-            <div className="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center hover:bg-blue-700 transition-colors">
-              <span className="text-lg font-bold">{user?.name?.charAt(0) || 'U'}</span>
-            </div>
+            <i className="ri-shopping-cart-2-line"></i>
+            <span>Cart</span>
+            {cartItemCount > 0 && (
+              <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
           </button>
           
-          {/* Profile Dropdown */}
-          {showProfileDropdown && (
-            <div className="absolute right-0 top-12 bg-white shadow-lg rounded-lg w-64 z-50">
-              <div className="p-4 border-b">
-                <div className="flex items-center space-x-2">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                    <span className="text-xl font-bold text-blue-600">{user?.name?.charAt(0) || 'U'}</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-800">{user?.name}</p>
-                    <p className="text-sm text-gray-500">{user?.email}</p>
+          {/* Profile Dropdown Container */}
+          <div className="relative" ref={dropdownRef}>
+            <button 
+              onClick={toggleProfileDropdown}
+              className="flex items-center space-x-2 focus:outline-none"
+            >
+              <div className="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center hover:bg-blue-700 transition-colors">
+                <span className="text-lg font-bold">{user?.name?.charAt(0) || 'U'}</span>
+              </div>
+            </button>
+            
+            {/* Profile Dropdown */}
+            {showProfileDropdown && (
+              <div className="absolute right-0 top-12 bg-white shadow-lg rounded-lg w-64 z-50">
+                <div className="p-4 border-b">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                      <span className="text-xl font-bold text-blue-600">{user?.name?.charAt(0) || 'U'}</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-800">{user?.name}</p>
+                      <p className="text-sm text-gray-500">{user?.email}</p>
+                    </div>
                   </div>
                 </div>
+                <div className="p-2">
+                  <button
+                    onClick={navigateToProfile}
+                    className="w-full text-left p-2 hover:bg-gray-100 text-black rounded transition-colors"
+                  >
+                    Profile Settings
+                  </button>
+                  <Link
+                    to="/client/subscription"
+                    className="block w-full text-left p-2 hover:bg-gray-100 text-black rounded transition-colors"
+                  >
+                    Subscription Details
+                  </Link>
+                  <Link
+                    to="/client/cart"
+                    className="block w-full text-left p-2 hover:bg-gray-100 text-black rounded transition-colors"
+                  >
+                    Shopping Cart {cartItemCount > 0 && `(${cartItemCount})`}
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left p-2 text-red-600 hover:bg-gray-100 rounded transition-colors mt-2 border-t pt-3"
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
-              <div className="p-2">
-                <button
-                  onClick={navigateToProfile}
-                  className="w-full text-left p-2 hover:bg-gray-100 text-black rounded transition-colors"
-                >
-                  Profile Settings
-                </button>
-                <Link
-                  to="/client/subscription"
-                  className="block w-full text-left p-2 hover:bg-gray-100 text-black rounded transition-colors"
-                >
-                  Subscription Details
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left p-2 text-red-600 hover:bg-gray-100 rounded transition-colors mt-2 border-t pt-3"
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </header>
 
@@ -371,6 +411,9 @@ const ClientDashboard = () => {
     </div>
   );
 };
+
+// Rest of the component remains the same...
+// ProfileSettings, Exercise, and Store components
 
 // Profile component for editing user information
 const ProfileSettings = () => {
