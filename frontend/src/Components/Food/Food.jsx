@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import Navbar from '../Navbar/Navbar';
-import { Link } from "react-router-dom";
 import "./Food.css";
 import productsData from "./Data.json";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"; // Replacing ion-icon
-import HeaderBody from '../HeaderBody/HeaderBody';
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 
 export default function Food() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -22,9 +19,6 @@ export default function Food() {
 
     return (
         <div>
-            <Navbar />
-            <HeaderBody />
-
             <div className="vegitbales-container">
                 <input
                     type="text"

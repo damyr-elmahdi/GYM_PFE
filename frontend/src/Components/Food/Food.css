@@ -1,12 +1,11 @@
 .vegitbales-container {
-    position: absolute;
+    position: relative;
     display: flex;
+    
     flex-direction: column;
     align-items: flex-start;
     padding: 52px;
-    margin-top: 72px;
-    margin-left: 240px;
-    width: 1111px;
+    width: 100%;
 }
 
 .products-container {
@@ -30,7 +29,6 @@
     transition: transform 0.3s ease-in-out;
     margin-left: 50px;
     margin-bottom: 30px;
-
 }
 
 .d-vegitbales:hover {
@@ -106,11 +104,11 @@
     border: 1px solid rgb(192, 191, 191);
     height: 40px;
     border-radius: 5px;
-    width: 300px;
+    width: -100px;
     padding: 0 12px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease-in-out;
-    margin-left: 350px;
+    margin-left: 50px;
     margin-bottom: -15px;
     margin-top: -25px;
 }
