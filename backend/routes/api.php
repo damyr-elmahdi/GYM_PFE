@@ -8,6 +8,7 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\FavoriteExerciseController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
@@ -92,6 +93,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/exercises/{id}/favorite', [FavoriteExerciseController::class, 'toggleFavorite']);
     Route::get('/favorites', [FavoriteExerciseController::class, 'getFavorites']);
     Route::post('/process-payment', [PaymentController::class, 'processPayment']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::post('/profile', [ProfileController::class, 'update']);
 });
 
 // Product management routes (admin only)

@@ -294,13 +294,13 @@ const ClientDashboard = () => {
               <div className="p-2">
                 <button
                   onClick={navigateToProfile}
-                  className="w-full text-left p-2 hover:bg-gray-100 rounded transition-colors"
+                  className="w-full text-left p-2 hover:bg-gray-100 text-black rounded transition-colors"
                 >
                   Profile Settings
                 </button>
                 <Link
                   to="/client/subscription"
-                  className="block w-full text-left p-2 hover:bg-gray-100 rounded transition-colors"
+                  className="block w-full text-left p-2 hover:bg-gray-100 text-black rounded transition-colors"
                 >
                   Subscription Details
                 </Link>
