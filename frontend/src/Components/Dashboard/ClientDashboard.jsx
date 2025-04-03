@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
 import { toast } from "react-toastify";
 import Calculator from "../CalorieCalculator/Calculator";
 import Food from "../Food/Food";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import HeaderBody from "../HeaderBody/HeaderBody";
 
@@ -21,6 +20,8 @@ const ClientDashboard = () => {
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +57,20 @@ const ClientDashboard = () => {
     }
   }, [token]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
   const handleLogout = async () => {
     try {
       const res = await fetch("/api/logout", {
@@ -76,6 +91,15 @@ const ClientDashboard = () => {
     }
   };
 
+  const toggleProfileDropdown = () => {
+    setShowProfileDropdown(!showProfileDropdown);
+  };
+  
+  const navigateToProfile = () => {
+    navigate("/client/profile");
+    setShowProfileDropdown(false);
+  };
+
   // Custom tab renderer to avoid HeaderBody duplication
   const renderTabContent = (index) => {
     switch(index) {
@@ -83,6 +107,10 @@ const ClientDashboard = () => {
         return <div className="calculator-container"><Calculator noHeader={true} /></div>;
       case 2:
         return <div className="food-container"><Food noHeader={true} /></div>;
+      case 3:
+        return <div className="exercise-container"><Exercise noHeader={true} /></div>;
+      case 4:
+        return <div className="store-container"><Store noHeader={true} /></div>;
       default:
         return renderDashboardContent();
     }
@@ -180,7 +208,7 @@ const ClientDashboard = () => {
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Quick Actions
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-xl font-semibold text-gray-700">
               Exercise Library
@@ -193,20 +221,6 @@ const ClientDashboard = () => {
               className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-300 inline-block"
             >
               View Exercises
-            </Link>
-          </div>
-          <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-xl font-semibold text-gray-700">
-              My Workouts
-            </h3>
-            <p className="text-gray-600 mt-2">
-              View and track your workout progress
-            </p>
-            <Link
-              to="/client/workouts"
-              className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-300 inline-block"
-            >
-              My Workouts
             </Link>
           </div>
           <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
@@ -228,125 +242,12 @@ const ClientDashboard = () => {
             <p className="text-gray-600 mt-2">
               Update your profile and preferences
             </p>
-            <Link
-              to="/client/profile"
+            <button
+              onClick={navigateToProfile}
               className="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition duration-300 inline-block"
             >
               Settings
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Workout Progress */}
-      <div className="bg-white p-6 rounded-lg shadow-md mt-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">
-          Recent Activity
-        </h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 bg-gray-100 text-left text-gray-600 font-semibold">
-                  Date
-                </th>
-                <th className="py-2 px-4 bg-gray-100 text-left text-gray-600 font-semibold">
-                  Workout
-                </th>
-                <th className="py-2 px-4 bg-gray-100 text-left text-gray-600 font-semibold">
-                  Duration
-                </th>
-                <th className="py-2 px-4 bg-gray-100 text-left text-gray-600 font-semibold">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              <tr>
-                <td className="py-3 px-4">Mar 17, 2025</td>
-                <td className="py-3 px-4">Full Body Workout</td>
-                <td className="py-3 px-4">45 minutes</td>
-                <td className="py-3 px-4">
-                  <span className="bg-green-100 text-green-800 py-1 px-3 rounded-full text-xs">
-                    Completed
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-3 px-4">Mar 15, 2025</td>
-                <td className="py-3 px-4">Arm Day</td>
-                <td className="py-3 px-4">30 minutes</td>
-                <td className="py-3 px-4">
-                  <span className="bg-green-100 text-green-800 py-1 px-3 rounded-full text-xs">
-                    Completed
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-3 px-4">Mar 14, 2025</td>
-                <td className="py-3 px-4">Leg Day</td>
-                <td className="py-3 px-4">50 minutes</td>
-                <td className="py-3 px-4">
-                  <span className="bg-green-100 text-green-800 py-1 px-3 rounded-full text-xs">
-                    Completed
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Recommended Workouts */}
-      <div className="bg-white p-6 rounded-lg shadow-md mt-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">
-          Recommended Workouts
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="border rounded-lg overflow-hidden shadow-sm">
-            <div className="h-40 bg-gray-300"></div>
-            <div className="p-4">
-              <h3 className="font-semibold text-lg">Core Strength</h3>
-              <p className="text-gray-600 text-sm mt-1">
-                20 minutes • Beginner
-              </p>
-              <p className="mt-2 text-sm">
-                Focus on building core strength with this quick workout
-              </p>
-              <button className="mt-3 bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">
-                Start Workout
-              </button>
-            </div>
-          </div>
-          <div className="border rounded-lg overflow-hidden shadow-sm">
-            <div className="h-40 bg-gray-300"></div>
-            <div className="p-4">
-              <h3 className="font-semibold text-lg">Upper Body Power</h3>
-              <p className="text-gray-600 text-sm mt-1">
-                30 minutes • Intermediate
-              </p>
-              <p className="mt-2 text-sm">
-                Build strength in your upper body with these exercises
-              </p>
-              <button className="mt-3 bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">
-                Start Workout
-              </button>
-            </div>
-          </div>
-          <div className="border rounded-lg overflow-hidden shadow-sm">
-            <div className="h-40 bg-gray-300"></div>
-            <div className="p-4">
-              <h3 className="font-semibold text-lg">Full Body HIIT</h3>
-              <p className="text-gray-600 text-sm mt-1">
-                45 minutes • Advanced
-              </p>
-              <p className="mt-2 text-sm">
-                High intensity interval training for maximum results
-              </p>
-              <button className="mt-3 bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">
-                Start Workout
-              </button>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -366,14 +267,52 @@ const ClientDashboard = () => {
             Return to Home
           </Link>
         </div>
-        <div className="flex items-center space-x-4">
-          <span className="text-lg">Welcome, {user?.name}</span>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300"
+        <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
+          <button 
+            onClick={toggleProfileDropdown}
+            className="flex items-center space-x-2 focus:outline-none"
           >
-            Logout
+            <div className="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center hover:bg-blue-700 transition-colors">
+              <span className="text-lg font-bold">{user?.name?.charAt(0) || 'U'}</span>
+            </div>
           </button>
+          
+          {/* Profile Dropdown */}
+          {showProfileDropdown && (
+            <div className="absolute right-0 top-12 bg-white shadow-lg rounded-lg w-64 z-50">
+              <div className="p-4 border-b">
+                <div className="flex items-center space-x-2">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                    <span className="text-xl font-bold text-blue-600">{user?.name?.charAt(0) || 'U'}</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-800">{user?.name}</p>
+                    <p className="text-sm text-gray-500">{user?.email}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-2">
+                <button
+                  onClick={navigateToProfile}
+                  className="w-full text-left p-2 hover:bg-gray-100 rounded transition-colors"
+                >
+                  Profile Settings
+                </button>
+                <Link
+                  to="/client/subscription"
+                  className="block w-full text-left p-2 hover:bg-gray-100 rounded transition-colors"
+                >
+                  Subscription Details
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left p-2 text-red-600 hover:bg-gray-100 rounded transition-colors mt-2 border-t pt-3"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -405,6 +344,22 @@ const ClientDashboard = () => {
                 Food Library
               </button>
             </li>
+            <li className={`mr-1 ${activeTab === 3 ? 'border-b-2 border-blue-500' : ''}`}>
+              <button
+                className={`bg-white inline-block py-2 px-4 font-semibold ${activeTab === 3 ? 'text-blue-500' : 'text-gray-500 hover:text-blue-500'}`}
+                onClick={() => setActiveTab(3)}
+              >
+                Exercise Library
+              </button>
+            </li>
+            <li className={`mr-1 ${activeTab === 4 ? 'border-b-2 border-blue-500' : ''}`}>
+              <button
+                className={`bg-white inline-block py-2 px-4 font-semibold ${activeTab === 4 ? 'text-blue-500' : 'text-gray-500 hover:text-blue-500'}`}
+                onClick={() => setActiveTab(4)}
+              >
+                Store
+              </button>
+            </li>
           </ul>
         </div>
       </div>
@@ -417,34 +372,228 @@ const ClientDashboard = () => {
   );
 };
 
-// Modified versions of the Calculator and Food components that don't render the HeaderBody
-// when used inside the dashboard
-const ModifiedCalculator = ({ noHeader = false }) => {
-  const CalculatorContent = () => {
-    // Copy of calculator component without HeaderBody
-    // Implementation here
+// Profile component for editing user information
+const ProfileSettings = () => {
+  const { user, token } = useContext(AppContext);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    height: "",
+    weight: "",
+    fitnessGoal: "",
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch user profile data
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch("/api/my-profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const profileData = await response.json();
+          setFormData({
+            name: profileData.name || user?.name || "",
+            email: profileData.email || user?.email || "",
+            phone: profileData.phone || "",
+            address: profileData.address || "",
+            height: profileData.height || "",
+            weight: profileData.weight || "",
+            fitnessGoal: profileData.fitnessGoal || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        toast.error("Failed to load profile data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [token, user]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  return noHeader ? <CalculatorContent /> : (
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/update-profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast.success("Profile updated successfully");
+      } else {
+        toast.error("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("An error occurred while updating profile");
+    }
+  };
+
+  return (
+    <div className="container mx-auto py-6">
+      <h2 className="text-2xl font-bold mb-6">Profile Settings</h2>
+      {loading ? (
+        <div className="animate-pulse">Loading profile data...</div>
+      ) : (
+        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-gray-700 mb-2">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2">Phone</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2">Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2">Height (cm)</label>
+              <input
+                type="number"
+                name="height"
+                value={formData.height}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2">Weight (kg)</label>
+              <input
+                type="number"
+                name="weight"
+                value={formData.weight}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-gray-700 mb-2">Fitness Goal</label>
+              <select
+                name="fitnessGoal"
+                value={formData.fitnessGoal}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg"
+              >
+                <option value="">Select a goal</option>
+                <option value="weightLoss">Weight Loss</option>
+                <option value="muscleGain">Muscle Gain</option>
+                <option value="endurance">Endurance</option>
+                <option value="flexibility">Flexibility</option>
+                <option value="general">General Fitness</option>
+              </select>
+            </div>
+          </div>
+          <div className="mt-6">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition duration-300"
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+};
+
+// Mock components for other tabs
+const Exercise = ({ noHeader = false }) => {
+  const ExerciseContent = () => {
+    return (
+      <div className="container mx-auto py-6">
+        <h2 className="text-2xl font-bold mb-6">Exercise Library</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Exercise content would go here */}
+          <div className="bg-white p-4 rounded-lg shadow">
+            <h3 className="font-semibold text-lg">Exercise Library Coming Soon</h3>
+            <p className="mt-2">Browse our complete collection of exercises.</p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return noHeader ? <ExerciseContent /> : (
     <>
       <HeaderBody />
-      <Navbar />
-      <CalculatorContent />
+      <ExerciseContent />
     </>
   );
 };
 
-const ModifiedFood = ({ noHeader = false }) => {
-  const FoodContent = () => {
-    // Copy of food component without HeaderBody
-    // Implementation here
+const Store = ({ noHeader = false }) => {
+  const StoreContent = () => {
+    return (
+      <div className="container mx-auto py-6">
+        <h2 className="text-2xl font-bold mb-6">Fitness Store</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Store content would go here */}
+          <div className="bg-white p-4 rounded-lg shadow">
+            <h3 className="font-semibold text-lg">Store Coming Soon</h3>
+            <p className="mt-2">Browse our collection of fitness products and supplements.</p>
+          </div>
+        </div>
+      </div>
+    );
   };
 
-  return noHeader ? <FoodContent /> : (
+  return noHeader ? <StoreContent /> : (
     <>
       <HeaderBody />
-      <Navbar />
-      <FoodContent />
+      <StoreContent />
     </>
   );
 };
