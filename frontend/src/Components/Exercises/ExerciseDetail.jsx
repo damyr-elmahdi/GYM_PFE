@@ -18,8 +18,8 @@ const ExerciseDetail = () => {
           throw new Error("Failed to fetch exercise details");
         }
         const data = await response.json();
-        console.log('Image path from API:', data.image);
-        console.log('Full image URL:', `/storage/${data.image}`);
+        console.log("Image path from API:", data.image);
+        console.log("Full image URL:", `/storage/${data.image}`);
         setExercise(data);
 
         if (token) {
@@ -137,19 +137,15 @@ const ExerciseDetail = () => {
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="md:flex">
           <div className="md:w-1/2">
-            {exercise.image ? (
+            {exercise.partieCorpsPic && (
               <img
+                src={`http://localhost:8000/storage/${exercise.partieCorpsPic}`}
+                alt="Target area"
                 className="w-full h-64 md:h-full object-cover"
-                src={`http://localhost:8000/storage/${exercise.image}`}
-                alt={exercise.nom}
                 onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/400x300"; // Fallback image if the main image fails to load
+                  e.target.src = "https://via.placeholder.com/400x300"; // Fallback image if the body part image fails to load
                 }}
               />
-            ) : (
-              <div className="w-full h-64 md:h-full bg-gray-100 flex items-center justify-center">
-                <span className="text-gray-500">No image available</span>
-              </div>
             )}
           </div>
           <div className="p-8 md:w-1/2">
@@ -191,15 +187,19 @@ const ExerciseDetail = () => {
                   Target Area
                 </h3>
                 <p className="text-gray-600">{exercise.partieCorps}</p>
-                {exercise.partieCorpsPic && (
+                {exercise.image ? (
                   <img
-                    src={`http://localhost:8000/storage/${exercise.partieCorpsPic}`}
-                    alt="Target area"
-                    className="mt-4 h-32 object-contain"
+                    className="w-full h-64 object-contain"
+                    src={`http://localhost:8000/storage/${exercise.image}`}
+                    alt={exercise.nom}
                     onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/400x300"; // Fallback image if the body part image fails to load
+                      e.target.src = "https://via.placeholder.com/400x300"; // Fallback image if the main image fails to load
                     }}
                   />
+                ) : (
+                  <div className="w-full h-64 md:h-full bg-gray-100 flex items-center justify-center">
+                    <span className="text-gray-500">No image available</span>
+                  </div>
                 )}
               </div>
 
