@@ -24,6 +24,7 @@ import PricingManagement from "./Components/Landing Page/PricingManagement";
 import SubscriptionManagement from "./Components/Subscription/SubscriptionManagement";
 import ProfileSettings from "./Components/Profile/ProfileSettings";
 import AppProvider from "./Context/AppContext";
+import CartView from "./Components/Cart/CartView";
 import "remixicon/fonts/remixicon.css";
 import Payment from "./Components/Landing Page/Payment";
 
@@ -125,13 +126,13 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        
+
         {/* Payment Route */}
         <Route path="/payment" element={<Payment />} />
-        
+
         {/* Client Routes */}
-                {/* Client Routes */}
-                <Route
+        {/* Client Routes */}
+        <Route
           path="/client/dashboard"
           element={
             <ProtectedRoute requiredRole="client">
@@ -139,7 +140,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        
+
         {/* Profile Settings Route */}
         <Route
           path="/client/profile"
@@ -165,7 +166,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        
+
         {/* Subscription Management Route */}
         <Route
           path="/client/subscription"
@@ -198,6 +199,14 @@ export default function App() {
           element={
             <ProtectedRoute requiredRole="admin">
               <PricingManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/client/cart"
+          element={
+            <ProtectedRoute requiredRole="client">
+              <CartView />
             </ProtectedRoute>
           }
         />
