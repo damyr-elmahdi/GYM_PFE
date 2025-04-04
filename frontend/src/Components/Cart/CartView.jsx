@@ -129,14 +129,14 @@ const CartView = () => {
     }
   };
 
+  // In the proceedToCheckout function in CartView.jsx
   const proceedToCheckout = () => {
-    // Navigate to payment page with total price information
-    navigate('/payment', {
+    navigate("/cartpayment", {
       state: {
-        planType: 'cart-purchase',
-        planName: 'Product Purchase',
+        planType: "cart-purchase",
+        planName: "Product Purchase",
         planPrice: totalPrice,
-      }
+      },
     });
   };
 
@@ -174,13 +174,13 @@ const CartView = () => {
         order_id: item.order_id,
         date: item.created_at,
         total: 0,
-        items: []
+        items: [],
       };
     }
-    
+
     acc[item.order_id].items.push(item);
     acc[item.order_id].total += item.price * item.quantity;
-    
+
     return acc;
   }, {});
 
@@ -191,7 +191,9 @@ const CartView = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Your Shopping Cart</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">
+          Your Shopping Cart
+        </h1>
 
         {error && (
           <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4">
@@ -201,8 +203,10 @@ const CartView = () => {
 
         {/* Current Cart */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-          <h2 className="text-xl font-bold text-gray-800 p-6 border-b">Current Cart</h2>
-          
+          <h2 className="text-xl font-bold text-gray-800 p-6 border-b">
+            Current Cart
+          </h2>
+
           {cartItems.length === 0 ? (
             <div className="bg-white p-6 text-center">
               <p className="text-gray-600 text-lg">Your cart is empty.</p>
@@ -279,7 +283,9 @@ const CartView = () => {
                             min="1"
                             max={item.product.stock}
                             value={item.quantity}
-                            onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                            onChange={(e) =>
+                              updateQuantity(item.id, parseInt(e.target.value))
+                            }
                             className="shadow border text-center w-12 py-1 px-2 text-gray-700"
                           />
                           <button
@@ -296,7 +302,10 @@ const CartView = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          ${(parseFloat(item.product.prix) * item.quantity).toFixed(2)}
+                          $
+                          {(
+                            parseFloat(item.product.prix) * item.quantity
+                          ).toFixed(2)}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -349,13 +358,17 @@ const CartView = () => {
 
         {/* Order History */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <h2 className="text-xl font-bold text-gray-800 p-6 border-b">Your Previous Orders</h2>
-          
+          <h2 className="text-xl font-bold text-gray-800 p-6 border-b">
+            Your Previous Orders
+          </h2>
+
           {historyLoading ? (
             <div className="p-6 text-center">Loading order history...</div>
           ) : Object.values(groupedHistory).length === 0 ? (
             <div className="p-6 text-center">
-              <p className="text-gray-600">You haven't placed any orders yet.</p>
+              <p className="text-gray-600">
+                You haven't placed any orders yet.
+              </p>
             </div>
           ) : (
             <div className="divide-y">
@@ -363,7 +376,9 @@ const CartView = () => {
                 <div key={order.order_id} className="p-6">
                   <div className="flex justify-between items-center mb-4">
                     <div>
-                      <span className="font-semibold">Order #{order.order_id}</span>
+                      <span className="font-semibold">
+                        Order #{order.order_id}
+                      </span>
                       <span className="text-gray-500 ml-4 text-sm">
                         {new Date(order.date).toLocaleDateString()}
                       </span>
@@ -372,7 +387,7 @@ const CartView = () => {
                       Total: ${order.total.toFixed(2)}
                     </div>
                   </div>
-                  
+
                   <div className="bg-gray-50 rounded-lg p-4">
                     <table className="min-w-full">
                       <thead>
@@ -397,9 +412,13 @@ const CartView = () => {
                                 <span>{item.product_name}</span>
                               </div>
                             </td>
-                            <td className="py-2 text-right">${parseFloat(item.price).toFixed(2)}</td>
+                            <td className="py-2 text-right">
+                              ${parseFloat(item.price).toFixed(2)}
+                            </td>
                             <td className="py-2 text-right">{item.quantity}</td>
-                            <td className="py-2 text-right">${(item.price * item.quantity).toFixed(2)}</td>
+                            <td className="py-2 text-right">
+                              ${(item.price * item.quantity).toFixed(2)}
+                            </td>
                             <td className="py-2 text-right">
                               <button
                                 onClick={() => addToCartFromHistory(item)}

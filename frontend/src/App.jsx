@@ -25,6 +25,7 @@ import SubscriptionManagement from "./Components/Subscription/SubscriptionManage
 import ProfileSettings from "./Components/Profile/ProfileSettings";
 import AppProvider from "./Context/AppContext";
 import CartView from "./Components/Cart/CartView";
+import CartPayment from "./Components/Cart/CartPayment";
 import "remixicon/fonts/remixicon.css";
 import Payment from "./Components/Landing Page/Payment";
 
@@ -150,6 +151,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+      
         <Route
           path="/client/exercises"
           element={
@@ -210,6 +212,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/cartpayment" element={<CartPayment />} />
 
         {/* Public Pricing Route */}
         <Route path="/pricing" element={<Price />} />
