@@ -6,6 +6,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\FavoriteExerciseController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -109,17 +110,21 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     
 });
 
+
+
 // Public product routes
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
-
-// Cart routes
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart/add', [CartController::class, 'add']);
     Route::put('/cart/{id}', [CartController::class, 'update']);
     Route::delete('/cart/{id}', [CartController::class, 'remove']);
     Route::delete('/cart', [CartController::class, 'clear']);
+    
+    // Order routes
+    Route::get('/order-history', [OrderController::class, 'getOrderHistory']);
+    Route::post('/checkout', [OrderController::class, 'createOrder']);
 });
 
 // Subscription management - Public routes
