@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\FavoriteExerciseController;
@@ -115,16 +116,19 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 // Public product routes
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
-Route::middleware(['auth:sanctum'])->group(function () {
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Cart Routes
     Route::get('/cart', [CartController::class, 'index']);
-    Route::post('/cart/add', [CartController::class, 'add']);
-    Route::put('/cart/{id}', [CartController::class, 'update']);
-    Route::delete('/cart/{id}', [CartController::class, 'remove']);
-    Route::delete('/cart', [CartController::class, 'clear']);
+    Route::post('/cart/add', [CartController::class, 'addToCart']);
+    Route::put('/cart/{id}', [CartController::class, 'updateCartItem']);
+    Route::delete('/cart/{id}', [CartController::class, 'removeCartItem']);
+    Route::delete('/cart', [CartController::class, 'clearCart']);
     
-    // Order routes
-    Route::get('/order-history', [OrderController::class, 'getOrderHistory']);
-    Route::post('/checkout', [OrderController::class, 'createOrder']);
+    // Checkout Routes
+    Route::post('/checkout', [CheckoutController::class, 'checkout']);
+    Route::get('/order-history', [CheckoutController::class, 'getOrderHistory']);
+    
 });
 
 // Subscription management - Public routes

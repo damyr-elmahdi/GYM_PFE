@@ -5,19 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Get current user's cart
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index()
     {
-        $cartItems = CartItem::where('user_id', $request->user()->id)
+        $user = Auth::user();
+        
+        $cartItems = CartItem::where('user_id', $user->id)
             ->with('product')
             ->get();
             
-        $total = 0;
-        foreach ($cartItems as $item) {
-            $total += $item->product->prix * $item->quantity;
-        }
+        $total = $cartItems->sum(function($item) {
+            return $item->product->prix * $item->quantity;
+        });
         
         return response()->json([
             'items' => $cartItems,
@@ -25,83 +32,88 @@ class CartController extends Controller
         ]);
     }
     
-    public function add(Request $request)
+    /**
+     * Add item to cart
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addToCart(Request $request)
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:1'
         ]);
         
+        $user = Auth::user();
+        
+        // Check if product exists and has stock
         $product = Product::findOrFail($request->product_id);
         
-        // Check if product is in stock
-        if ($product->stock < $request->quantity) {
-            return response()->json([
-                'message' => 'Not enough stock available'
-            ], 400);
-        }
-        
-        // Check if product already in cart
-        $existingItem = CartItem::where('user_id', $request->user()->id)
+        // Check if product is already in cart
+        $cartItem = CartItem::where('user_id', $user->id)
             ->where('product_id', $request->product_id)
             ->first();
             
-        if ($existingItem) {
-            $newQuantity = $existingItem->quantity + $request->quantity;
-            
-            // Check if new quantity exceeds stock
-            if ($product->stock < $newQuantity) {
-                return response()->json([
-                    'message' => 'Not enough stock available'
-                ], 400);
-            }
-            
-            $existingItem->quantity = $newQuantity;
-            $existingItem->save();
+        if ($cartItem) {
+            // Update quantity if product already in cart
+            $cartItem->quantity += $request->quantity;
+            $cartItem->save();
         } else {
-            CartItem::create([
-                'user_id' => $request->user()->id,
+            // Create new cart item
+            $cartItem = CartItem::create([
+                'user_id' => $user->id,
                 'product_id' => $request->product_id,
                 'quantity' => $request->quantity
             ]);
         }
         
         return response()->json([
-            'message' => 'Product added to cart'
-        ]);
+            'message' => 'Product added to cart',
+            'cart_item' => $cartItem
+        ], 201);
     }
     
-    public function update(Request $request, $id)
+    /**
+     * Update cart item quantity
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateCartItem(Request $request, $id)
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:1'
         ]);
         
+        $user = Auth::user();
+        
         $cartItem = CartItem::where('id', $id)
-            ->where('user_id', $request->user()->id)
+            ->where('user_id', $user->id)
             ->firstOrFail();
             
-        $product = Product::findOrFail($cartItem->product_id);
-        
-        // Check if product is in stock
-        if ($product->stock < $request->quantity) {
-            return response()->json([
-                'message' => 'Not enough stock available'
-            ], 400);
-        }
-        
         $cartItem->quantity = $request->quantity;
         $cartItem->save();
         
         return response()->json([
-            'message' => 'Cart updated'
+            'message' => 'Cart updated successfully',
+            'cart_item' => $cartItem
         ]);
     }
     
-    public function remove(Request $request, $id)
+    /**
+     * Remove item from cart
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeCartItem($id)
     {
+        $user = Auth::user();
+        
         $cartItem = CartItem::where('id', $id)
-            ->where('user_id', $request->user()->id)
+            ->where('user_id', $user->id)
             ->firstOrFail();
             
         $cartItem->delete();
@@ -111,12 +123,19 @@ class CartController extends Controller
         ]);
     }
     
-    public function clear(Request $request)
+    /**
+     * Clear all items from cart
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function clearCart()
     {
-        CartItem::where('user_id', $request->user()->id)->delete();
+        $user = Auth::user();
+        
+        CartItem::where('user_id', $user->id)->delete();
         
         return response()->json([
-            'message' => 'Cart cleared'
+            'message' => 'Cart cleared successfully'
         ]);
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const { token } = useContext(AppContext);
@@ -53,7 +53,9 @@ const Cart = () => {
       setOrderHistory(data);
     } catch (err) {
       console.error("Error loading order history:", err);
-      // Don't show error toast for history as it's not critical
+      // Set order history to empty array when there's an error
+      setOrderHistory([]);
+      // Don't show the error to users unless it's critical
     } finally {
       setHistoryLoading(false);
     }
@@ -145,13 +147,13 @@ const Cart = () => {
         order_id: item.order_id,
         date: item.created_at,
         total: 0,
-        items: []
+        items: [],
       };
     }
-    
+
     acc[item.order_id].items.push(item);
     acc[item.order_id].total += item.price * item.quantity;
-    
+
     return acc;
   }, {});
 
@@ -162,7 +164,9 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Your Shopping Cart</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">
+          Your Shopping Cart
+        </h1>
 
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -214,14 +218,21 @@ const Cart = () => {
                       <td className="py-3 px-6 text-center">
                         <div className="flex items-center justify-center">
                           <button
-                            onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                            onClick={() =>
+                              updateQuantity(
+                                item.id,
+                                Math.max(1, item.quantity - 1)
+                              )
+                            }
                             className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-2 rounded-l"
                           >
                             -
                           </button>
                           <span className="px-4">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() =>
+                              updateQuantity(item.id, item.quantity + 1)
+                            }
                             className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-2 rounded-r"
                           >
                             +
@@ -275,13 +286,17 @@ const Cart = () => {
 
         {/* Order History */}
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <h2 className="text-xl font-bold text-gray-800 p-6 border-b">Order History</h2>
-          
+          <h2 className="text-xl font-bold text-gray-800 p-6 border-b">
+            Order History
+          </h2>
+
           {historyLoading ? (
             <div className="p-6 text-center">Loading order history...</div>
           ) : Object.values(groupedHistory).length === 0 ? (
             <div className="p-6 text-center">
-              <p className="text-gray-600">You haven't placed any orders yet.</p>
+              <p className="text-gray-600">
+                You haven't placed any orders yet.
+              </p>
             </div>
           ) : (
             <div className="divide-y">
@@ -289,7 +304,9 @@ const Cart = () => {
                 <div key={order.order_id} className="p-6">
                   <div className="flex justify-between items-center mb-4">
                     <div>
-                      <span className="font-semibold">Order #{order.order_id}</span>
+                      <span className="font-semibold">
+                        Order #{order.order_id}
+                      </span>
                       <span className="text-gray-500 ml-4 text-sm">
                         {new Date(order.date).toLocaleDateString()}
                       </span>
@@ -298,7 +315,7 @@ const Cart = () => {
                       Total: ${order.total.toFixed(2)}
                     </div>
                   </div>
-                  
+
                   <div className="bg-gray-50 rounded-lg p-4">
                     <table className="min-w-full">
                       <thead>
@@ -322,15 +339,19 @@ const Cart = () => {
                                 <span>{item.product_name}</span>
                               </div>
                             </td>
-                            <td className="py-2 text-right">${parseFloat(item.price).toFixed(2)}</td>
+                            <td className="py-2 text-right">
+                              ${parseFloat(item.price).toFixed(2)}
+                            </td>
                             <td className="py-2 text-right">{item.quantity}</td>
-                            <td className="py-2 text-right">${(item.price * item.quantity).toFixed(2)}</td>
+                            <td className="py-2 text-right">
+                              ${(item.price * item.quantity).toFixed(2)}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                  
+
                   <div className="mt-4 flex justify-end">
                     <button
                       onClick={() => {

@@ -9,6 +9,7 @@ const CartView = () => {
   const [loading, setLoading] = useState(true);
   const [historyLoading, setHistoryLoading] = useState(true);
   const [error, setError] = useState("");
+  const [historyError, setHistoryError] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const { token, user } = useContext(AppContext);
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const CartView = () => {
       setLoading(false);
     }
   };
-
+  // Improved error handling for fetchOrderHistory
   const fetchOrderHistory = async () => {
     try {
       const response = await fetch("/api/order-history", {
@@ -56,6 +57,9 @@ const CartView = () => {
       setOrderHistory(data);
     } catch (err) {
       console.error("Error loading order history:", err);
+      // Set order history to empty array when there's an error
+      setOrderHistory([]);
+      // Don't show the error to users unless it's critical
     } finally {
       setHistoryLoading(false);
     }
@@ -129,7 +133,6 @@ const CartView = () => {
     }
   };
 
-  // In the proceedToCheckout function in CartView.jsx
   const proceedToCheckout = () => {
     navigate("/cartpayment", {
       state: {
@@ -140,7 +143,6 @@ const CartView = () => {
     });
   };
 
-  // Add an item from order history back to cart
   const addToCartFromHistory = async (product) => {
     try {
       const response = await fetch("/api/cart/add", {
@@ -364,6 +366,19 @@ const CartView = () => {
 
           {historyLoading ? (
             <div className="p-6 text-center">Loading order history...</div>
+          ) : historyError ? (
+            <div className="p-6 text-center">
+              <p className="text-gray-600">
+                Unable to load your order history at this time.
+              </p>
+              <p className="text-sm text-gray-500 mt-2">{historyError}</p>
+              <button
+                onClick={fetchOrderHistory}
+                className="mt-3 text-blue-500 hover:text-blue-700 font-medium"
+              >
+                Try Again
+              </button>
+            </div>
           ) : Object.values(groupedHistory).length === 0 ? (
             <div className="p-6 text-center">
               <p className="text-gray-600">

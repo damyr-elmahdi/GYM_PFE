@@ -3,6 +3,27 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
 import { toast } from "react-toastify";
 
+// SVG Icons for credit cards
+const CardIcons = {
+  visa: (
+    <svg className="w-10 h-10" viewBox="0 0 780 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 0H740C762.1 0 780 17.9 780 40V460C780 482.1 762.1 500 740 500H40C17.9 500 0 482.1 0 460V40C0 17.9 17.9 0 40 0Z" fill="#0066B2"/>
+      <path d="M330 350L375 149H434L389 350H330Z" fill="white"/>
+      <path d="M556 149C541 149 526 154 519 166L445 350H508L517 323H584L591 350H649L608 149H556ZM535 277L562 196L578 277H535Z" fill="white"/>
+      <path d="M223 149L171 289L164 260C155 233 132 204 106 190L156 350H221L310 149H223Z" fill="white"/>
+      <path d="M131 149H32L31 154C98 170 145 208 164 260L150 175C148 165 140 150 131 149Z" fill="#FAA61A"/>
+    </svg>
+  ),
+  mastercard: (
+    <svg className="w-10 h-10" viewBox="0 0 780 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 0H740C762.1 0 780 17.9 780 40V460C780 482.1 762.1 500 740 500H40C17.9 500 0 482.1 0 460V40C0 17.9 17.9 0 40 0Z" fill="white"/>
+      <path d="M449 250C449 182 502 126 568 126C634 126 688 182 688 250C688 318 634 374 568 374C502 374 449 318 449 250Z" fill="#FF5F00"/>
+      <path d="M305 250C305 182 358 126 424 126C490 126 544 182 544 250C544 318 490 374 424 374C358 374 305 318 305 250Z" fill="#EB001B"/>
+      <path d="M424 374C391 374 361 360 339 337C361 314 391 301 424 301C457 301 487 314 509 337C487 360 457 374 424 374Z" fill="#F79E1B"/>
+    </svg>
+  ),
+};
+
 const CartPayment = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -10,9 +31,11 @@ const CartPayment = () => {
   const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
+  const [selectedCard, setSelectedCard] = useState('');
   const [formData, setFormData] = useState({
     payment_method: "credit_card",
     card_number: "",
+    cardholder_name: "",
     card_expiry: "",
     card_cvv: "",
     shipping_address: "",
@@ -30,6 +53,19 @@ const CartPayment = () => {
       setCartTotal(location.state.planPrice);
     }
   }, [location.state]);
+
+  // Detect card type from number
+  useEffect(() => {
+    const cardNumber = formData.card_number.replace(/\s/g, '');
+    
+    if (/^4/.test(cardNumber)) {
+      setSelectedCard('visa');
+    } else if (/^5[1-5]/.test(cardNumber)) {
+      setSelectedCard('mastercard');
+    } else {
+      setSelectedCard('');
+    }
+  }, [formData.card_number]);
 
   const fetchCartItems = async () => {
     try {
@@ -56,7 +92,34 @@ const CartPayment = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    
+    // Format card number with spaces
+    if (name === 'card_number') {
+      const formatted = value
+        .replace(/\s/g, '')
+        .match(/.{1,4}/g)
+        ?.join(' ') || '';
+      
+      setFormData({
+        ...formData,
+        [name]: formatted
+      });
+    } else if (name === 'card_expiry') {
+      // Format expiry date with slash
+      const cleaned = value.replace(/\D/g, '');
+      let formatted = cleaned;
+      
+      if (cleaned.length > 2) {
+        formatted = cleaned.slice(0, 2) + '/' + cleaned.slice(2, 4);
+      }
+      
+      setFormData({
+        ...formData,
+        [name]: formatted
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -127,8 +190,13 @@ const CartPayment = () => {
 
   const validateForm = () => {
     // Basic validation
-    if (!formData.card_number || formData.card_number.length < 16) {
+    if (!formData.card_number || formData.card_number.replace(/\s/g, '').length < 16) {
       toast.error("Please enter a valid card number");
+      return false;
+    }
+    
+    if (!formData.cardholder_name) {
+      toast.error("Please enter the cardholder name");
       return false;
     }
     
@@ -199,6 +267,16 @@ const CartPayment = () => {
           <div className="p-6">
             <h2 className="text-xl font-semibold mb-6">Payment Information</h2>
             
+            {/* Card Icons */}
+            <div className="flex space-x-3 mb-6">
+              <div className={`transition-opacity ${selectedCard === 'visa' ? 'opacity-100' : 'opacity-40'}`}>
+                {CardIcons.visa}
+              </div>
+              <div className={`transition-opacity ${selectedCard === 'mastercard' ? 'opacity-100' : 'opacity-40'}`}>
+                {CardIcons.mastercard}
+              </div>
+            </div>
+            
             <form onSubmit={handleSubmit}>
               <div className="mb-6">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -236,12 +314,35 @@ const CartPayment = () => {
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="card_number">
                       Card Number
                     </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="card_number"
+                        name="card_number"
+                        placeholder="1234 5678 9012 3456"
+                        value={formData.card_number}
+                        onChange={handleInputChange}
+                        maxLength="19"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      />
+                      {selectedCard && (
+                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6">
+                          {CardIcons[selectedCard]}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cardholder_name">
+                      Cardholder Name
+                    </label>
                     <input
                       type="text"
-                      id="card_number"
-                      name="card_number"
-                      placeholder="1234 5678 9012 3456"
-                      value={formData.card_number}
+                      id="cardholder_name"
+                      name="cardholder_name"
+                      placeholder="John Doe"
+                      value={formData.cardholder_name}
                       onChange={handleInputChange}
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
@@ -259,6 +360,7 @@ const CartPayment = () => {
                         placeholder="MM/YY"
                         value={formData.card_expiry}
                         onChange={handleInputChange}
+                        maxLength="5"
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </div>
@@ -274,6 +376,7 @@ const CartPayment = () => {
                         placeholder="123"
                         value={formData.card_cvv}
                         onChange={handleInputChange}
+                        maxLength="4"
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </div>
