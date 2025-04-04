@@ -190,7 +190,7 @@ const Payment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
       // Step 1: Process payment
       const paymentResponse = await fetch("/api/process-payment", {
@@ -204,49 +204,63 @@ const Payment = () => {
           amount: planPrice,
         }),
       });
-
+  
       const paymentData = await paymentResponse.json();
-
+  
       if (!paymentResponse.ok) {
         throw new Error(paymentData.message || "Payment processing failed");
       }
-
-      // Step 2: Create subscription
-      const subscriptionResponse = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          plan_type: planType,
-          user_id: user.id,
-        }),
-      });
-
-      const subscriptionData = await subscriptionResponse.json();
-
-      if (!subscriptionResponse.ok) {
-        throw new Error(subscriptionData.message || "Subscription failed");
+  
+      // Step 2: For cart purchases, create an order from cart items
+      if (planType === 'cart-purchase') {
+        const orderResponse = await fetch("/api/checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            payment_method: "card",
+            shipping_address: formData.billingAddress
+          }),
+        });
+  
+        if (!orderResponse.ok) {
+          const errorData = await orderResponse.json();
+          throw new Error(errorData.message || "Failed to create order");
+        }
+  
+        toast.success("Order placed successfully!");
+      } 
+      // For subscription purchases
+      else {
+        // Create subscription
+        const subscriptionResponse = await fetch("/api/subscribe", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            plan_type: planType,
+            user_id: user.id,
+          }),
+        });
+  
+        const subscriptionData = await subscriptionResponse.json();
+  
+        if (!subscriptionResponse.ok) {
+          throw new Error(subscriptionData.message || "Subscription failed");
+        }
+  
+        toast.success(`Successfully subscribed to ${planName}!`);
       }
-
-      // Step 3: Clear the cart
-      await fetch("/api/cart", {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      toast.success(`Successfully subscribed to ${planName}!`);
-
-      // Navigate to dashboard
+  
+      // Navigate to dashboard after successful payment
       navigate("/client/dashboard", { replace: true });
     } catch (error) {
       console.error("Payment/subscription error:", error);
-      toast.error(
-        error.message || "An error occurred during payment processing"
-      );
+      toast.error(error.message || "An error occurred during payment processing");
     } finally {
       setLoading(false);
     }
