@@ -24,12 +24,12 @@ const CartPayment = () => {
 
   useEffect(() => {
     // Get cart data if not passed through location state
-    if (!location.state) {
+    if (!location.state || !location.state.planPrice) {
       fetchCartItems();
     } else {
       setCartTotal(location.state.planPrice);
     }
-  }, []);
+  }, [location.state]);
 
   const fetchCartItems = async () => {
     try {
@@ -45,8 +45,8 @@ const CartPayment = () => {
       }
 
       const data = await response.json();
-      setCartItems(data.items);
-      setCartTotal(data.total);
+      setCartItems(data.items || []);
+      setCartTotal(data.total || 0);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -72,28 +72,46 @@ const CartPayment = () => {
       // Create shipping address string
       const shippingAddress = `${formData.shipping_address}, ${formData.city}, ${formData.state} ${formData.zip_code}, ${formData.country}`;
       
+      // Determine if this is a subscription or a regular purchase
+      const isSubscription = location.state && location.state.planType && location.state.planType !== 'cart-purchase';
+      
+      // Choose the appropriate endpoint
+      const endpoint = isSubscription ? "/api/subscribe" : "/api/checkout";
+      
+      // Prepare the request body
+      const requestBody = {
+        payment_method: formData.payment_method,
+        shipping_address: shippingAddress
+      };
+      
+      // Add plan-specific data if this is a subscription
+      if (isSubscription) {
+        requestBody.plan_type = location.state.planType;
+        requestBody.plan_name = location.state.planName;
+        requestBody.plan_price = location.state.planPrice;
+      }
+      
       // Submit order to backend
-      const response = await fetch("/api/checkout", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({
-          payment_method: formData.payment_method,
-          shipping_address: shippingAddress
-        })
+        body: JSON.stringify(requestBody)
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Payment failed");
+        throw new Error(errorData.message || `Payment/checkout failed: ${response.statusText}`);
       }
 
       const data = await response.json();
       
       // Show success message
-      toast.success("Payment successful! Your order has been placed.");
+      toast.success(isSubscription 
+        ? "Subscription successful! Your subscription has been activated." 
+        : "Payment successful! Your order has been placed.");
       
       // Navigate to dashboard
       setTimeout(() => {
@@ -101,7 +119,7 @@ const CartPayment = () => {
       }, 2000);
       
     } catch (error) {
-      toast.error(error.message);
+      toast.error(`Payment/checkout error: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -129,6 +147,21 @@ const CartPayment = () => {
       return false;
     }
     
+    if (!formData.city) {
+      toast.error("Please enter your city");
+      return false;
+    }
+    
+    if (!formData.state) {
+      toast.error("Please enter your state/province");
+      return false;
+    }
+    
+    if (!formData.zip_code) {
+      toast.error("Please enter your ZIP/postal code");
+      return false;
+    }
+    
     return true;
   };
 
@@ -142,16 +175,21 @@ const CartPayment = () => {
     );
   }
 
+  // Determine if this is a subscription or regular purchase
+  const isSubscription = location.state && location.state.planType && location.state.planType !== 'cart-purchase';
+  const pageTitle = isSubscription ? "Subscription Checkout" : "Product Checkout";
+  const paymentType = isSubscription ? location.state.planName : "Product Purchase";
+
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-4xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Checkout</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">{pageTitle}</h1>
         
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
           <div className="p-6 border-b">
             <h2 className="text-xl font-semibold">Order Summary</h2>
-            <div className="mt-4 text-right">
-              <p className="text-gray-600">Total Amount</p>
+            <div className="mt-4 flex justify-between">
+              <p className="text-gray-600">{paymentType}</p>
               <p className="text-2xl font-bold">${parseFloat(cartTotal).toFixed(2)}</p>
             </div>
           </div>
@@ -337,7 +375,7 @@ const CartPayment = () => {
                   onClick={() => navigate(-1)}
                   className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
-                  Back to Cart
+                  Back
                 </button>
                 
                 <button
