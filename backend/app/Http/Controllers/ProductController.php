@@ -50,13 +50,13 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         
-        $request->validate([
-            'nom' => 'string|max:255',
-            'prix' => 'numeric|min:0',
-            'description' => 'string',
-            'categorie' => 'string|max:100',
-            'stock' => 'integer|min:0',
-            'image' => 'sometimes|image|max:2048', // Max 2MB
+        $validated = $request->validate([
+            'nom' => 'sometimes|required|string|max:255',
+            'prix' => 'sometimes|required|numeric|min:0',
+            'description' => 'sometimes|required|string',
+            'categorie' => 'sometimes|required|string|max:100',
+            'stock' => 'sometimes|required|integer|min:0',
+            'image' => 'sometimes|nullable|image|max:2048', // Max 2MB, but now nullable
         ]);
 
         // Handle image upload if provided
@@ -70,11 +70,12 @@ class ProductController extends Controller
             $product->image = $imagePath;
         }
         
-        $product->nom = $request->nom ?? $product->nom;
-        $product->prix = $request->prix ?? $product->prix;
-        $product->description = $request->description ?? $product->description;
-        $product->categorie = $request->categorie ?? $product->categorie;
-        $product->stock = $request->stock ?? $product->stock;
+        // Update other fields
+        $product->nom = $request->input('nom', $product->nom);
+        $product->prix = $request->input('prix', $product->prix);
+        $product->description = $request->input('description', $product->description);
+        $product->categorie = $request->input('categorie', $product->categorie);
+        $product->stock = $request->input('stock', $product->stock);
         
         $product->save();
 

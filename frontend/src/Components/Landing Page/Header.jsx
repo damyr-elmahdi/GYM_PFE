@@ -11,15 +11,6 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-    setUser(null);
-    toast.info("You have been logged out.");
-    navigate("/login-register");
-    setShowDropdown(false);
-  };
-
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
@@ -79,9 +70,6 @@ const Header = () => {
                   <div className="dropdown-menu">
                     <button className="dashboard-btn" onClick={navigateToDashboard}>
                       Dashboard
-                    </button>
-                    <button className="logout-btn" onClick={handleLogout}>
-                      Logout
                     </button>
                   </div>
                 )}

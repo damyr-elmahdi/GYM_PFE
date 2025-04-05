@@ -91,19 +91,24 @@ const ProductForm = () => {
     productData.append("categorie", formData.categorie);
     productData.append("stock", formData.stock);
     
-    // Only append image if a new one was selected or if in create mode
+    // Only append image if a new one was selected
     if (formData.image) {
       productData.append("image", formData.image);
     }
 
     try {
       const url = isEditMode ? `/api/products/${id}` : "/api/products";
-      const method = isEditMode ? "PUT" : "POST";
+      
+      // For PUT requests with FormData in Laravel, we need to use POST with _method
+      if (isEditMode) {
+        productData.append('_method', 'PUT');
+      }
       
       const response = await fetch(url, {
-        method: method,
+        method: isEditMode ? "POST" : "POST", // Always POST, but with _method: PUT for updates
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
+          // Do NOT set Content-Type header for FormData
         },
         body: productData,
       });
