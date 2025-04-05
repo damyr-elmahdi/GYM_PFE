@@ -8,9 +8,9 @@ const AdminDashboard = () => {
   const { user, token, logout } = useContext(AppContext);
   const navigate = useNavigate();
   const [stats, setStats] = useState({
-    totalUsers: 0,
-    newPosts: 0,
-    activeSessions: 0,
+    totalClients: 0,
+    numberSubscriptions: 0,
+    numberSales: 0,
   });
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,9 +37,9 @@ const AdminDashboard = () => {
 
         if (statsData.data) {
           setStats({
-            totalUsers: statsData.data.totalUsers || 0,
-            newPosts: statsData.data.newPosts || 0,
-            activeSessions: statsData.data.activeSessions || 0,
+            totalClients: statsData.data.totalClients || 0,
+            numberSubscriptions: statsData.data.numberSubscriptions || 0,
+            numberSales: statsData.data.numberSales || 0,
           });
         }
       } catch (error) {
@@ -155,34 +155,34 @@ const AdminDashboard = () => {
         {/* Stats Panel */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-700">Total Users</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Total Clients</h3>
             {loading ? (
               <div className="animate-pulse h-8 w-16 bg-gray-200 rounded"></div>
             ) : (
               <p className="text-3xl font-bold text-blue-600">
-                {stats.totalUsers}
+                {stats.totalClients}
               </p>
             )}
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-700">New Posts</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Number of Subscriptions</h3>
             {loading ? (
               <div className="animate-pulse h-8 w-16 bg-gray-200 rounded"></div>
             ) : (
               <p className="text-3xl font-bold text-green-600">
-                {stats.newPosts}
+                {stats.numberSubscriptions}
               </p>
             )}
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold text-gray-700">
-              Active Sessions
+              Number of Sales
             </h3>
             {loading ? (
               <div className="animate-pulse h-8 w-16 bg-gray-200 rounded"></div>
             ) : (
               <p className="text-3xl font-bold text-purple-600">
-                {stats.activeSessions}
+                {stats.numberSales}
               </p>
             )}
           </div>
@@ -305,18 +305,6 @@ const AdminDashboard = () => {
                 </Link>
               </div>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-700">
-                System Settings
-              </h3>
-              <p className="text-gray-600 mt-2">
-                Configure application settings and preferences
-              </p>
-              <button className="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition duration-300">
-                Settings
-              </button>
-            </div>
-
             <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <h3 className="text-xl font-semibold text-gray-700">
                 Pricing Management

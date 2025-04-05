@@ -4,17 +4,19 @@ import { AppContext } from "../../Context/AppContext";
 import { toast } from "react-toastify";
 import Calculator from "../CalorieCalculator/Calculator";
 import Food from "../Food/Food";
+import ClientExerciseList from "../Exercises/ClientExerciseList";
+import ClientProductList from "../Product/ClientProductList ";
 import 'react-tabs/style/react-tabs.css';
-import HeaderBody from "../HeaderBody/HeaderBody";
+
 
 const ClientDashboard = () => {
   const { user, setToken, setUser, token } = useContext(AppContext);
   const navigate = useNavigate();
 
   const [stats, setStats] = useState({
-    completedWorkouts: 0,
+    subscriptionDaysLeft: 0,
     favoriteExercises: 0,
-    streakDays: 0,
+    purchasedProducts: 0,
   });
 
   const [subscription, setSubscription] = useState(null);
@@ -37,6 +39,14 @@ const ClientDashboard = () => {
         if (subscriptionResponse.ok) {
           const subscriptionData = await subscriptionResponse.json();
           setSubscription(subscriptionData);
+          
+          // Calculate days left in subscription
+          if (subscriptionData.end_date) {
+            const endDate = new Date(subscriptionData.end_date);
+            const today = new Date();
+            const daysLeft = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+            setStats(prev => ({ ...prev, subscriptionDaysLeft: daysLeft > 0 ? daysLeft : 0 }));
+          }
         }
 
         // Fetch cart items count
@@ -51,12 +61,36 @@ const ClientDashboard = () => {
           setCartItemCount(cartData.items?.length || 0);
         }
 
-        // Placeholder for other stats - replace with actual API calls
-        setStats({
-          completedWorkouts: 12,
-          favoriteExercises: 8,
-          streakDays: 5,
+        // Fetch favorite exercises count
+        const favoritesResponse = await fetch("/api/favorites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+
+        if (favoritesResponse.ok) {
+          const favoritesData = await favoritesResponse.json();
+          setStats(prev => ({ ...prev, favoriteExercises: favoritesData.length || 0 }));
+        }
+
+        // Fetch purchased products count
+        const ordersResponse = await fetch("/api/order-history", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (ordersResponse.ok) {
+          const ordersData = await ordersResponse.json();
+          // Calculate total purchased products across all orders
+          let totalPurchases = 0;
+          ordersData.forEach(order => {
+            order.items?.forEach(item => {
+              totalPurchases += item.quantity;
+            });
+          });
+          setStats(prev => ({ ...prev, purchasedProducts: totalPurchases }));
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Failed to load dashboard data");
@@ -125,9 +159,9 @@ const ClientDashboard = () => {
       case 2:
         return <div className="food-container"><Food noHeader={true} /></div>;
       case 3:
-        return <div className="exercise-container"><Exercise noHeader={true} /></div>;
+        return <div className="exercise-container"><ClientExerciseList /></div>;
       case 4:
-        return <div className="store-container"><Store noHeader={true} /></div>;
+        return <div className="store-container"><ClientProductList /></div>;
       default:
         return renderDashboardContent();
     }
@@ -198,10 +232,10 @@ const ClientDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold text-gray-700">
-            Workouts Completed
+            Days Left in Subscription
           </h3>
           <p className="text-3xl font-bold text-blue-600">
-            {stats.completedWorkouts}
+            {stats.subscriptionDaysLeft}
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md">
@@ -213,9 +247,9 @@ const ClientDashboard = () => {
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-700">Day Streak</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Products Purchased</h3>
           <p className="text-3xl font-bold text-purple-600">
-            {stats.streakDays}
+            {stats.purchasedProducts}
           </p>
         </div>
       </div>
@@ -233,24 +267,24 @@ const ClientDashboard = () => {
             <p className="text-gray-600 mt-2">
               Browse and discover new exercises
             </p>
-            <Link
-              to="/client/exercises"
+            <button
+              onClick={() => setActiveTab(3)}
               className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-300 inline-block"
             >
               View Exercises
-            </Link>
+            </button>
           </div>
           <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-xl font-semibold text-gray-700">Store</h3>
             <p className="text-gray-600 mt-2">
               Browse and purchase fitness products
             </p>
-            <Link
-              to="/client/products"
+            <button
+              onClick={() => setActiveTab(4)}
               className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-300 inline-block"
             >
               Visit Store
-            </Link>
+            </button>
           </div>
           <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-xl font-semibold text-gray-700">
@@ -412,9 +446,6 @@ const ClientDashboard = () => {
   );
 };
 
-// Rest of the component remains the same...
-// ProfileSettings, Exercise, and Store components
-
 // Profile component for editing user information
 const ProfileSettings = () => {
   const { user, token } = useContext(AppContext);
@@ -433,7 +464,7 @@ const ProfileSettings = () => {
     // Fetch user profile data
     const fetchProfile = async () => {
       try {
-        const response = await fetch("/api/my-profile", {
+        const response = await fetch("/api/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -473,7 +504,7 @@ const ProfileSettings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/update-profile", {
+      const response = await fetch("/api/profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -589,55 +620,6 @@ const ProfileSettings = () => {
         </form>
       )}
     </div>
-  );
-};
-
-// Mock components for other tabs
-const Exercise = ({ noHeader = false }) => {
-  const ExerciseContent = () => {
-    return (
-      <div className="container mx-auto py-6">
-        <h2 className="text-2xl font-bold mb-6">Exercise Library</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Exercise content would go here */}
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h3 className="font-semibold text-lg">Exercise Library Coming Soon</h3>
-            <p className="mt-2">Browse our complete collection of exercises.</p>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return noHeader ? <ExerciseContent /> : (
-    <>
-      <HeaderBody />
-      <ExerciseContent />
-    </>
-  );
-};
-
-const Store = ({ noHeader = false }) => {
-  const StoreContent = () => {
-    return (
-      <div className="container mx-auto py-6">
-        <h2 className="text-2xl font-bold mb-6">Fitness Store</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Store content would go here */}
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h3 className="font-semibold text-lg">Store Coming Soon</h3>
-            <p className="mt-2">Browse our collection of fitness products and supplements.</p>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return noHeader ? <StoreContent /> : (
-    <>
-      <HeaderBody />
-      <StoreContent />
-    </>
   );
 };
 

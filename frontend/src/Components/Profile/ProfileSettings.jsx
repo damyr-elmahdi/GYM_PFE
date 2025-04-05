@@ -208,7 +208,7 @@ const ProfileSettings = () => {
                   <option value="">Select Gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="no answer"> I prefer not to answer. </option>
                 </select>
               </div>
               
