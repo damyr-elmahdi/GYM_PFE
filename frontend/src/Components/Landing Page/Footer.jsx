@@ -1,6 +1,7 @@
 import React from "react";
 import "./LandingPage.css";
 import logo from "../../Assets/logo.png";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -34,27 +35,27 @@ const Footer = () => {
         <div class="footer__col">
           <h4>Company</h4>
           <div class="footer__links">
-            <a href="#">Business</a>
-            <a href="#">Franchise</a>
-            <a href="#">Partnership</a>
-            <a href="#">Network</a>
+            <Link to={"business-page"}>Business</Link>
+            <Link to={"/franchise-page"}>Franchise</Link>
+            <Link to={"/partnership-page"}>Partnership</Link>
+            <Link to={"/netwok-page"}>Network</Link>
           </div>
         </div>
         <div class="footer__col">
           <h4>About Us</h4>
           <div class="footer__links">
-            <a href="#">Blogs</a>
-            <a href="#">Security</a>
-            <a href="#">Careers</a>
+            <Link to={"/blog-page"}>Blogs</Link>
+            <Link to={"/security-page"}>Security</Link>
+            <Link to={"career-page"}>Careers</Link>
           </div>
         </div>
         <div class="footer__col">
           <h4>Contact</h4>
           <div class="footer__links">
-            <a href="#">Contact Us</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms & Conditions</a>
-            <a href="#">BMI Calculator</a>
+            <Link to={"/contact-us"}>Contact Us</Link>
+            <Link to={"/privacy-policy"}>Privacy Policy</Link>
+            <Link to={"/terms-conditions"}>Terms & Conditions</Link>
+            <Link to={"/bmi-calculator"}>BMI Calculator</Link>
           </div>
         </div>
       </div>

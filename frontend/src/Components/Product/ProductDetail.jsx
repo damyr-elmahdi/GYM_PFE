@@ -91,9 +91,9 @@ const ProductDetail = () => {
             {cartMessage}
           </div>
         )}
-        
+
         <div className="md:flex">
-          <div className="md:w-1/2">
+          <div className="md:w-1/2 p-[45px]">
             <img
               src={`http://localhost:8000/storage/${product.image}`}
               alt={product.nom}
@@ -104,21 +104,21 @@ const ProductDetail = () => {
             <h1 className="text-2xl font-bold text-gray-800">{product.nom}</h1>
             <p className="text-gray-600 mt-2">Category: {product.categorie}</p>
             <p className="text-gray-800 font-bold text-xl mt-2">${parseFloat(product.prix).toFixed(2)}</p>
-            
+
             <div className="mt-4">
               <p className="text-gray-600">
-                Availability: 
+                Availability:
                 <span className={product.stock > 0 ? "text-green-600" : "text-red-600"}>
                   {product.stock > 0 ? ` In stock (${product.stock} available)` : " Out of stock"}
                 </span>
               </p>
             </div>
-            
+
             <div className="mt-6">
               <h2 className="text-lg font-semibold text-gray-800">Description</h2>
               <p className="text-gray-600 mt-2">{product.description}</p>
             </div>
-            
+
             {product.stock > 0 && (
               <div className="mt-6">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="quantity">
@@ -149,15 +149,14 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
-            
+
             <div className="mt-8 flex space-x-4">
               <button
                 onClick={addToCart}
-                className={`font-bold py-2 px-4 rounded ${
-                  product.stock > 0
-                    ? "bg-green-500 hover:bg-green-700 text-white"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
+                className={`font-bold py-2 px-4 rounded ${product.stock > 0
+                  ? "bg-green-500 hover:bg-green-700 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
                 disabled={product.stock <= 0}
               >
                 Add to Cart

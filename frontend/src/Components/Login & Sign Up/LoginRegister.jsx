@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
 import "./LoginRegister.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -71,7 +71,7 @@ const LoginRegister = () => {
           } else {
             navigate("/client/dashboard");
           }
-        }, 100);
+        }, 1500);
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -101,6 +101,7 @@ const LoginRegister = () => {
         body: JSON.stringify(registerData),
       });
       const data = await res.json();
+
       if (data.errors) {
         setRegisterErrors(data.errors);
         toast.error("Registration failed. Please check the form.");
@@ -108,7 +109,11 @@ const LoginRegister = () => {
         localStorage.setItem("token", data.token);
         setToken(data.token);
         toast.success("Registration successful!");
-        navigate("/");
+
+        // Adding setTimeout to delay navigation
+        setTimeout(() => {
+          navigate("/"); // Navigate after a delay to show success message
+        }, 1500); // 1.5-second delay
       }
     } catch (error) {
       console.error("Registration error:", error);
@@ -129,6 +134,7 @@ const LoginRegister = () => {
     }
   }
 
+
   return (
     <div className="flex justify-center items-center min-h-screen">
       <ToastContainer
@@ -146,15 +152,11 @@ const LoginRegister = () => {
           <div className="forbox login">
             <form onSubmit={handleLogin}>
               <h1>Login</h1>
-              {loginErrors.general && (
-                <p className="error">{loginErrors.general[0]}</p>
-              )}
 
               <div className="inpbox">
                 <input
                   type="text"
                   placeholder="Email"
-                  required
                   value={loginData.email}
                   onChange={(e) =>
                     setLoginData({ ...loginData, email: e.target.value })
@@ -162,15 +164,11 @@ const LoginRegister = () => {
                 />
                 <i className="bx bxs-envelope"></i>
               </div>
-              {loginErrors.email && (
-                <p className="error">{loginErrors.email[0]}</p>
-              )}
 
               <div className="inpbox">
                 <input
                   type={showPassword ? "text" : "password"} // Toggle input type
                   placeholder="Password"
-                  required
                   value={loginData.password}
                   onChange={(e) =>
                     setLoginData({ ...loginData, password: e.target.value })
@@ -183,15 +181,12 @@ const LoginRegister = () => {
                   style={{ cursor: "pointer" }}
                 ></i>
               </div>
-              {loginErrors.password && (
-                <p className="error">{loginErrors.password[0]}</p>
-              )}
 
               <div className="forgot-link">
-                <a href="#">Forgot password ?</a>
+                <Link to={"#"}>Forgot password ?</Link>
               </div>
 
-              <button type="submit" className="button">
+              <button type="submit" className="button-login">
                 Login
               </button>
               <br />
@@ -225,7 +220,6 @@ const LoginRegister = () => {
                 <input
                   type="text"
                   placeholder="Username"
-                  required
                   value={registerData.name}
                   onChange={(e) =>
                     setRegisterData({ ...registerData, name: e.target.value })
@@ -233,15 +227,11 @@ const LoginRegister = () => {
                 />
                 <i className="bx bxs-user"></i>
               </div>
-              {registerErrors.name && (
-                <p className="error">{registerErrors.name[0]}</p>
-              )}
 
               <div className="inpbox">
                 <input
                   type="email"
                   placeholder="Email"
-                  required
                   value={registerData.email}
                   onChange={(e) =>
                     setRegisterData({ ...registerData, email: e.target.value })
@@ -249,14 +239,10 @@ const LoginRegister = () => {
                 />
                 <i className="bx bxs-envelope"></i>
               </div>
-              {registerErrors.email && (
-                <p className="error">{registerErrors.email[0]}</p>
-              )}
               <div className="inpbox">
                 <input
                   type={showPassword ? "text" : "password"} // Toggle input type
                   placeholder="Password"
-                  required
                   value={registerData.password}
                   onChange={(e) =>
                     setRegisterData({
@@ -272,15 +258,11 @@ const LoginRegister = () => {
                   style={{ cursor: "pointer" }}
                 ></i>
               </div>
-              {registerErrors.password && (
-                <p className="error">{registerErrors.password[0]}</p>
-              )}
 
               <div className="inpbox">
                 <input
                   type={showPassword ? "text" : "password"} // Toggle input type
                   placeholder="Confirm Password"
-                  required
                   value={registerData.password_confirmation}
                   onChange={(e) =>
                     setRegisterData({
@@ -297,7 +279,7 @@ const LoginRegister = () => {
                 ></i>
               </div>
 
-              <button type="submit" className="button">
+              <button type="submit" className="button-register">
                 Register
               </button>
 
@@ -324,7 +306,7 @@ const LoginRegister = () => {
               <h1>Hello, Welcome!</h1>
               <p>Don't have an account?</p>
               <button
-                className="button register-btn"
+                className="button-animation-register register-btn"
                 onClick={() => setIsActive(true)}
               >
                 Register
@@ -334,7 +316,7 @@ const LoginRegister = () => {
               <h1>Welcome Back!</h1>
               <p>Already have an account?</p>
               <button
-                className="button login-btn"
+                className="button-animation-login login-btn"
                 onClick={() => setIsActive(false)}
               >
                 Login

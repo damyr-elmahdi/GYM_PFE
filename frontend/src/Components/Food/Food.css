@@ -1,18 +1,21 @@
 .vegitbales-container {
     position: relative;
     display: flex;
-    
     flex-direction: column;
     align-items: flex-start;
-    padding: 52px;
-    width: 100%;
+    padding: 52px 0px;
+    width: 1350px;
+    margin-left: -25px;
 }
 
 .products-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
-    width: 100%;
+    /* width: 100%; */
+    margin-left: -24px;
+    width: 1351px;
+
 }
 
 .d-vegitbales {
@@ -33,8 +36,8 @@
 
 .d-vegitbales:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3),
-        0 6px 20px rgba(0, 51, 153, 0.4);
+    box-shadow: 0 4px 12px #6A9AB0,
+        0 6px 20px #6A9AB0;
     transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
@@ -59,12 +62,14 @@
 .input-value {
     border: 1px solid gray;
     border-radius: 4px;
-    width: 75px;
     padding: 0px 5px;
-    margin-left: -90px;
     font-size: 8px;
-    height: 17px;
     margin-top: 25px;
+    width: 92px;
+    padding: 0px 9px;
+    margin-left: -101px;
+    font-size: 11px;
+    height: 23px;
 }
 
 .number-calories {
@@ -78,7 +83,8 @@
     font-weight: bold;
     color: #333;
     padding: 10px 15px;
-    background: linear-gradient(to right, #4facfe, #00f2fe);
+    /* background: linear-gradient(to right, #4facfe, #00f2fe); */
+    background: #EAD8B1;
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     display: inline-block;
@@ -104,7 +110,7 @@
     border: 1px solid rgb(192, 191, 191);
     height: 40px;
     border-radius: 5px;
-    width: -100px;
+    width: 1000px;
     padding: 0 12px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease-in-out;
@@ -122,4 +128,16 @@
 .d-number-result {
     margin-top: 25px;
     margin-left: 7px;
+}
+
+.div-image-food {
+    /* background: #bab9b9; */
+    width: 250px;
+    height: 200px;
+    margin-top: -24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
 }

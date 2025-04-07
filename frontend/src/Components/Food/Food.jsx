@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "./Food.css";
-import productsData from "./Data.json";
+import productsData from "./Data";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 
 export default function Food() {
@@ -76,23 +76,27 @@ function VegetableCard({ product }) {
 
     return (
         <div className="d-vegitbales">
-            <img src={product.image} alt={product.name} className="veg-image" />
-            <h3 className="name-product">{product.name}</h3>
-            <h4 className="weight-product">{weight} g</h4>
-            <input
-                type="number"
-                value={weight}
-                onChange={(e) => setWeight(Math.max(1, Number(e.target.value)))}
-                min="1"
-                className="input-value"
-                placeholder="Enter weight (g)"
-            />
-            <p className="number-calories">
-                <strong>{calories}</strong> calories
-            </p>
-            <p onClick={() => setShow(!show)} className="d-show-outline">
-                {show ? <FaArrowUp /> : <FaArrowDown />}
-            </p>
+            <div className='div-image-food'>
+                <img src={product.image} alt={product.name} className="veg-image" />
+            </div>
+            <div>
+                <h3 className="name-product">{product.name}</h3>
+                <h4 className="weight-product">{weight} g</h4>
+                <input
+                    type="number"
+                    value={weight}
+                    onChange={(e) => setWeight(Math.max(1, Number(e.target.value)))}
+                    min="1"
+                    className="input-value w-[900px]"
+                    placeholder="Enter weight (g)"
+                />
+                <p className="number-calories">
+                    <strong>{calories}</strong> calories
+                </p>
+                <p onClick={() => setShow(!show)} className="d-show-outline">
+                    {show ? <FaArrowUp /> : <FaArrowDown />}
+                </p>
+            </div>
             {show && (
                 <div className='d-number-result'>
                     <p><strong>Protein: </strong> {proteinAmount} g</p>

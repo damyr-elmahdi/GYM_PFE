@@ -28,6 +28,20 @@ import CartView from "./Components/Cart/CartView";
 import CartPayment from "./Components/Cart/CartPayment";
 import "remixicon/fonts/remixicon.css";
 import Payment from "./Components/Landing Page/Payment";
+import ContactUs from "./Components/Footer/ContactUs";
+import PrivacyPolicy from "./Components/Footer/PrivacyPolicy ";
+import TermsAndConditions from "./Components/Footer/TermsAndConditions";
+import BMICalculator from "./Components/Footer/BMICalculator";
+import BlogPage from "./Components/Footer/BlogPage";
+import BlogDetail from "./Components/Footer/BlogDetail";
+import SecurityPage from "./Components/Footer/SecurityPage";
+import CareersPage from "./Components/Footer/CareersPage";
+import BusinessPage from "./Components/Footer/BusinessPage";
+import FranchisePage from "./Components/Footer/FranchisePage";
+import PartnershipPage from "./Components/Footer/PartnershipPage";
+import NetworkPage from "./Components/Footer/NetworkPage";
+import PriceJoin from "./Components/Landing Page/PricingJoin";
+// import ForgetPassword from "./Components/Login & Sign Up/ForgetPassword";
 
 const NotFoundPage = () => (
   <div className="flex justify-center items-center h-screen">
@@ -50,7 +64,7 @@ export default function App() {
               <About />
               <Class />
               <Trainer />
-              <Price />
+              <PriceJoin />
               <Client />
               <Footer />
             </>
@@ -151,7 +165,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-      
+
         <Route
           path="/client/exercises"
           element={
@@ -216,7 +230,25 @@ export default function App() {
 
         {/* Public Pricing Route */}
         <Route path="/pricing" element={<Price />} />
+        <Route path="/pricing-join" element={<PriceJoin />} />
 
+        {/*************** Forgot Password ****************/}
+        {/* <Route path="/forget-password" element={<ForgetPassword />} /> */}
+
+
+        {/* *************** Footer Pages ************************** */}
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-conditions" element={<TermsAndConditions />} />
+        <Route path="/bmi-calculator" element={<BMICalculator />} />
+        <Route path="/blog-page" element={<BlogPage />} />
+        <Route path="/blog/:id" element={<BlogDetail />} />
+        <Route path="/security-page" element={<SecurityPage />} />
+        <Route path="career-page" element={<CareersPage />} />
+        <Route path="/business-page" element={<BusinessPage />} />
+        <Route path="/franchise-page" element={<FranchisePage />} />
+        <Route path="/partnership-page" element={<PartnershipPage />} />
+        <Route path="/netwok-page" element={<NetworkPage />} />
         {/* Fallback Route for Unmatched Paths */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

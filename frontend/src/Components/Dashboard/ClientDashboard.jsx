@@ -39,7 +39,7 @@ const ClientDashboard = () => {
         if (subscriptionResponse.ok) {
           const subscriptionData = await subscriptionResponse.json();
           setSubscription(subscriptionData);
-          
+
           // Calculate days left in subscription
           if (subscriptionData.end_date) {
             const endDate = new Date(subscriptionData.end_date);
@@ -111,7 +111,7 @@ const ClientDashboard = () => {
         setShowProfileDropdown(false);
       }
     }
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -141,7 +141,7 @@ const ClientDashboard = () => {
   const toggleProfileDropdown = () => {
     setShowProfileDropdown(!showProfileDropdown);
   };
-  
+
   const navigateToProfile = () => {
     navigate("/client/profile");
     setShowProfileDropdown(false);
@@ -153,8 +153,8 @@ const ClientDashboard = () => {
 
   // Custom tab renderer to avoid HeaderBody duplication
   const renderTabContent = (index) => {
-    switch(index) {
-      case 1: 
+    switch (index) {
+      case 1:
         return <div className="calculator-container"><Calculator noHeader={true} /></div>;
       case 2:
         return <div className="food-container"><Food noHeader={true} /></div>;
@@ -197,11 +197,10 @@ const ClientDashboard = () => {
               <p>
                 Status:{" "}
                 <span
-                  className={`font-bold ${
-                    subscription.status === "active"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
+                  className={`font-bold ${subscription.status === "active"
+                    ? "text-green-600"
+                    : "text-red-600"
+                    }`}
                 >
                   {subscription.status.toUpperCase()}
                 </span>
@@ -308,12 +307,12 @@ const ClientDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+      <header className="bg-[#001F3F] text-white p-4 flex justify-between items-center shadow-md">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold">Client Dashboard</h1>
           <Link
             to="/"
-            className="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg transition duration-300"
+            className="bg-[#3A6D8C] hover:bg-blue-900 text-white px-4 py-2 rounded-lg transition duration-300"
           >
             Return to Home
           </Link>
@@ -322,7 +321,7 @@ const ClientDashboard = () => {
           {/* Cart Button */}
           <button
             onClick={navigateToCart}
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg transition duration-300 flex items-center space-x-2"
+            className="bg-[#6A9AB0] hover:bg-[#EAD8B1] text-white px-3 py-2 rounded-lg transition duration-300 flex items-center space-x-2"
           >
             <i className="ri-shopping-cart-2-line"></i>
             <span>Cart</span>
@@ -332,10 +331,10 @@ const ClientDashboard = () => {
               </span>
             )}
           </button>
-          
+
           {/* Profile Dropdown Container */}
           <div className="relative" ref={dropdownRef}>
-            <button 
+            <button
               onClick={toggleProfileDropdown}
               className="flex items-center space-x-2 focus:outline-none"
             >
@@ -343,7 +342,7 @@ const ClientDashboard = () => {
                 <span className="text-lg font-bold">{user?.name?.charAt(0) || 'U'}</span>
               </div>
             </button>
-            
+
             {/* Profile Dropdown */}
             {showProfileDropdown && (
               <div className="absolute right-0 top-12 bg-white shadow-lg rounded-lg w-64 z-50">

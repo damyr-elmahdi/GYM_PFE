@@ -6,6 +6,7 @@ import client3 from "../../Assets/client-3.jpg";
 import client4 from "../../Assets/client-4.jpg";
 import ScrollReveal from "scrollreveal";
 import Swiper from "swiper";
+import "./LandingPage.css"
 
 const Client = () => {
   useEffect(() => {

@@ -7,6 +7,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\FavoriteExerciseController;
+use App\Http\Controllers\ForgetController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
@@ -159,3 +160,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/admin/plans/{planType}', [SubscriptionController::class, 'updatePlan']);
     Route::delete('/admin/plans/{planType}', [SubscriptionController::class, 'deletePlan']);
 });
+
+
+Route::post('/forgot-password', [ForgetController::class, 'sendResetCode']);

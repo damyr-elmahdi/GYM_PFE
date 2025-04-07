@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);
@@ -64,11 +64,31 @@ const AdminProductList = () => {
     return <div className="text-center text-red-500 p-6">{error}</div>;
   }
 
+  // const navigate = useNavigate();
+  const navigate = useNavigate()
+
+  // const handleScrollToBottom = () => {
+  //   window.scrollTo({
+  //     top: document.documentElement.scrollHeight,
+  //     behavior: 'smooth',
+  //   });
+  // };
+
+  const handleBackClick = () => {
+    // handleScrollToBottom();
+    navigate('/admin/dashboard');  // Navigate to home page
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Product Management</h1>
+          <button
+            className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[10px] ml-[-10px] hover:scale-105"
+            onClick={handleBackClick}  // Custom click handler
+          > &larr; Back
+          </button>
+          <h1 className="text-2xl font-bold text-gray-800 w-[979px] flex justify-center">Product Management</h1>
           <Link
             to="/admin/products/create"
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"

@@ -89,7 +89,7 @@ export default function Calculator() {
     };
 
     return (
-        <div className="absolute h-auto flex flex-col items-center bg-white p-6 w-full">
+        <div className="absolute h-auto flex flex-col items-center bg-white p-6 w-full ml-[-24px]">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">Calorie Calculator</h2>
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
                 {!showResults ? (

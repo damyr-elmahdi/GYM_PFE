@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 :root {
-  --primary-color: #7494ec;
-  --primary-color-dark: #3f6bd1;
+  --primary-color: #3A6D8C;
+  --primary-color-dark: #001F3F;
   --secondary-color: #faf9fe;
   --text-dark: #0f172a;
   --text-light: #64748b;
@@ -24,8 +24,10 @@
 }
 
 .header {
-  width: 100%; /* Changed from fixed width 1519px to 100% */
+  width: 100%;
+  /* Changed from fixed width 1519px to 100% */
 }
+
 .dashboard-btn {
   background: none;
   border: none;
@@ -39,6 +41,7 @@
 .dashboard-btn:hover {
   background-color: #f5f5f5;
 }
+
 .section__header {
   position: relative;
   padding-bottom: 0.5rem;
@@ -56,6 +59,10 @@
   width: 50px;
   height: 3px;
   background-color: var(--primary-color);
+}
+
+.section__container {
+  overflow-x: hidden;
 }
 
 .section__description {
@@ -83,8 +90,10 @@
 img {
   display: flex;
   width: 100%;
-  max-width: 100%; /* Added for better responsiveness */
-  height: auto; /* Added for better responsiveness */
+  max-width: 100%;
+  /* Added for better responsiveness */
+  height: auto;
+  /* Added for better responsiveness */
 }
 
 a {
@@ -168,7 +177,8 @@ nav {
 .nav__menu__btn {
   font-size: 1.5rem;
   color: var(--text-dark);
-  cursor: pointer; /* Added for better UX */
+  cursor: pointer;
+  /* Added for better UX */
 }
 
 .header__container {
@@ -381,6 +391,7 @@ nav {
 }
 
 .price__card {
+  /* width: 500px; */
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
@@ -418,17 +429,25 @@ nav {
 .swiper {
   margin-top: 2rem;
   padding-bottom: 2rem;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .swiper-wrapper {
   display: flex;
+  width: 1820px;
 }
 
 .swiper-slide {
   max-width: 500px;
   padding-inline: 1rem;
   padding-top: 4rem;
+
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition-property: transform;
+  display: block;
 }
 
 .client__card {
@@ -437,9 +456,12 @@ nav {
   padding-inline: 2rem;
   border-radius: 5px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Changed from fixed width 468px to 100% */
-  max-width: 468px; /* Added max-width instead */
-  margin: 0 auto; /* Center the card */
+  width: 100%;
+  /* Changed from fixed width 468px to 100% */
+  max-width: 468px;
+  /* Added max-width instead */
+  margin: 0 auto;
+  /* Center the card */
 }
 
 .client__card img {
@@ -564,6 +586,7 @@ nav {
   padding: 0.5rem;
   z-index: 100;
   min-width: 120px;
+  background: #c2c0c0;
 }
 
 .logout-btn {
@@ -587,28 +610,28 @@ nav {
   .section__header {
     font-size: 1.8rem;
   }
-  
+
   .header__content h4 {
     font-size: 1.8rem;
   }
-  
+
   .header__content .section__header {
     font-size: 2.5rem;
   }
-  
+
   .about__card {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .swiper-slide {
     padding-top: 5rem;
   }
-  
+
   .client__card {
     padding: 3rem 1rem 1.5rem;
   }
-  
+
   .client__card img {
     left: 50%;
     transform: translate(-50%, -50%);

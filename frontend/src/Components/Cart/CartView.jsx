@@ -190,10 +190,22 @@ const CartView = () => {
     return <div className="text-center p-6">Loading your cart...</div>;
   }
 
+  // const navigate = useNavigate();  // Initialize navigate function
+
+  // Define the custom click handler
+  const handleBackClick = () => {
+    navigate('/client/dashboard');  // Navigate to client/dashboard
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        <button
+          className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[0px] ml-[0px] hover:scale-105"
+          onClick={handleBackClick}  // Custom click handler
+        > &larr; Back
+        </button>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 flex justify-center">
           Your Shopping Cart
         </h1>
 

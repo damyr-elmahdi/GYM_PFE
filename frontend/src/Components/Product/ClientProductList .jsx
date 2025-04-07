@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
+import iconCart from "../../Assets/iconCart.png";
+import "./ClientProductList.css";
+import axios from "axios";
 
 const ClientProductList = () => {
   const [products, setProducts] = useState([]);
@@ -8,6 +11,7 @@ const ClientProductList = () => {
   const [error, setError] = useState("");
   const [cartMessage, setCartMessage] = useState("");
   const { token } = useContext(AppContext);
+  const [selectedRating, setSelectedRating] = useState(null); // Track the clicked star rating
 
   useEffect(() => {
     fetchProducts();
@@ -29,7 +33,38 @@ const ClientProductList = () => {
     }
   };
 
-  const addToCart = async (productId) => {
+  const handleStarClick = (rating, productId) => {
+    setSelectedRating(rating);
+    // Here, you can update the number of reviews based on the rating
+    const updatedProducts = products.map((product) =>
+      product.id === productId ? { ...product, rating, reviews: 3 } : product
+    );
+    setProducts(updatedProducts);
+  };
+
+  const renderStars = (rating, productId) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      const isFilled = i < rating;
+      stars.push(
+        <span
+          key={i}
+          className={`star ${isFilled ? "filled" : ""}`}
+          style={{
+            fontSize: "23px",
+            color: isFilled || (selectedRating && selectedRating >= i + 1) ? "#FFD700" : "#ccc", // Update color for clicked stars
+            cursor: "pointer",
+          }}
+          onClick={() => handleStarClick(i + 1, productId)} // Update rating when star clicked
+        >
+          ★
+        </span>
+      );
+    }
+    return stars;
+  };
+
+  const addToCart = async (product) => {
     if (!token) {
       setCartMessage("Please log in to add items to your cart");
       setTimeout(() => setCartMessage(""), 3000);
@@ -37,15 +72,18 @@ const ClientProductList = () => {
     }
 
     try {
-      const response = await fetch("/api/cart/add", {
+      const response = await fetch("http://localhost:8000/api/cart/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          product_id: productId,
-          quantity: 1,
+          product_id: product.id,
+          nom: product.nom,
+          prix: product.prix,
+          image: product.image,
+          quantity: 1, // Default quantity
         }),
       });
 
@@ -61,18 +99,10 @@ const ClientProductList = () => {
     }
   };
 
-  if (loading) {
-    return <div className="text-center p-6">Loading products...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center text-red-500 p-6">{error}</div>;
-  }
-
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-white p-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Our Products</h1>
+        <h1 className="flex justify-center text-3xl font-bold text-gray-800 mb-6">Our Products</h1>
 
         {cartMessage && (
           <div className={`p-4 rounded-md mb-4 ${cartMessage.includes("Failed") ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
@@ -80,43 +110,43 @@ const ClientProductList = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.length === 0 ? (
             <div className="col-span-full text-center p-6">
               No products available at the moment.
             </div>
           ) : (
             products.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img
-                  src={`http://localhost:8000/storage/${product.image}`}
-                  alt={product.nom}
-                  className="w-full h-48 object-cover"
-                />
+              <div key={product.id} className="div-all-t bg-white rounded-lg shadow-md overflow-hidden w-[260px] mt-[30px]">
+                <div className="img-d">
+                  <Link to={`/client/products/${product.id}`}>
+                    <img
+                      src={`http://localhost:8000/storage/${product.image}`}
+                      alt={product.nom}
+                      className="image-product"
+                    />
+                  </Link>
+                </div>
                 <div className="p-4">
-                  <h2 className="text-xl font-semibold text-gray-800">{product.nom}</h2>
-                  <p className="text-gray-600 mt-2">{product.categorie}</p>
-                  <p className="text-gray-800 font-bold mt-2">${parseFloat(product.prix).toFixed(2)}</p>
-                  <p className="text-gray-600 mt-2">
-                    {product.stock > 0 ? `In stock (${product.stock})` : "Out of stock"}
-                  </p>
+                  <h3 className="text-center">{product.nom}</h3>
+
+                  <div className="stars">
+                    {renderStars(product.rating, product.id)}
+                    <p className="number-review">({product.reviews || 2})</p>
+                  </div>
+                  <p className="price-p">${parseFloat(product.prix).toFixed(2)}</p>
+
+                  <div className="absolute discount text-[#999696] text-sm line-through mt-[-3px]">
+                    ${(product.prix * 0.9).toFixed(2)}
+                  </div>
+
                   <div className="mt-4 flex justify-between">
-                    <Link
-                      to={`/client/products/${product.id}`}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                      View Details
-                    </Link>
                     <button
-                      onClick={() => addToCart(product.id)}
-                      className={`font-bold py-2 px-4 rounded ${
-                        product.stock > 0
-                          ? "bg-green-500 hover:bg-green-700 text-white"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
-                      disabled={product.stock <= 0}
+                      className="bg-gray-300 p-2 rounded-md text-sm hover:bg-gray-400 flex gap-2 mx-auto mt-[-4px] ml-[103px]"
+                      onClick={() => addToCart(product)}
                     >
-                      Add to Cart
+                      <img src={iconCart} alt="" className="w-[14px]" />
+                      Add To Cart
                     </button>
                   </div>
                 </div>

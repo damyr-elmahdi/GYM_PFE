@@ -67,8 +67,8 @@ const Header = () => {
                   Welcome, {user.name}
                 </button>
                 {showDropdown && (
-                  <div className="dropdown-menu">
-                    <button className="dashboard-btn" onClick={navigateToDashboard}>
+                  <div className="dropdown-menu w-[188px]">
+                    <button className="dashboard-btn flex justify-center text-[15px]" onClick={navigateToDashboard}>
                       Dashboard
                     </button>
                   </div>
@@ -87,20 +87,20 @@ const Header = () => {
           <img src={header} alt="header" />
         </div>
         <div className="header__content">
-        <h4>Build Your Body &</h4>
-        <h1 className="section__header">Shape Yourself!</h1>
-        <p>
-          Unleash your potential and embark on a journey towards a stronger,
-          fitter, and more confident you. Sign up for 'Make Your Body Shape'
-          now and witness the incredible transformation your body is capable
-          of!
-        </p>
-        <div className="header__btn">
-          <button className="btn" onClick={handleJoinToday}>Join Today</button>
+          <h4>Build Your Body &</h4>
+          <h1 className="section__header">Shape Yourself!</h1>
+          <p>
+            Unleash your potential and embark on a journey towards a stronger,
+            fitter, and more confident you. Sign up for 'Make Your Body Shape'
+            now and witness the incredible transformation your body is capable
+            of!
+          </p>
+          <div className="header__btn">
+            <button className="btn" onClick={handleJoinToday}>Join Today</button>
+          </div>
         </div>
       </div>
-      </div>
-      
+
     </header>
   );
 };

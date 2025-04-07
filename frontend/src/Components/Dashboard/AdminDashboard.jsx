@@ -129,12 +129,12 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+      <header className="bg-[#001F3F] text-white p-4 flex justify-between items-center shadow-md">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <Link 
-            to="/" 
-            className="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg transition duration-300"
+          <Link
+            to="/"
+            className="bg-[#6A9AB0] hover:bg-blue-900 text-white px-4 py-2 rounded-lg transition duration-300"
           >
             Return to Home
           </Link>
@@ -224,16 +224,16 @@ const AdminDashboard = () => {
                       <td className="p-3">
                         <span className={`
                           px-2 py-1 rounded-full text-xs font-bold
-                          ${subscription.status === 'active' ? 'bg-green-100 text-green-800' : 
-                            subscription.status === 'cancelled' ? 'bg-red-100 text-red-800' : 
-                            'bg-yellow-100 text-yellow-800'}
+                          ${subscription.status === 'active' ? 'bg-green-100 text-green-800' :
+                            subscription.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                              'bg-yellow-100 text-yellow-800'}
                         `}>
                           {subscription.status.toUpperCase()}
                         </span>
                       </td>
                       <td className="p-3">
                         {subscription.status === 'active' && (
-                          <button 
+                          <button
                             onClick={() => handleCancelSubscription(subscription.id)}
                             className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm"
                           >
