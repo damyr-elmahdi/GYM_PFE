@@ -58,7 +58,7 @@ const Header = () => {
             </span>
           </div>
         </div>
-        <ul className="nav__links" id="nav-links">
+        <ul className={`nav__links ${language === 'ar' ? 'nav__links--rtl' : ''}`} id="nav-links">
           <li className="link">
             <a href="#home">{t.home}</a>
           </li>
@@ -77,26 +77,49 @@ const Header = () => {
           <li className="link language-toggle">
             <LanguageToggle />
           </li>
-          <li className="link user-dropdown-container">
-            {user ? (
-              <div className="user-dropdown">
-                <button className="btn user-btn" onClick={toggleDropdown}>
-                  {t.welcome}, {user.name}
-                </button>
-                {showDropdown && (
-                  <div className="dropdown-menu">
-                    <button className="dashboard-btn" onClick={navigateToDashboard}>
-                      Dashboard
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link to="/login-register">
-                <button className="btn">{t.login}</button>
-              </Link>
-            )}
-          </li>
+          {language === 'ar' ? (
+            <li className={`link user-dropdown-container ${language === 'ar' ? 'user-dropdown-container--rtl' : ''}`}>
+              {user ? (
+                <div className="user-dropdown">
+                  <button className="btn user-btn" onClick={toggleDropdown}>
+                    {t.welcome}, {user.name}
+                  </button>
+                  {showDropdown && (
+                    <div className="dropdown-menu dropdown-menu--rtl">
+                      <button className="dashboard-btn" onClick={navigateToDashboard}>
+                        Dashboard
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link to="/login-register">
+                  <button className="btn">{t.login}</button>
+                </Link>
+              )}
+            </li>
+          ) : (
+            <li className="link user-dropdown-container">
+              {user ? (
+                <div className="user-dropdown">
+                  <button className="btn user-btn" onClick={toggleDropdown}>
+                    {t.welcome}, {user.name}
+                  </button>
+                  {showDropdown && (
+                    <div className="dropdown-menu">
+                      <button className="dashboard-btn" onClick={navigateToDashboard}>
+                        Dashboard
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link to="/login-register">
+                  <button className="btn">{t.login}</button>
+                </Link>
+              )}
+            </li>
+          )}
         </ul>
       </nav>
       <div className="section__container header__container" id="home">

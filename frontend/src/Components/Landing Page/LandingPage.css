@@ -12,43 +12,51 @@
 
 /* Add these styles to your LandingPage.css file */
 
-/* RTL Layout Support */
-[dir="rtl"] {
-  text-align: right;
+/* Add these styles to your LandingPage.css file */
+
+/* RTL specific classes */
+.nav__links--rtl {
+  display: flex;
+  justify-content: flex-end;
 }
 
-[dir="rtl"] .nav__links {
-  flex-direction: row-reverse;
+@media (width > 768px) {
+  .nav__links--rtl {
+    flex-direction: row-reverse;
+  }
+  
+  .user-dropdown-container--rtl {
+    margin-right: auto;
+    margin-left: 0;
+  }
+  
+  /* Fix dropdown menu position in RTL */
+  .dropdown-menu--rtl {
+    left: 0;
+    right: auto;
+  }
 }
 
-[dir="rtl"] .header__content {
-  align-items: flex-end;
-}
-
-[dir="rtl"] .header__btn {
-  direction: rtl;
-}
-
-[dir="rtl"] .dropdown-menu {
+/* Ensure the RTL text alignment works properly */
+[dir="rtl"] .section__header::after {
   left: auto;
   right: 0;
 }
 
-/* Font adjustment for Arabic */
-[lang="ar"] {
-  font-family: 'Tajawal', Arial, sans-serif;
-  line-height: 1.6;
+/* Fix responsive layout for RTL */
+@media (width <= 768px) {
+  .nav__links--rtl {
+    align-items: flex-end;
+    text-align: right;
+  }
+  
+  .user-dropdown-container--rtl {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
 }
 
-/* Specific styles for Arabic typography */
-[lang="ar"] h1, 
-[lang="ar"] h2, 
-[lang="ar"] h3, 
-[lang="ar"] h4 {
-  line-height: 1.4;
-}
-
-/* Add any other RTL specific adjustments here */
 * {
   padding: 0;
   margin: 0;
