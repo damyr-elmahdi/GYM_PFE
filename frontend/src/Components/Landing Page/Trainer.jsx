@@ -3,15 +3,16 @@ import "./LandingPage.css";
 import trainer1 from "../../Assets/trainer-1.jpg";
 import trainer2 from "../../Assets/trainer-2.jpg";
 import trainer3 from "../../Assets/trainer-3.jpg";
+import { useLanguage } from "../../Context/LanguageContext";
 
 const Trainer = () => {
+  const { t } = useLanguage();
+  
   return (
     <section className="section__container trainer__container" id="trainer">
-      <h2 className="section__header">Our Trainers</h2>
+      <h2 className="section__header">{t.ourTrainers}</h2>
       <p className="section__description">
-        Our trainers are more than just experts in exercise; they are passionate
-        about helping you achieve your health and fitness goals. Our trainers
-        are equipped to tailor workout programs to meet your unique needs.
+        {t.trainersDesc}
       </p>
       <div className="trainer__grid">
         <div className="trainer__card">
@@ -19,12 +20,11 @@ const Trainer = () => {
         </div>
         <div className="trainer__card">
           <div className="trainer__content">
-            <h4>James Rodriguez</h4>
-            <h5>Strength and Conditioning</h5>
+            <h4>{t.jamesRodriguez}</h4>
+            <h5>{t.strengthConditioning}</h5>
             <hr />
             <p>
-              With a background in competitive sports, he's dedicated to helping
-              you reach your peak physical performance.
+              {t.jamesDesc}
             </p>
             <div className="trainer__socials">
               <a href="#">
@@ -47,12 +47,11 @@ const Trainer = () => {
         </div>
         <div className="trainer__card">
           <div className="trainer__content">
-            <h4>Mark Harris</h4>
-            <h5>HIIT and Functional</h5>
+            <h4>{t.markHarris}</h4>
+            <h5>{t.hiitFunctional}</h5>
             <hr />
             <p>
-              His energetic and dynamic workouts are designed to push your
-              limits, boost metabolism, and torch calories.
+              {t.markDesc}
             </p>
             <div className="trainer__socials">
               <a href="#">
@@ -75,12 +74,11 @@ const Trainer = () => {
         </div>
         <div className="trainer__card">
           <div className="trainer__content">
-            <h4>Emily Davis</h4>
-            <h5>Yoga and Mindfulness</h5>
+            <h4>{t.emilyDavis}</h4>
+            <h5>{t.yogaMindfulness}</h5>
             <hr />
             <p>
-              Emily's sessions are about physical postures and also about
-              cultivating inner peace and mindfulness.
+              {t.emilyDesc}
             </p>
             <div className="trainer__socials">
               <a href="#">

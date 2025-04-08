@@ -5,12 +5,15 @@ import price2 from "../../Assets/price-2.png";
 import price3 from "../../Assets/price-3.png";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
+import { useLanguage } from "../../Context/LanguageContext";
 import { toast } from 'react-toastify';
 
 const Price = () => {
   const [plans, setPlans] = useState([]);
   const { user, token } = useContext(AppContext);
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
+  
   useEffect(() => {
     const fetchPlans = async () => {
       try {
@@ -31,44 +34,25 @@ const Price = () => {
 
   const handleSubscribe = async (planType) => {
     if (!user) {
-      toast.error('Please log in to subscribe');
+      toast.error(language === 'en' ? 'Please log in to subscribe' : 'Veuillez vous connecter pour vous abonner');
       return;
     }
-
+    
     // Navigate to payment page with plan information
-    navigate('/payment', {
-      state: {
-        planType,
+    navigate('/payment', { 
+      state: { 
+        planType, 
         planName: plans.find(plan => plan.type === planType).name,
-        planPrice: plans.find(plan => plan.type === planType).price
-      }
+        planPrice: plans.find(plan => plan.type === planType).price 
+      } 
     });
-  };
-
-  const nav = useNavigate();
-  const handleScrollToBottom = () => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth',
-    });
-  };
-
-  const handleBackClick = () => {
-    handleScrollToBottom();
-    nav('/');  // Navigate to home page
   };
 
   return (
     <section className="section__container price__container" id="price">
-      <button
-        className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[0px] ml-[0px] hover:scale-105"
-        onClick={handleBackClick}  // Custom click handler
-      > &larr; Back
-      </button>
-      <h2 className="section__header">Our Pricing</h2>
+      <h2 className="section__header">{t.ourPricing}</h2>
       <p className="section__description">
-        Our pricing plan comes with various membership tiers, each tailored to
-        cater to different preferences and fitness aspirations.
+        {t.pricingDesc}
       </p>
       <div className="price__grid">
         {plans.map((plan) => (
@@ -76,21 +60,21 @@ const Price = () => {
             <div className="price__content">
               <h4>{plan.name}</h4>
               <img src={plan.image} alt={plan.name} />
-              <p>{plan.description || 'Fitness plan tailored to your needs.'}</p>
+              <p>{plan.description || (language === 'en' ? 'Fitness plan tailored to your needs.' : 'Plan de fitness adapté à vos besoins.')}</p>
               <hr />
-              <h4>Key Features</h4>
+              <h4>{t.keyFeatures}</h4>
               {plan.features.map((feature, index) => (
                 <p key={index}>{feature}</p>
               ))}
               <div className="text-center mt-4">
-                <h3 className="text-2xl font-bold text-blue-600">${plan.price}/month</h3>
+                <h3 className="text-2xl font-bold text-blue-600">${plan.price}/{language === 'en' ? 'month' : 'mois'}</h3>
               </div>
             </div>
-            <button
-              onClick={() => handleSubscribe(plan.type)}
+            <button 
+              onClick={() => handleSubscribe(plan.type)} 
               className="btn"
             >
-              Subscribe Now
+              {t.subscribeNow}
             </button>
           </div>
         ))}

@@ -4,10 +4,12 @@ import logo from "../../Assets/logo.png";
 import header from "../../Assets/header.png";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
+import { useLanguage } from "../../Context/LanguageContext";
 import { toast } from 'react-toastify';
 
 const Header = () => {
   const { user, setUser, setToken } = useContext(AppContext);
+  const { language, toggleLanguage, t } = useLanguage();
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
@@ -46,29 +48,37 @@ const Header = () => {
         </div>
         <ul className="nav__links" id="nav-links">
           <li className="link">
-            <a href="#home">Home</a>
+            <a href="#home">{t.home}</a>
           </li>
           <li className="link">
-            <a href="#about">About</a>
+            <a href="#about">{t.about}</a>
           </li>
           <li className="link">
-            <a href="#class">Classes</a>
+            <a href="#class">{t.classes}</a>
           </li>
           <li className="link">
-            <a href="#trainer">Trainers</a>
+            <a href="#trainer">{t.trainers}</a>
           </li>
           <li className="link">
-            <a href="#price">Pricing</a>
+            <a href="#price">{t.pricing}</a>
+          </li>
+          <li className="link language-toggle">
+            <button 
+              className="btn language-btn"
+              onClick={toggleLanguage}
+            >
+              {language === 'en' ? 'FR' : 'EN'}
+            </button>
           </li>
           <li className="link user-dropdown-container">
             {user ? (
               <div className="user-dropdown">
                 <button className="btn user-btn" onClick={toggleDropdown}>
-                  Welcome, {user.name}
+                  {t.welcome}, {user.name}
                 </button>
                 {showDropdown && (
-                  <div className="dropdown-menu w-[188px]">
-                    <button className="dashboard-btn flex justify-center text-[15px]" onClick={navigateToDashboard}>
+                  <div className="dropdown-menu">
+                    <button className="dashboard-btn" onClick={navigateToDashboard}>
                       Dashboard
                     </button>
                   </div>
@@ -76,7 +86,7 @@ const Header = () => {
               </div>
             ) : (
               <Link to="/login-register">
-                <button className="btn">Login</button>
+                <button className="btn">{t.login}</button>
               </Link>
             )}
           </li>
@@ -87,20 +97,14 @@ const Header = () => {
           <img src={header} alt="header" />
         </div>
         <div className="header__content">
-          <h4>Build Your Body &</h4>
-          <h1 className="section__header">Shape Yourself!</h1>
-          <p>
-            Unleash your potential and embark on a journey towards a stronger,
-            fitter, and more confident you. Sign up for 'Make Your Body Shape'
-            now and witness the incredible transformation your body is capable
-            of!
-          </p>
+          <h4>{t.buildBody}</h4>
+          <h1 className="section__header">{t.shapeYourself}</h1>
+          <p>{t.unleashPotential}</p>
           <div className="header__btn">
-            <button className="btn" onClick={handleJoinToday}>Join Today</button>
+            <button className="btn" onClick={handleJoinToday}>{t.joinToday}</button>
           </div>
         </div>
       </div>
-
     </header>
   );
 };

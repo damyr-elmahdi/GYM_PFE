@@ -41,6 +41,7 @@ import FranchisePage from "./Components/Footer/FranchisePage";
 import PartnershipPage from "./Components/Footer/PartnershipPage";
 import NetworkPage from "./Components/Footer/NetworkPage";
 import PriceJoin from "./Components/Landing Page/PricingJoin";
+import { LanguageProvider } from "./Context/LanguageContext";
 // import ForgetPassword from "./Components/Login & Sign Up/ForgetPassword";
 
 const NotFoundPage = () => (
@@ -202,6 +203,13 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <LanguageProvider>
+          {/* Your existing app structure */}
+          <AppContext.Provider value={{ user, setUser, token, setToken }}>
+            <ToastContainer />
+            <Routes>{/* Your routes */}</Routes>
+          </AppContext.Provider>
+        </LanguageProvider>
         <Route
           path="/client/products/:id"
           element={
@@ -234,7 +242,6 @@ export default function App() {
 
         {/*************** Forgot Password ****************/}
         {/* <Route path="/forget-password" element={<ForgetPassword />} /> */}
-
 
         {/* *************** Footer Pages ************************** */}
         <Route path="/contact-us" element={<ContactUs />} />
