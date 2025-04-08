@@ -2,8 +2,11 @@ import React from "react";
 import "./LandingPage.css";
 import logo from "../../Assets/logo.png";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../../Context/LanguageContext";
 
 const Footer = () => {
+  const { t } = useLanguage();
+
   return (
     <footer className="footer">
       <div className="section__container footer__container">
@@ -15,9 +18,7 @@ const Footer = () => {
             </a>
           </div>
           <p>
-            Take the first step towards a healthier, stronger you with our
-            unbeatable pricing plans. Let's sweat, achieve, and conquer
-            together!
+            {t.footerTagline}
           </p>
           <div className="footer__socials">
             <a href="#">
@@ -32,35 +33,35 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        <div class="footer__col">
-          <h4>Company</h4>
-          <div class="footer__links">
-            <Link to={"business-page"}>Business</Link>
-            <Link to={"/franchise-page"}>Franchise</Link>
-            <Link to={"/partnership-page"}>Partnership</Link>
-            <Link to={"/netwok-page"}>Network</Link>
+        <div className="footer__col">
+          <h4>{t.company}</h4>
+          <div className="footer__links">
+            <Link to={"business-page"}>{t.business}</Link>
+            <Link to={"/franchise-page"}>{t.franchise}</Link>
+            <Link to={"/partnership-page"}>{t.partnership}</Link>
+            <Link to={"/netwok-page"}>{t.network}</Link>
           </div>
         </div>
-        <div class="footer__col">
-          <h4>About Us</h4>
-          <div class="footer__links">
-            <Link to={"/blog-page"}>Blogs</Link>
-            <Link to={"/security-page"}>Security</Link>
-            <Link to={"career-page"}>Careers</Link>
+        <div className="footer__col">
+          <h4>{t.aboutUs}</h4>
+          <div className="footer__links">
+            <Link to={"/blog-page"}>{t.blogs}</Link>
+            <Link to={"/security-page"}>{t.security}</Link>
+            <Link to={"career-page"}>{t.careers}</Link>
           </div>
         </div>
-        <div class="footer__col">
-          <h4>Contact</h4>
-          <div class="footer__links">
-            <Link to={"/contact-us"}>Contact Us</Link>
-            <Link to={"/privacy-policy"}>Privacy Policy</Link>
-            <Link to={"/terms-conditions"}>Terms & Conditions</Link>
-            <Link to={"/bmi-calculator"}>BMI Calculator</Link>
+        <div className="footer__col">
+          <h4>{t.contact}</h4>
+          <div className="footer__links">
+            <Link to={"/contact-us"}>{t.contactUs}</Link>
+            <Link to={"/privacy-policy"}>{t.privacyPolicy}</Link>
+            <Link to={"/terms-conditions"}>{t.termsConditions}</Link>
+            <Link to={"/bmi-calculator"}>{t.bmiCalculator}</Link>
           </div>
         </div>
       </div>
-      <div class="footer__bar">
-        Copyright © 2025 Web Design Mastery. All rights reserved.
+      <div className="footer__bar">
+        {t.copyright}
       </div>
     </footer>
   );

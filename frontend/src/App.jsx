@@ -42,6 +42,7 @@ import PartnershipPage from "./Components/Footer/PartnershipPage";
 import NetworkPage from "./Components/Footer/NetworkPage";
 import PriceJoin from "./Components/Landing Page/PricingJoin";
 import { LanguageProvider } from "./Context/LanguageContext";
+
 // import ForgetPassword from "./Components/Login & Sign Up/ForgetPassword";
 
 const NotFoundPage = () => (
@@ -55,210 +56,201 @@ const NotFoundPage = () => (
 export default function App() {
   return (
     <AppProvider>
-      <Routes>
-        {/* Landing Page Route */}
-        <Route
-          path="/"
-          element={
-            <>
-              <Header />
-              <About />
-              <Class />
-              <Trainer />
-              <PriceJoin />
-              <Client />
-              <Footer />
-            </>
-          }
-        />
+      <LanguageProvider>
+        <Routes>
+          {/* Landing Page Route */}
+          <Route
+            path="/"
+            element={
+              <>
+                <Header />
+                <About />
+                <Class />
+                <Trainer />
+                <PriceJoin />
+                <Client />
+                <Footer />
+              </>
+            }
+          />
 
-        {/* Login/Register Route */}
-        <Route path="/login-register" element={<LoginRegister />} />
+          {/* Login/Register Route */}
+          <Route path="/login-register" element={<LoginRegister />} />
 
-        {/* Admin Routes */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/users"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <UserManagement />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/exercises"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminExerciseList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/exercises/create"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ExerciseForm />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/exercises/edit/:id"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ExerciseForm />
-            </ProtectedRoute>
-          }
-        />
+          {/* Admin Routes */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <UserManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/exercises"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminExerciseList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/exercises/create"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ExerciseForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/exercises/edit/:id"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ExerciseForm />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Admin Product Routes */}
-        <Route
-          path="/admin/products"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminProductList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/products/create"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ProductForm />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/products/edit/:id"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ProductForm />
-            </ProtectedRoute>
-          }
-        />
+          {/* Admin Product Routes */}
+          <Route
+            path="/admin/products"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminProductList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/products/create"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ProductForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/products/edit/:id"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ProductForm />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Payment Route */}
-        <Route path="/payment" element={<Payment />} />
+          {/* Payment Route */}
+          <Route path="/payment" element={<Payment />} />
 
-        {/* Client Routes */}
-        {/* Client Routes */}
-        <Route
-          path="/client/dashboard"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <ClientDashboard />
-            </ProtectedRoute>
-          }
-        />
+          {/* Client Routes */}
+          <Route
+            path="/client/dashboard"
+            element={
+              <ProtectedRoute requiredRole="client">
+                <ClientDashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Profile Settings Route */}
-        <Route
-          path="/client/profile"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <ProfileSettings />
-            </ProtectedRoute>
-          }
-        />
+          {/* Profile Settings Route */}
+          <Route
+            path="/client/profile"
+            element={
+              <ProtectedRoute requiredRole="client">
+                <ProfileSettings />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/client/exercises"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <ClientExerciseList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/client/exercises/:id"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <ExerciseDetail />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/client/exercises"
+            element={
+              <ProtectedRoute requiredRole="client">
+                <ClientExerciseList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/client/exercises/:id"
+            element={
+              <ProtectedRoute requiredRole="client">
+                <ExerciseDetail />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Subscription Management Route */}
-        <Route
-          path="/client/subscription"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <SubscriptionManagement />
-            </ProtectedRoute>
-          }
-        />
+          {/* Subscription Management Route */}
+          <Route
+            path="/client/subscription"
+            element={
+              <ProtectedRoute requiredRole="client">
+                <SubscriptionManagement />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Client Product Routes */}
-        <Route
-          path="/client/products"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <ClientProductList />
-            </ProtectedRoute>
-          }
-        />
-        <LanguageProvider>
-          {/* Your existing app structure */}
-          <AppContext.Provider value={{ user, setUser, token, setToken }}>
-            <ToastContainer />
-            <Routes>{/* Your routes */}</Routes>
-          </AppContext.Provider>
-        </LanguageProvider>
-        <Route
-          path="/client/products/:id"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <ProductDetail />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/pricing"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <PricingManagement />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/client/cart"
-          element={
-            <ProtectedRoute requiredRole="client">
-              <CartView />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/cartpayment" element={<CartPayment />} />
+          {/* Client Product Routes */}
+          <Route
+            path="/client/products"
+            element={
+              <ProtectedRoute requiredRole="client">
+                <ClientProductList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/client/products/:id"
+            element={
+              <ProtectedRoute requiredRole="client">
+                <ProductDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/pricing"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <PricingManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/client/cart"
+            element={
+              <ProtectedRoute requiredRole="client">
+                <CartView />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/cartpayment" element={<CartPayment />} />
 
-        {/* Public Pricing Route */}
-        <Route path="/pricing" element={<Price />} />
-        <Route path="/pricing-join" element={<PriceJoin />} />
+          {/* Public Pricing Route */}
+          <Route path="/pricing" element={<Price />} />
+          <Route path="/pricing-join" element={<PriceJoin />} />
 
-        {/*************** Forgot Password ****************/}
-        {/* <Route path="/forget-password" element={<ForgetPassword />} /> */}
-
-        {/* *************** Footer Pages ************************** */}
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-conditions" element={<TermsAndConditions />} />
-        <Route path="/bmi-calculator" element={<BMICalculator />} />
-        <Route path="/blog-page" element={<BlogPage />} />
-        <Route path="/blog/:id" element={<BlogDetail />} />
-        <Route path="/security-page" element={<SecurityPage />} />
-        <Route path="career-page" element={<CareersPage />} />
-        <Route path="/business-page" element={<BusinessPage />} />
-        <Route path="/franchise-page" element={<FranchisePage />} />
-        <Route path="/partnership-page" element={<PartnershipPage />} />
-        <Route path="/netwok-page" element={<NetworkPage />} />
-        {/* Fallback Route for Unmatched Paths */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+          {/* Footer Pages */}
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-conditions" element={<TermsAndConditions />} />
+          <Route path="/bmi-calculator" element={<BMICalculator />} />
+          <Route path="/blog-page" element={<BlogPage />} />
+          <Route path="/blog/:id" element={<BlogDetail />} />
+          <Route path="/security-page" element={<SecurityPage />} />
+          <Route path="career-page" element={<CareersPage />} />
+          <Route path="/business-page" element={<BusinessPage />} />
+          <Route path="/franchise-page" element={<FranchisePage />} />
+          <Route path="/partnership-page" element={<PartnershipPage />} />
+          <Route path="/netwok-page" element={<NetworkPage />} />
+          {/* Fallback Route for Unmatched Paths */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </LanguageProvider>
     </AppProvider>
   );
 }

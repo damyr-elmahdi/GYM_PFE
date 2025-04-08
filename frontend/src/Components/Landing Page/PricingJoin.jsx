@@ -6,32 +6,64 @@ import price3 from "../../Assets/price-3.png";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
 import { toast } from 'react-toastify';
+import { useLanguage } from "../../Context/LanguageContext";
 
 const PriceJoin = () => {
     const [plans, setPlans] = useState([]);
     const { user, token } = useContext(AppContext);
     const navigate = useNavigate();
+    const { t, language } = useLanguage();
+
+    const planDescriptions = {
+        en: {
+            basic: "Perfect for beginners who are just starting their fitness journey.",
+            weekly: "Ideal for those with a busy schedule who want flexible workout times.",
+            premium: "The ultimate fitness experience with full access to all amenities."
+        },
+        fr: {
+            basic: "Parfait pour les débutants qui commencent leur parcours de remise en forme.",
+            weekly: "Idéal pour ceux qui ont un emploi du temps chargé et qui souhaitent des horaires d'entraînement flexibles.",
+            premium: "L'expérience de remise en forme ultime avec un accès complet à tous les équipements."
+        }
+    };
+
     useEffect(() => {
         const fetchPlans = async () => {
             try {
                 const response = await fetch('/api/plans');
                 const data = await response.json();
-                setPlans(Object.entries(data).map(([key, plan]) => ({
-                    ...plan,
-                    type: key,
-                    image: key === 'basic' ? price1 : key === 'weekly' ? price2 : price3
-                })));
+                
+                const translatedPlans = Object.entries(data).map(([key, plan]) => {
+                    // Translate features based on current language
+                    const translatedFeatures = plan.features.map(feature => {
+                        // Here you would need to have translations for each feature
+                        // This is a simplified example
+                        return language === 'fr' && key === 'basic' ? 
+                            feature.replace('Access', 'Accès').replace('classes', 'cours') : 
+                            feature;
+                    });
+
+                    return {
+                        ...plan,
+                        type: key,
+                        description: planDescriptions[language][key] || plan.description,
+                        features: translatedFeatures,
+                        image: key === 'basic' ? price1 : key === 'weekly' ? price2 : price3
+                    };
+                });
+                
+                setPlans(translatedPlans);
             } catch (error) {
                 console.error('Error fetching plans:', error);
             }
         };
 
         fetchPlans();
-    }, []);
+    }, [language]);
 
     const handleSubscribe = async (planType) => {
         if (!user) {
-            toast.error('Please log in to subscribe');
+            toast.error(language === 'en' ? 'Please log in to subscribe' : 'Veuillez vous connecter pour vous abonner');
             return;
         }
 
@@ -47,10 +79,9 @@ const PriceJoin = () => {
 
     return (
         <section className="section__container price__container" id="price">
-            <h2 className="section__header">Our Pricing</h2>
+            <h2 className="section__header">{t.ourPricing}</h2>
             <p className="section__description">
-                Our pricing plan comes with various membership tiers, each tailored to
-                cater to different preferences and fitness aspirations.
+                {t.pricingDesc}
             </p>
             <div className="price__grid">
                 {plans.map((plan) => (
@@ -58,21 +89,23 @@ const PriceJoin = () => {
                         <div className="price__content">
                             <h4>{plan.name}</h4>
                             <img src={plan.image} alt={plan.name} />
-                            <p>{plan.description || 'Fitness plan tailored to your needs.'}</p>
+                            <p>{plan.description}</p>
                             <hr />
-                            <h4>Key Features</h4>
+                            <h4>{t.keyFeatures}</h4>
                             {plan.features.map((feature, index) => (
                                 <p key={index}>{feature}</p>
                             ))}
                             <div className="text-center mt-4">
-                                <h3 className="text-2xl font-bold text-blue-600">${plan.price}/month</h3>
+                                <h3 className="text-2xl font-bold text-blue-600">
+                                    ${plan.price}/{language === 'en' ? 'month' : 'mois'}
+                                </h3>
                             </div>
                         </div>
                         <button
                             onClick={() => handleSubscribe(plan.type)}
                             className="btn"
                         >
-                            Subscribe Now
+                            {t.subscribeNow}
                         </button>
                     </div>
                 ))}
