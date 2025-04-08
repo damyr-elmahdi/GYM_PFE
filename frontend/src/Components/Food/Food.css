@@ -1,143 +1,170 @@
-.vegitbales-container {
-    position: relative;
+.vegetables-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 52px 0px;
-    width: 1350px;
-    margin-left: -25px;
+    align-items: center;
+    padding: 40px 20px;
+    width: 100%;
+    max-width: 1350px;
+    margin: 0 auto;
 }
 
 .products-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    /* width: 100%; */
-    margin-left: -24px;
-    width: 1351px;
-
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    width: 100%;
+    margin-top: 20px;
 }
 
-.d-vegitbales {
+.food-card {
     background-color: #ffffff;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
     text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    transition: transform 0.3s ease-in-out;
-    margin-left: 50px;
-    margin-bottom: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
 }
 
-.d-vegitbales:hover {
+.food-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 12px #6A9AB0,
-        0 6px 20px #6A9AB0;
-    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+    box-shadow: 0 8px 25px rgba(106, 154, 176, 0.4);
 }
 
-.veg-image {
-    width: 151px;
-    height: 159px;
-    border-radius: 8px;
-}
-
-.name-product {
-    font-size: 15px;
-    margin-left: -85px;
-    margin-top: 22px;
-}
-
-.weight-product {
-    font-size: 15px;
-    margin-top: -23px;
-    margin-left: 110px;
-}
-
-.input-value {
-    border: 1px solid gray;
-    border-radius: 4px;
-    padding: 0px 5px;
-    font-size: 8px;
-    margin-top: 25px;
-    width: 92px;
-    padding: 0px 9px;
-    margin-left: -101px;
-    font-size: 11px;
-    height: 23px;
-}
-
-.number-calories {
-    font-size: 12px;
-    margin-left: 86px;
-    margin-top: -17px;
-}
-
-.category-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    padding: 10px 15px;
-    /* background: linear-gradient(to right, #4facfe, #00f2fe); */
-    background: #EAD8B1;
-    border-radius: 8px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    display: inline-block;
-    margin: 40px 0 20px;
-    text-align: left;
-    margin-bottom: 40px;
-    margin-left: 60px;
-}
-
-.d-show-outline {
-    margin-top: -16px;
-    margin-left: 186px;
-    font-size: 14px;
-}
-
-.text-result-yet {
-    margin-left: 430px;
-    margin-top: 135px;
-    position: absolute;
-}
-
-.search-input {
-    border: 1px solid rgb(192, 191, 191);
-    height: 40px;
-    border-radius: 5px;
-    width: 1000px;
-    padding: 0 12px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease-in-out;
-    margin-left: 50px;
-    margin-bottom: -15px;
-    margin-top: -25px;
-}
-
-/* Add a stronger shadow when the input is focused */
-.search-input:focus {
-    outline: none;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
-}
-
-.d-number-result {
-    margin-top: 25px;
-    margin-left: 7px;
-}
-
-.div-image-food {
-    /* background: #bab9b9; */
-    width: 250px;
+.food-image-container {
+    background: #f8f9fa;
+    width: 100%;
     height: 200px;
-    margin-top: -24px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top-right-radius: 12px;
-    border-top-left-radius: 12px;
+    overflow: hidden;
+}
+
+.food-image {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.food-card:hover .food-image {
+    transform: scale(1.05);
+}
+
+.food-info {
+    padding: 20px;
+    position: relative;
+}
+
+.food-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.food-weight {
+    font-size: 15px;
+    color: #666;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.weight-input {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 100px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.calories-display {
+    font-size: 16px;
+    color: #444;
+    margin: 10px 0;
+    text-align: left;
+}
+
+.calories-value {
+    font-weight: 700;
+    color: #2a9d8f;
+}
+
+.toggle-details {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 60px;
+    color: #666;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+.nutrition-details {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    text-align: left;
+}
+
+.nutrition-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+.nutrition-label {
+    font-weight: 600;
+}
+
+.category-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    padding: 12px 20px;
+    background: linear-gradient(to right, #EAD8B1, #f5e6c8);
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    margin: 30px 0 20px;
+    align-self: flex-start;
+}
+
+.search-input {
+    border: 1px solid #ddd;
+    height: 50px;
+    border-radius: 10px;
+    width: 100%;
+    padding: 0 20px;
+    font-size: 16px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #6A9AB0;
+    box-shadow: 0 3px 15px rgba(106, 154, 176, 0.2);
+}
+
+.no-results {
+    font-size: 18px;
+    color: #666;
+    margin-top: 40px;
+    text-align: center;
+    width: 100%;
 }

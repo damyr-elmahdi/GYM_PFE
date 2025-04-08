@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { FaArrowLeft, FaUpload, FaSave } from "react-icons/fa";
 
 const ExerciseForm = () => {
   const { id } = useParams();
@@ -146,147 +147,212 @@ const ExerciseForm = () => {
       toast.success(`Exercise created successfully!`);
       setTimeout(() => {
         navigate("/admin/exercises");
-      }, 1500); // 2 second delay
+      }, 1500);
     } finally {
       setLoading(false);
     }
   };
 
+  const bodyPartOptions = [
+    { value: "Arms", label: "Arms" },
+    { value: "Legs", label: "Legs" },
+    { value: "Chest", label: "Chest" },
+    { value: "Back", label: "Back" },
+    { value: "Shoulders", label: "Shoulders" },
+    { value: "Core", label: "Core" },
+    { value: "Full Body", label: "Full Body" },
+  ];
+
+  const difficultyOptions = [
+    { value: "Beginner", label: "Beginner" },
+    { value: "Intermediate", label: "Intermediate" },
+    { value: "Advanced", label: "Advanced" },
+  ];
+
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <button
-        className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[0px] ml-[-300px] hover:scale-105"
-        onClick={handleBackClick}
-      >
-        &larr; Back
-      </button>
-      <h2 className="text-2xl font-bold mb-4">
-        {isEdit ? "Edit Exercise" : "Create New Exercise"}
-      </h2>
-      {error && <div className="bg-red-100 p-3 mb-4 text-red-700">{error}</div>}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block mb-1">Name:</label>
-          <input
-            type="text"
-            name="nom"
-            value={formData.nom}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1">Description:</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-            rows="4"
-          ></textarea>
-        </div>
-
-        <div>
-          <label className="block mb-1">Video URL:</label>
-          <input
-            type="text"
-            name="urlVido"
-            value={formData.urlVido}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1">Difficulty Level:</label>
-          <select
-            name="niveauDifficult"
-            value={formData.niveauDifficult}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          >
-            <option value="">Select Difficulty</option>
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block mb-1">Body Part:</label>
-          <select
-            name="partieCorps"
-            value={formData.partieCorps}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          >
-            <option value="">Select Body Part</option>
-            <option value="Arms">Arms</option>
-            <option value="Legs">Legs</option>
-            <option value="Chest">Chest</option>
-            <option value="Back">Back</option>
-            <option value="Shoulders">Shoulders</option>
-            <option value="Core">Core</option>
-            <option value="Full Body">Full Body</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block mb-1">Exercise Image:</label>
-          <input
-            type="file"
-            name="image"
-            onChange={handleFileChange}
-            className="w-full p-2 border rounded"
-          />
-          {previewImage && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-500 mb-1">Current image:</p>
-              <img
-                src={previewImage}
-                alt="Exercise preview"
-                className="h-32 object-cover rounded border"
-              />
-            </div>
-          )}
-        </div>
-
-        <div>
-          <label className="block mb-1">Body Part Reference Image:</label>
-          <input
-            type="file"
-            name="partieCorpsPic"
-            onChange={handleFileChange}
-            className="w-full p-2 border rounded"
-          />
-          {previewBodyPartImage && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-500 mb-1">Current body part image:</p>
-              <img
-                src={previewBodyPartImage}
-                alt="Body part preview"
-                className="h-32 object-cover rounded border"
-              />
-            </div>
-          )}
-        </div>
-
+    <div className="max-w-3xl mx-auto  bg-white rounded-xl shadow-lg p-8 my-8 border border-gray-500">
+      <div className="flex justify-between items-center mb-8">
         <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:opacity-50"
+          className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-300"
+          onClick={handleBackClick}
         >
-          {loading ? (isEdit ? "Updating..." : "Creating...") : (isEdit ? "Update Exercise" : "Create Exercise")}
+          <FaArrowLeft className="mr-2" /> Back to Exercises
         </button>
+        <h2 className="text-3xl font-bold text-gray-800">
+          {isEdit ? "Edit Exercise" : "Create New Exercise"}
+        </h2>
+      </div>
+      
+      {error && (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-md">
+          <div className="flex">
+            <div className="ml-3">
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Left column */}
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Exercise Name</label>
+              <input
+                type="text"
+                name="nom"
+                value={formData.nom}
+                onChange={handleChange}
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                placeholder="Enter exercise name"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                rows="5"
+                placeholder="Describe the exercise and how to perform it"
+              ></textarea>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Video URL</label>
+              <input
+                type="text"
+                name="urlVido"
+                value={formData.urlVido}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                placeholder="YouTube or Vimeo URL (optional)"
+              />
+            </div>
+          </div>
+
+          {/* Right column */}
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Difficulty Level</label>
+              <select
+                name="niveauDifficult"
+                value={formData.niveauDifficult}
+                onChange={handleChange}
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+              >
+                <option value="">Select Difficulty</option>
+                {difficultyOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Body Part</label>
+              <select
+                name="partieCorps"
+                value={formData.partieCorps}
+                onChange={handleChange}
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+              >
+                <option value="">Select Body Part</option>
+                {bodyPartOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="file-upload-container">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Exercise Image</label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    name="image"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    id="exercise-image"
+                  />
+                  <label 
+                    htmlFor="exercise-image" 
+                    className="flex items-center justify-center w-full p-3 border border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-300"
+                  >
+                    <FaUpload className="mr-2 text-gray-400" />
+                    <span className="text-sm text-gray-500">Upload Image</span>
+                  </label>
+                </div>
+                {previewImage && (
+                  <div className="mt-3">
+                    <img
+                      src={previewImage}
+                      alt="Exercise preview"
+                      className="h-32 w-full object-cover rounded-lg border border-gray-200"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="file-upload-container">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Body Part Image</label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    name="partieCorpsPic"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    id="body-part-image"
+                  />
+                  <label 
+                    htmlFor="body-part-image" 
+                    className="flex items-center justify-center w-full p-3 border border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-300"
+                  >
+                    <FaUpload className="mr-2 text-gray-400" />
+                    <span className="text-sm text-gray-500">Upload Image</span>
+                  </label>
+                </div>
+                {previewBodyPartImage && (
+                  <div className="mt-3">
+                    <img
+                      src={previewBodyPartImage}
+                      alt="Body part preview"
+                      className="h-32 w-full object-cover rounded-lg border border-gray-200"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-5 border-t border-gray-200">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={handleBackClick}
+              className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-3"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex items-center justify-center bg-blue-600 py-2 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <FaSave className="mr-2" />
+              {loading ? (isEdit ? "Updating..." : "Creating...") : (isEdit ? "Update Exercise" : "Create Exercise")}
+            </button>
+          </div>
+        </div>
       </form>
 
-      {/* Toast messages */}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </div>
   );

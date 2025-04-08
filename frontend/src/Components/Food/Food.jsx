@@ -13,33 +13,33 @@ export default function Food() {
     const filteredItems =
         searchTerm.trim() !== ""
             ? allItems.filter((item) =>
-                item.name.toLowerCase().startsWith(searchTerm.toLowerCase())
+                item.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
             : null;
 
     return (
         <div>
-            <div className="vegitbales-container">
+            <div className="vegetables-container">
                 <input
                     type="text"
-                    placeholder="Search food..."
+                    placeholder="Search for food items..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"
-                /> <br />
+                />
 
                 {searchTerm.trim() !== "" ? (
                     filteredItems.length > 0 ? (
                         <>
-                            <h2 className="category-title">Search Results:</h2>
+                            <h2 className="category-title">🔍 Search Results</h2>
                             <div className="products-container">
                                 {filteredItems.map((product) => (
-                                    <VegetableCard key={product.id} product={product} />
+                                    <FoodCard key={product.id} product={product} />
                                 ))}
                             </div>
                         </>
                     ) : (
-                        <p className="text-result-yet">No results found</p>
+                        <p className="no-results">No results found for "{searchTerm}"</p>
                     )
                 ) : (
                     Object.entries(productsData).map(([category, items]) => (
@@ -50,7 +50,7 @@ export default function Food() {
 
                             <div className="products-container">
                                 {items.map((product) => (
-                                    <VegetableCard key={product.id} product={product} />
+                                    <FoodCard key={product.id} product={product} />
                                 ))}
                             </div>
                         </React.Fragment>
@@ -61,49 +61,66 @@ export default function Food() {
     );
 }
 
-function VegetableCard({ product }) {
+function FoodCard({ product }) {
     const caloriesPerGram = !isNaN(Number(product.calories))
         ? Number(product.calories) / 100
         : 0;
 
     const [weight, setWeight] = useState(100);
-    const [show, setShow] = useState(false);
+    const [showDetails, setShowDetails] = useState(false);
 
     const calories = parseFloat((weight * caloriesPerGram).toFixed(2));
-    const proteinAmount = ((calories * 0.25) / 4).toFixed(2);
-    const carbsAmount = ((calories * 0.45) / 4).toFixed(2);
-    const fatsAmount = ((calories * 0.3) / 9).toFixed(2);
+    const proteinAmount = ((calories * 0.25) / 4).toFixed(1);
+    const carbsAmount = ((calories * 0.45) / 4).toFixed(1);
+    const fatsAmount = ((calories * 0.3) / 9).toFixed(1);
 
     return (
-        <div className="d-vegitbales">
-            <div className='div-image-food'>
-                <img src={product.image} alt={product.name} className="veg-image" />
+        <div className="food-card">
+            <div className="food-image-container">
+                <img src={product.image} alt={product.name} className="food-image" />
             </div>
-            <div>
-                <h3 className="name-product">{product.name}</h3>
-                <h4 className="weight-product">{weight} g</h4>
+            <div className="food-info">
+                <h3 className="food-name">{product.name}</h3>
+                <span className="food-weight">{weight}g</span>
+                
                 <input
                     type="number"
                     value={weight}
                     onChange={(e) => setWeight(Math.max(1, Number(e.target.value)))}
                     min="1"
-                    className="input-value w-[900px]"
-                    placeholder="Enter weight (g)"
+                    className="weight-input"
+                    placeholder="Weight (g)"
                 />
-                <p className="number-calories">
-                    <strong>{calories}</strong> calories
+                
+                <p className="calories-display">
+                    Calories: <span className="calories-value">{calories}</span>
                 </p>
-                <p onClick={() => setShow(!show)} className="d-show-outline">
-                    {show ? <FaArrowUp /> : <FaArrowDown />}
-                </p>
+                
+                <button 
+                    className="toggle-details"
+                    onClick={() => setShowDetails(!showDetails)}
+                    aria-label={showDetails ? "Hide nutrition details" : "Show nutrition details"}
+                >
+                    {showDetails ? <FaArrowUp /> : <FaArrowDown />}
+                </button>
+                
+                {showDetails && (
+                    <div className="nutrition-details">
+                        <div className="nutrition-item">
+                            <span className="nutrition-label">Protein:</span>
+                            <span>{proteinAmount}g</span>
+                        </div>
+                        <div className="nutrition-item">
+                            <span className="nutrition-label">Carbs:</span>
+                            <span>{carbsAmount}g</span>
+                        </div>
+                        <div className="nutrition-item">
+                            <span className="nutrition-label">Fats:</span>
+                            <span>{fatsAmount}g</span>
+                        </div>
+                    </div>
+                )}
             </div>
-            {show && (
-                <div className='d-number-result'>
-                    <p><strong>Protein: </strong> {proteinAmount} g</p>
-                    <p><strong>Carbs: </strong> {carbsAmount} g</p>
-                    <p><strong>Fats: </strong> {fatsAmount} g</p>
-                </div>
-            )}
         </div>
     );
 }
