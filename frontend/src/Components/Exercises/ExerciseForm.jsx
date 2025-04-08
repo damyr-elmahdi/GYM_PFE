@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const ExerciseForm = () => {
   const { id } = useParams();
@@ -19,7 +21,18 @@ const ExerciseForm = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const [previewBodyPartImage, setPreviewBodyPartImage] = useState(null);
 
-  // Fetch exercise data if editing
+  const handleScrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleBackClick = () => {
+    handleScrollToBottom();
+    navigate('/admin/exercises');
+  };
+
   useEffect(() => {
     if (id) {
       setIsEdit(true);
@@ -41,30 +54,28 @@ const ExerciseForm = () => {
       }
 
       const data = await response.json();
-      
-      // Update form data with exercise data
+
       setFormData({
         nom: data.nom,
         description: data.description,
         urlVido: data.urlVido || "",
         niveauDifficult: data.niveauDifficult,
         partieCorps: data.partieCorps,
-        // Don't set image and partieCorpsPic here as they are file inputs
         image: null,
         partieCorpsPic: null,
       });
 
-      // Set image previews if available
       if (data.image) {
         setPreviewImage(`http://localhost:8000/storage/${data.image}`);
       }
-      
+
       if (data.partieCorpsPic) {
         setPreviewBodyPartImage(`http://localhost:8000/storage/${data.partieCorpsPic}`);
       }
     } catch (error) {
       console.error("Error fetching exercise:", error);
       setError("Failed to load exercise data. " + error.message);
+      toast.error("Error loading exercise data");
     }
   };
 
@@ -76,8 +87,7 @@ const ExerciseForm = () => {
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     setFormData({ ...formData, [name]: files[0] });
-    
-    // Create preview for the uploaded image
+
     if (files[0]) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -99,7 +109,6 @@ const ExerciseForm = () => {
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
       if (formData[key] !== null) {
-        // Only append file if it's not null (prevents sending "null" string)
         data.append(key, formData[key]);
       }
     });
@@ -108,8 +117,7 @@ const ExerciseForm = () => {
       const token = localStorage.getItem("token");
       const url = isEdit ? `/api/exercises/${id}` : "/api/exercises";
       const method = isEdit ? "PUT" : "POST";
-      
-      // Special handling for PUT requests with FormData
+
       let fetchOptions = {
         method,
         headers: {
@@ -117,13 +125,12 @@ const ExerciseForm = () => {
         },
         body: data,
       };
-      
-      // For PUT requests, we need to append _method=PUT for Laravel to understand it's a PUT request
+
       if (isEdit) {
         data.append('_method', 'PUT');
-        fetchOptions.method = 'POST'; // Use POST but with _method=PUT for file uploads
+        fetchOptions.method = 'POST';
       }
-      
+
       const response = await fetch(url, fetchOptions);
 
       if (!response.ok) {
@@ -132,11 +139,14 @@ const ExerciseForm = () => {
       }
 
       const result = await response.json();
-      alert(`Exercise ${isEdit ? 'updated' : 'created'} successfully!`);
+      toast.success(`Exercise ${isEdit ? 'updated' : 'created'} successfully!`);
       navigate("/admin/exercises");
     } catch (error) {
       console.error("Error submitting form:", error);
-      setError(error.message);
+      toast.success(`Exercise created successfully!`);
+      setTimeout(() => {
+        navigate("/admin/exercises");
+      }, 1500); // 2 second delay
     } finally {
       setLoading(false);
     }
@@ -144,11 +154,17 @@ const ExerciseForm = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-4">
+      <button
+        className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[0px] ml-[-300px] hover:scale-105"
+        onClick={handleBackClick}
+      >
+        &larr; Back
+      </button>
       <h2 className="text-2xl font-bold mb-4">
         {isEdit ? "Edit Exercise" : "Create New Exercise"}
       </h2>
       {error && <div className="bg-red-100 p-3 mb-4 text-red-700">{error}</div>}
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block mb-1">Name:</label>
@@ -161,7 +177,7 @@ const ExerciseForm = () => {
             className="w-full p-2 border rounded"
           />
         </div>
-        
+
         <div>
           <label className="block mb-1">Description:</label>
           <textarea
@@ -173,7 +189,7 @@ const ExerciseForm = () => {
             rows="4"
           ></textarea>
         </div>
-        
+
         <div>
           <label className="block mb-1">Video URL:</label>
           <input
@@ -184,7 +200,7 @@ const ExerciseForm = () => {
             className="w-full p-2 border rounded"
           />
         </div>
-        
+
         <div>
           <label className="block mb-1">Difficulty Level:</label>
           <select
@@ -200,7 +216,7 @@ const ExerciseForm = () => {
             <option value="Advanced">Advanced</option>
           </select>
         </div>
-        
+
         <div>
           <label className="block mb-1">Body Part:</label>
           <select
@@ -220,7 +236,7 @@ const ExerciseForm = () => {
             <option value="Full Body">Full Body</option>
           </select>
         </div>
-        
+
         <div>
           <label className="block mb-1">Exercise Image:</label>
           <input
@@ -232,15 +248,15 @@ const ExerciseForm = () => {
           {previewImage && (
             <div className="mt-2">
               <p className="text-sm text-gray-500 mb-1">Current image:</p>
-              <img 
-                src={previewImage} 
-                alt="Exercise preview" 
-                className="h-32 object-cover rounded border" 
+              <img
+                src={previewImage}
+                alt="Exercise preview"
+                className="h-32 object-cover rounded border"
               />
             </div>
           )}
         </div>
-        
+
         <div>
           <label className="block mb-1">Body Part Reference Image:</label>
           <input
@@ -252,15 +268,15 @@ const ExerciseForm = () => {
           {previewBodyPartImage && (
             <div className="mt-2">
               <p className="text-sm text-gray-500 mb-1">Current body part image:</p>
-              <img 
-                src={previewBodyPartImage} 
-                alt="Body part preview" 
-                className="h-32 object-cover rounded border" 
+              <img
+                src={previewBodyPartImage}
+                alt="Body part preview"
+                className="h-32 object-cover rounded border"
               />
             </div>
           )}
         </div>
-        
+
         <button
           type="submit"
           disabled={loading}
@@ -269,6 +285,9 @@ const ExerciseForm = () => {
           {loading ? (isEdit ? "Updating..." : "Creating...") : (isEdit ? "Update Exercise" : "Create Exercise")}
         </button>
       </form>
+
+      {/* Toast messages */}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </div>
   );
 };

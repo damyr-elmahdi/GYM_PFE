@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
 import iconCart from "../../Assets/iconCart.png";
 import "./ClientProductList.css";
@@ -99,9 +99,27 @@ const ClientProductList = () => {
     }
   };
 
+  const navigate = useNavigate();
+  const handleScrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleBackClick = () => {
+    handleScrollToBottom();
+    navigate('/client/dashboard');  // Navigate to home page
+  };
+
   return (
     <div className="min-h-screen bg-white p-6">
       <div className="max-w-6xl mx-auto">
+        <button
+          className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[0px] ml-[0px] hover:scale-105"
+          onClick={handleBackClick}  // Custom click handler
+        > &larr; Back
+        </button>
         <h1 className="flex justify-center text-3xl font-bold text-gray-800 mb-6">Our Products</h1>
 
         {cartMessage && (

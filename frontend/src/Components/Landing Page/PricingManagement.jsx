@@ -48,7 +48,7 @@ const PricingManagement = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name === "price") {
       // Ensure price is a valid number
       const numValue = parseFloat(value);
@@ -84,7 +84,7 @@ const PricingManagement = () => {
       price: planDetails.price.toString(),
       features: Array.isArray(planDetails.features) ? planDetails.features : []
     });
-    
+
     setEditingPlan(planType);
     setIsCreating(false);
   };
@@ -96,7 +96,7 @@ const PricingManagement = () => {
       price: "",
       features: []
     });
-    
+
     setEditingPlan(null);
     setIsCreating(true);
   };
@@ -114,7 +114,7 @@ const PricingManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validation
     if (!formData.name || !formData.plan_type || !formData.price) {
       toast.error("Please fill all required fields");
@@ -122,15 +122,15 @@ const PricingManagement = () => {
     }
 
     try {
-      const endpoint = isCreating 
-        ? "/api/admin/plans" 
+      const endpoint = isCreating
+        ? "/api/admin/plans"
         : `/api/admin/plans/${encodeURIComponent(formData.plan_type)}`;
-      
+
       const method = isCreating ? "POST" : "PUT";
-      
+
       console.log(`Submitting to ${endpoint} with method ${method}`);
       console.log("Form data:", formData);
-      
+
       const response = await fetch(endpoint, {
         method: method,
         headers: {
@@ -157,7 +157,7 @@ const PricingManagement = () => {
       setIsCreating(false);
       setEditingPlan(null);
       fetchPlans();
-      
+
     } catch (error) {
       console.error("Error saving plan:", error);
       toast.error(error.message || "Failed to save plan");
@@ -196,12 +196,12 @@ const PricingManagement = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+      <header className="bg-[#001F3F] text-white p-4 flex justify-between items-center shadow-md">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold">Pricing Management</h1>
-          <Link 
-            to="/admin/dashboard" 
-            className="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg transition duration-300"
+          <Link
+            to="/admin/dashboard"
+            className="bg-[#3A6D8C] hover:bg-blue-900 text-white px-4 py-2 rounded-lg transition duration-300"
           >
             Back to Dashboard
           </Link>
@@ -225,7 +225,7 @@ const PricingManagement = () => {
               <h3 className="text-xl font-semibold mb-4">
                 {isCreating ? "Create New Plan" : `Edit ${editingPlan} Plan`}
               </h3>
-              
+
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
@@ -240,7 +240,7 @@ const PricingManagement = () => {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-gray-700 mb-1">Plan Type (identifier)</label>
                     <input
@@ -259,7 +259,7 @@ const PricingManagement = () => {
                       </p>
                     )}
                   </div>
-                  
+
                   <div>
                     <label className="block text-gray-700 mb-1">Price ($)</label>
                     <input
@@ -273,7 +273,7 @@ const PricingManagement = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-1">Features</label>
                   <div className="flex">
@@ -293,12 +293,12 @@ const PricingManagement = () => {
                     <button
                       type="button"
                       onClick={handleAddFeature}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r"
+                      className="bg-[#3A6D8C] hover:bg-blue-600 text-white px-4 py-2 rounded-r"
                     >
                       Add
                     </button>
                   </div>
-                  
+
                   <div className="mt-3">
                     {formData.features.map((feature, index) => (
                       <div key={index} className="flex items-center bg-gray-100 p-2 rounded mb-2">
@@ -317,7 +317,7 @@ const PricingManagement = () => {
                     )}
                   </div>
                 </div>
-                
+
                 <div className="flex justify-end space-x-4">
                   <button
                     type="button"
@@ -328,7 +328,7 @@ const PricingManagement = () => {
                   </button>
                   <button
                     type="submit"
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+                    className="bg-[#3A6D8C] hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
                   >
                     {isCreating ? "Create Plan" : "Update Plan"}
                   </button>

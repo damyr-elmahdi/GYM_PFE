@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const AdminProductList = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const handleBackClick = () => {
+    navigate('/admin/dashboard');  // Navigate to home page
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -64,20 +69,7 @@ const AdminProductList = () => {
     return <div className="text-center text-red-500 p-6">{error}</div>;
   }
 
-  // const navigate = useNavigate();
-  const navigate = useNavigate()
 
-  // const handleScrollToBottom = () => {
-  //   window.scrollTo({
-  //     top: document.documentElement.scrollHeight,
-  //     behavior: 'smooth',
-  //   });
-  // };
-
-  const handleBackClick = () => {
-    // handleScrollToBottom();
-    navigate('/admin/dashboard');  // Navigate to home page
-  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

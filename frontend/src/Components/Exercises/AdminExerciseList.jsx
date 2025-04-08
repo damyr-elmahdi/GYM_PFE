@@ -1,10 +1,23 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AdminExerciseList = () => {
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+  const handleScrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleBackClick = () => {
+    handleScrollToBottom();
+    navigate('/admin/dashboard');  // Navigate to home page
+  };
 
   useEffect(() => {
     fetchExercises();
@@ -78,10 +91,17 @@ const AdminExerciseList = () => {
     );
   }
 
+
+
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Manage Exercises</h2>
+        <button
+          className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[-10px] ml-[10px] hover:scale-105"
+          onClick={handleBackClick}  // Custom click handler
+        > &larr; Back
+        </button>
+        <h2 className="text-2xl font-bold w-[1200px] text-center">Manage Exercises</h2>
         <Link
           to="/admin/exercises/create"
           className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
