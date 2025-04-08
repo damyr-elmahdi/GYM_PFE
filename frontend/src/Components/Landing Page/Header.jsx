@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./LandingPage.css";
 import logo from "../../Assets/logo.png";
 import header from "../../Assets/header.png";
@@ -6,12 +6,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
 import { useLanguage } from "../../Context/LanguageContext";
 import { toast } from 'react-toastify';
+import LanguageToggle from "../Common/LanguageToggle";
 
 const Header = () => {
   const { user, setUser, setToken } = useContext(AppContext);
   const { language, toggleLanguage, t } = useLanguage();
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+
+  // Set document direction based on language
+  useEffect(() => {
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = language;
+  }, [language]);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -30,8 +37,13 @@ const Header = () => {
     navigate("/pricing");
   };
 
+  // Add language-specific classes
+  const getDirectionClass = () => {
+    return language === 'ar' ? 'rtl-text' : '';
+  };
+
   return (
-    <header className="header">
+    <header className={`header ${getDirectionClass()}`}>
       <nav>
         <div className="nav__header">
           <div className="nav__logo">
@@ -63,12 +75,7 @@ const Header = () => {
             <a href="#price">{t.pricing}</a>
           </li>
           <li className="link language-toggle">
-            <button 
-              className="btn language-btn"
-              onClick={toggleLanguage}
-            >
-              {language === 'en' ? 'FR' : 'EN'}
-            </button>
+            <LanguageToggle />
           </li>
           <li className="link user-dropdown-container">
             {user ? (

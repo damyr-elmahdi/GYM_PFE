@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
 
-// Create the translations object with all text content in both languages
+// Create the translations object with all text content in all languages
 export const translations = {
   en: {
     // Header
@@ -155,6 +155,83 @@ export const translations = {
     bmiCalculator: "Calculateur IMC",
     copyright: "Copyright © 2025 Web Design Mastery. Tous droits réservés.",
     footerTagline: "Faites le premier pas vers un vous plus sain et plus fort avec nos forfaits imbattables. Transpirons, réalisons et conquérons ensemble!"
+  },
+  ar: {
+    // Header
+    home: "الرئيسية",
+    about: "من نحن",
+    classes: "الفصول",
+    trainers: "المدربين",
+    pricing: "الأسعار",
+    login: "تسجيل الدخول",
+    welcome: "مرحبًا",
+    joinToday: "انضم اليوم",
+    buildBody: "ابنِ جسمك &",
+    shapeYourself: "شكّل نفسك!",
+    unleashPotential: "أطلق العنان لإمكاناتك وانطلق في رحلة نحو نسخة أقوى وأكثر لياقة وثقة. سجل في 'شكل جسمك' الآن واشهد التحول المذهل الذي يمكن أن يحققه جسمك!",
+    
+    // About
+    ourStory: "قصتنا",
+    classYouWillGet: "بقيادة فريقنا من المدربين الخبراء والمحفزين، \"الفصل الذي ستحصل عليه هنا\" هو جلسة عالية الطاقة وموجهة نحو النتائج تجمع بين مزيج مثالي من تمارين القلب وتدريب القوة والتمارين الوظيفية.",
+    openDoorPolicy: "سياسة الباب المفتوح",
+    openDoorDesc: "نؤمن بتوفير وصول غير مقيد لجميع الأفراد، بغض النظر عن لياقتهم البدنية أو عمرهم أو خلفيتهم.",
+    fullyInsured: "تأمين كامل",
+    fullyInsuredDesc: "راحة بالك هي أولويتنا القصوى، والتزامنا بسلامتك يمتد إلى كل جانب من جوانب رحلتك اللياقة البدنية.",
+    personalTrainer: "مدرب شخصي",
+    personalTrainerDesc: "مع خطط تمرين مخصصة مصممة وفقًا لاحتياجاتك، سنضمن لك الاستفادة القصوى من تجربتك في الصالة الرياضية.",
+    
+    // Classes
+    ourClasses: "فصولنا",
+    classesDesc: "اكتشف مجموعة متنوعة من الفصول المثيرة في صالة الألعاب الرياضية الخاصة بنا المصممة لتلبية جميع مستويات اللياقة البدنية والاهتمامات. سواء كنت رياضيًا متمرسًا أو بدأت للتو رحلة اللياقة البدنية، تقدم فصولنا شيئًا للجميع.",
+    strengthTraining: "تدريب القوة",
+    resistanceTraining: "تدريب المقاومة",
+    flexibilityMobility: "المرونة والحركة",
+    yogaPilates: "اليوغا وبيلاتس",
+    hiit: "تدريب عالي الكثافة",
+    circuitTraining: "تدريب الدائرة",
+    groupFitness: "لياقة جماعية",
+    zumbaOrDance: "زومبا أو رقص",
+    
+    // Trainers
+    ourTrainers: "مدربينا",
+    trainersDesc: "مدربونا هم أكثر من مجرد خبراء في التمارين؛ إنهم شغوفون بمساعدتك على تحقيق أهداف الصحة واللياقة البدنية. مدربونا مجهزون لتصميم برامج تمرين تلبي احتياجاتك الفريدة.",
+    jamesRodriguez: "جيمس رودريغيز",
+    strengthConditioning: "القوة واللياقة",
+    jamesDesc: "مع خلفية في الرياضات التنافسية، هو متفانٍ في مساعدتك على الوصول إلى ذروة أدائك البدني.",
+    markHarris: "مارك هاريس",
+    hiitFunctional: "تدريب عالي الكثافة ووظيفي",
+    markDesc: "تمارينه النشطة والديناميكية مصممة لدفع حدودك، وتعزيز عملية الأيض، وحرق السعرات الحرارية.",
+    emilyDavis: "إيميلي ديفيس",
+    yogaMindfulness: "اليوغا واليقظة الذهنية",
+    emilyDesc: "جلسات إيميلي تتعلق بالوضعيات الجسدية وأيضاً بزراعة السلام الداخلي واليقظة الذهنية.",
+    
+    // Pricing
+    ourPricing: "أسعارنا",
+    pricingDesc: "تأتي خطة التسعير الخاصة بنا مع مستويات عضوية مختلفة، كل منها مصمم لتلبية التفضيلات وتطلعات اللياقة البدنية المختلفة.",
+    keyFeatures: "الميزات الرئيسية",
+    subscribeNow: "اشترك الآن",
+    
+    // Client Testimonials
+    whatPeopleSay: "ماذا يقول الناس عنا؟",
+    testimonialsDesc: "تعد هذه الشهادات بمثابة شهادة على التزامنا بمساعدة الأفراد على تحقيق أهداف اللياقة البدنية، وتعزيز بيئة داعمة لكل من يدخل أبوابنا.",
+    
+    // Footer
+    company: "الشركة",
+    business: "الأعمال",
+    franchise: "الامتياز",
+    partnership: "الشراكة",
+    network: "الشبكة",
+    aboutUs: "من نحن",
+    blogs: "المدونات",
+    security: "الأمان",
+    careers: "الوظائف",
+    contact: "اتصل",
+    contactUs: "اتصل بنا",
+    privacyPolicy: "سياسة الخصوصية",
+    termsConditions: "الشروط والأحكام",
+    bmiCalculator: "حاسبة مؤشر كتلة الجسم",
+    copyright: "حقوق النشر © 2025 ويب ديزاين ماستري. جميع الحقوق محفوظة.",
+    footerTagline: "اتخذ الخطوة الأولى نحو نسخة أكثر صحة وقوة منك مع خطط التسعير التي لا تقهر. دعنا نتعرق ونحقق وننتصر معًا!"
   }
 };
 
@@ -168,16 +245,30 @@ export const useLanguage = () => useContext(LanguageContext);
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState('en'); // Default language is English
   
-  // Function to toggle between languages
+  // Function to cycle through languages
   const toggleLanguage = () => {
-    setLanguage(prevLang => prevLang === 'en' ? 'fr' : 'en');
+    setLanguage(prevLang => {
+      switch(prevLang) {
+        case 'en': return 'fr';
+        case 'fr': return 'ar';
+        case 'ar': return 'en';
+        default: return 'en';
+      }
+    });
+  };
+  
+  // Function to set a specific language
+  const setSpecificLanguage = (lang) => {
+    if(['en', 'fr', 'ar'].includes(lang)) {
+      setLanguage(lang);
+    }
   };
   
   // Get translations for the current language
   const t = translations[language];
   
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, setSpecificLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

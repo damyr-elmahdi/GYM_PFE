@@ -10,7 +10,45 @@
   --max-width: 1200px;
 }
 
+/* Add these styles to your LandingPage.css file */
 
+/* RTL Layout Support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .nav__links {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .header__content {
+  align-items: flex-end;
+}
+
+[dir="rtl"] .header__btn {
+  direction: rtl;
+}
+
+[dir="rtl"] .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+/* Font adjustment for Arabic */
+[lang="ar"] {
+  font-family: 'Tajawal', Arial, sans-serif;
+  line-height: 1.6;
+}
+
+/* Specific styles for Arabic typography */
+[lang="ar"] h1, 
+[lang="ar"] h2, 
+[lang="ar"] h3, 
+[lang="ar"] h4 {
+  line-height: 1.4;
+}
+
+/* Add any other RTL specific adjustments here */
 * {
   padding: 0;
   margin: 0;

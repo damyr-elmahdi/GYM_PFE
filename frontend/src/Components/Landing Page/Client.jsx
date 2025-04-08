@@ -9,34 +9,92 @@ import Swiper from "swiper";
 import { useLanguage } from "../../Context/LanguageContext";
 
 const Client = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
-  const testimonials = {
-    en: [
-      "The trainers here customized a plan that balanced my work-life demands, and I've seen remarkable progress in my fitness journey.",
-      "The trainers' expertise and the gym's commitment to cleanliness during these times have made it a safe haven.",
-      "The variety of classes and the supportive community have kept me motivated. I've shed pounds and gained confidence.",
-      "This gym's 24/7 access has been a lifesaver. The convenience here is unbeatable."
-    ],
-    fr: [
-      "Les entraîneurs ici ont personnalisé un plan qui équilibre mes exigences professionnelles, et j'ai constaté des progrès remarquables dans mon parcours de remise en forme.",
-      "L'expertise des entraîneurs et l'engagement de la salle de sport en matière de propreté en ont fait un havre de paix.",
-      "La variété des cours et la communauté solidaire m'ont gardé motivé. J'ai perdu du poids et gagné en confiance.",
-      "L'accès 24/7 à cette salle de sport a été une bouée de sauvetage. La commodité ici est imbattable."
-    ]
+  // Sample client testimonials data with multi-language support
+  const clientData = [
+    {
+      name: {
+        en: "Jane Smith",
+        fr: "Jane Smith",
+        ar: "جين سميث"
+      },
+      role: {
+        en: "Marketing Manager",
+        fr: "Responsable Marketing",
+        ar: "مدير تسويق"
+      },
+      testimonial: {
+        en: "The trainers here customized a plan that balanced my work-life demands, and I've seen remarkable progress in my fitness journey.",
+        fr: "Les entraîneurs ici ont personnalisé un plan qui équilibre mes exigences professionnelles, et j'ai constaté des progrès remarquables dans mon parcours de remise en forme.",
+        ar: "قام المدربون هنا بتخصيص خطة توازن بين متطلبات عملي وحياتي، وقد شهدت تقدمًا ملحوظًا في رحلة لياقتي."
+      },
+      image: client1
+    },
+    {
+      name: {
+        en: "Emily Carter",
+        fr: "Emily Carter",
+        ar: "إميلي كارتر"
+      },
+      role: {
+        en: "Registered Nurse",
+        fr: "Infirmière Diplômée",
+        ar: "ممرضة مسجلة"
+      },
+      testimonial: {
+        en: "The trainers' expertise and the gym's commitment to cleanliness during these times have made it a safe haven.",
+        fr: "L'expertise des entraîneurs et l'engagement de la salle de sport en matière de propreté en ont fait un havre de paix.",
+        ar: "خبرة المدربين والتزام الصالة الرياضية بالنظافة خلال هذه الأوقات جعلتها ملاذًا آمنًا."
+      },
+      image: client2
+    },
+    {
+      name: {
+        en: "John Davis",
+        fr: "John Davis",
+        ar: "جون ديفيس"
+      },
+      role: {
+        en: "Teacher",
+        fr: "Enseignant",
+        ar: "مدرس"
+      },
+      testimonial: {
+        en: "The variety of classes and the supportive community have kept me motivated. I've shed pounds and gained confidence.",
+        fr: "La variété des cours et la communauté solidaire m'ont gardé motivé. J'ai perdu du poids et gagné en confiance.",
+        ar: "تنوع الفصول والمجتمع الداعم أبقاني متحمسًا. لقد فقدت الوزن واكتسبت الثقة."
+      },
+      image: client3
+    },
+    {
+      name: {
+        en: "David Martinez",
+        fr: "David Martinez",
+        ar: "ديفيد مارتينيز"
+      },
+      role: {
+        en: "Entrepreneur", 
+        fr: "Entrepreneur",
+        ar: "رائد أعمال"
+      },
+      testimonial: {
+        en: "This gym's 24/7 access has been a lifesaver. The convenience here is unbeatable.",
+        fr: "L'accès 24/7 à cette salle de sport a été une bouée de sauvetage. La commodité ici est imbattable.",
+        ar: "كان الوصول على مدار الساعة طوال أيام الأسبوع إلى هذه الصالة الرياضية بمثابة منقذ للحياة. الراحة هنا لا مثيل لها."
+      },
+      image: client4
+    }
+  ];
+
+  // Safely access language-specific content with fallback to English
+  const getLocalizedContent = (item, field) => {
+    if (item && item[field] && item[field][language]) {
+      return item[field][language];
+    }
+    // Fallback to English if the translation isn't available
+    return item && item[field] ? item[field].en : "";
   };
-
-  const names = {
-    en: ["Jane Smith", "Emily Carter", "John Davis", "David Martinez"],
-    fr: ["Jane Smith", "Emily Carter", "John Davis", "David Martinez"]
-  };
-
-  const professions = {
-    en: ["Marketing Manager", "Registered Nurse", "Teacher", "Entrepreneur"],
-    fr: ["Responsable Marketing", "Infirmière Diplômée", "Enseignant", "Entrepreneur"]
-  };
-
-  const { language } = useLanguage();
 
   useEffect(() => {
     const scrollRevealOption = {
@@ -100,10 +158,10 @@ const Client = () => {
       </p>
       <div className="swiper">
         <div className="swiper-wrapper">
-          {[client1, client2, client3, client4].map((client, index) => (
+          {clientData.map((client, index) => (
             <div className="swiper-slide" key={index}>
               <div className="client__card">
-                <img src={client} alt={`client-${index + 1}`} />
+                <img src={client.image} alt={getLocalizedContent(client, "name")} />
                 <div className="client__ratings">
                   {[...Array(5)].map((_, i) => (
                     <span key={i}>
@@ -113,15 +171,9 @@ const Client = () => {
                     </span>
                   ))}
                 </div>
-                <p>
-                  {testimonials[language][index]}
-                </p>
-                <h4>
-                  {names[language][index]}
-                </h4>
-                <h5>
-                  {professions[language][index]}
-                </h5>
+                <p>{getLocalizedContent(client, "testimonial")}</p>
+                <h4>{getLocalizedContent(client, "name")}</h4>
+                <h5>{getLocalizedContent(client, "role")}</h5>
               </div>
             </div>
           ))}

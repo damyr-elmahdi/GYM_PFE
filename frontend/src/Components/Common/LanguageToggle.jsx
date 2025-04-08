@@ -2,17 +2,31 @@ import React from 'react';
 import { useLanguage } from '../../Context/LanguageContext';
 
 const LanguageToggle = () => {
-  const { language, toggleLanguage } = useLanguage();
+  const { language, setSpecificLanguage } = useLanguage();
 
   return (
-    <button 
-      onClick={toggleLanguage}
-      className="flex items-center px-3 py-1 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-300"
-    >
-      <span className={`mr-2 font-medium ${language === 'en' ? 'font-bold' : 'opacity-60'}`}>EN</span>
+    <div className="flex items-center px-3 py-1 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-300">
+      <button 
+        onClick={() => setSpecificLanguage('en')}
+        className={`px-2 font-medium ${language === 'en' ? 'font-bold' : 'opacity-60'}`}
+      >
+        EN
+      </button>
       <span className="mx-1">|</span>
-      <span className={`ml-2 font-medium ${language === 'fr' ? 'font-bold' : 'opacity-60'}`}>FR</span>
-    </button>
+      <button 
+        onClick={() => setSpecificLanguage('fr')}
+        className={`px-2 font-medium ${language === 'fr' ? 'font-bold' : 'opacity-60'}`}
+      >
+        FR
+      </button>
+      <span className="mx-1">|</span>
+      <button 
+        onClick={() => setSpecificLanguage('ar')}
+        className={`px-2 font-medium ${language === 'ar' ? 'font-bold' : 'opacity-60'}`}
+      >
+        عربي
+      </button>
+    </div>
   );
 };
 
