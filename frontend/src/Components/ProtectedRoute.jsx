@@ -22,11 +22,9 @@ const ProtectedRoute = ({ children, requiredRole }) => {
       </div>
     );
   }
-  
-  // Check if user has the required role
   if (requiredRole && user.role !== requiredRole) {
     console.log(`User role (${user.role}) doesn't match required role (${requiredRole})`);
-    // Redirect to appropriate dashboard based on role
+   
     if (user.role === "admin") {
       return <Navigate to="/admin/dashboard" replace />;
     } else {

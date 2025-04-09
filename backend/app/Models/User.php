@@ -62,7 +62,7 @@ class User extends Authenticatable
         return $this->role === $role;
     }
 
-    // In User.php model
+   
     public function favoriteExercises()
     {
         return $this->belongsToMany(Exercise::class, 'favorite_exercises', 'user_id', 'exercise_id')

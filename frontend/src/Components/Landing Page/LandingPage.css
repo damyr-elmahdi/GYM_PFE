@@ -10,11 +10,7 @@
   --max-width: 1200px;
 }
 
-/* Add these styles to your LandingPage.css file */
 
-/* Add these styles to your LandingPage.css file */
-
-/* RTL specific classes */
 .nav__links--rtl {
   display: flex;
   justify-content: flex-end;
@@ -30,20 +26,20 @@
     margin-left: 0;
   }
   
-  /* Fix dropdown menu position in RTL */
+
   .dropdown-menu--rtl {
     left: 0;
     right: auto;
   }
 }
 
-/* Ensure the RTL text alignment works properly */
+
 [dir="rtl"] .section__header::after {
   left: auto;
   right: 0;
 }
 
-/* Fix responsive layout for RTL */
+
 @media (width <= 768px) {
   .nav__links--rtl {
     align-items: flex-end;
@@ -71,7 +67,7 @@
 
 .header {
   width: 100%;
-  /* Changed from fixed width 1519px to 100% */
+ 
 }
 
 .dashboard-btn {
@@ -137,9 +133,9 @@ img {
   display: flex;
   width: 100%;
   max-width: 100%;
-  /* Added for better responsiveness */
+  
   height: auto;
-  /* Added for better responsiveness */
+  
 }
 
 a {
@@ -437,7 +433,7 @@ nav {
 }
 
 .price__card {
-  /* width: 500px; */
+ 
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
@@ -503,11 +499,11 @@ nav {
   border-radius: 5px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  /* Changed from fixed width 468px to 100% */
+  
   max-width: 468px;
-  /* Added max-width instead */
+ 
   margin: 0 auto;
-  /* Center the card */
+  
 }
 
 .client__card img {
@@ -651,7 +647,7 @@ nav {
   color: var(--primary-color);
 }
 
-/* Media queries - small mobile first */
+
 @media (max-width: 480px) {
   .section__header {
     font-size: 1.8rem;
@@ -684,8 +680,7 @@ nav {
   }
 }
 
-/* Media query for small tablets */
-/* Continuing from the previous media query */
+
 @media (width > 480px) {
   .trainer__card:nth-child(3) {
     grid-area: 2/2/3/3;
@@ -701,7 +696,6 @@ nav {
   }
 }
 
-/* Media query for tablets and small laptops */
 @media (width > 768px) {
   nav {
     position: static;
@@ -781,7 +775,7 @@ nav {
   }
 }
 
-/* Media query for larger screens */
+
 @media (width > 1024px) {
   .class__grid {
     gap: 2rem;

@@ -22,12 +22,12 @@ const BMICalculator = () => {
             return;
         }
 
-        // Convert height to meters
+        
         const heightInMeters = height / 100;
-        // Calculate BMI
+       
         const calculatedBmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
 
-        // Set BMI category based on calculated BMI
+       
         let bmiCategory = '';
         if (calculatedBmi < 18.5) {
             bmiCategory = 'Underweight';
@@ -53,14 +53,14 @@ const BMICalculator = () => {
 
     const handleBackClick = () => {
         handleScrollToBottom();
-        navigate('/');  // Navigate to home page
+        navigate('/');  
     };
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
             <button
                 className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[-570px] ml-[-1200px] hover:scale-105"
-                onClick={handleBackClick}  // Custom click handler
+                onClick={handleBackClick}  
             > &larr; Back
             </button>
             <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
@@ -112,7 +112,7 @@ const BMICalculator = () => {
                 )}
             </div>
 
-            {/* Explanation Section Below the Form */}
+           
             <div className="max-w-3xl w-full bg-white shadow-lg rounded-lg p-8 mt-12 mx-4">
                 <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">What is BMI?</h2>
                 <p className="text-lg text-gray-700">

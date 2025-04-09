@@ -18,13 +18,13 @@ class Product extends Model
         'stock'
     ];
 
-    // Relationship with cart items
+    
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
     }
 
-    // Relationship with order items
+  
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);

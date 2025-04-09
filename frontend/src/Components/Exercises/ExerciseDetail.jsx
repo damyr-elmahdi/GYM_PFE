@@ -36,10 +36,9 @@ const ExerciseDetail = () => {
             
             const favorites = await favResponse.json();
             console.log("Favorites data:", favorites);
-            
-            // Check if we have an array of exercise objects
+          
             if (Array.isArray(favorites)) {
-              // Extract IDs from the objects if they have an idExercice property
+       
               const favoriteIds = favorites.map(fav => 
                 typeof fav === 'object' && fav.idExercice ? fav.idExercice : fav
               );
@@ -49,7 +48,7 @@ const ExerciseDetail = () => {
             }
           } catch (favError) {
             console.error("Error fetching favorites:", favError);
-            // Don't set the main error state, just log the favorites error
+         
           }
         }
       } catch (err) {
@@ -166,7 +165,7 @@ const ExerciseDetail = () => {
                 alt="Target area"
                 className="w-full h-64 md:h-full object-cover"
                 onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/400x300"; // Fallback image if the body part image fails to load
+                  e.target.src = "https://via.placeholder.com/400x300"; 
                 }}
               />
             )}
@@ -216,7 +215,7 @@ const ExerciseDetail = () => {
                     src={`http://localhost:8000/storage/${exercise.image}`}
                     alt={exercise.nom}
                     onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/400x300"; // Fallback image if the main image fails to load
+                      e.target.src = "https://via.placeholder.com/400x300"; 
                     }}
                   />
                 ) : (

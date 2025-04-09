@@ -21,7 +21,7 @@ const NetworkPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Add logic to handle form submission
+        
         setMessage('Thank you for reaching out! We will contact you soon.');
         setFormData({
             name: '',
@@ -41,7 +41,7 @@ const NetworkPage = () => {
 
     const handleBackClick = () => {
         handleScrollToBottom();
-        navigate('/');  // Navigate to home page
+        navigate('/');  
     };
 
     return (
@@ -49,7 +49,7 @@ const NetworkPage = () => {
             <div className="max-w-6xl mx-auto">
                 <button
                     className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[0px] ml-[0px] hover:scale-105"
-                    onClick={handleBackClick}  // Custom click handler
+                    onClick={handleBackClick}  
                 > &larr; Back
                 </button>
                 <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">Networking Opportunities</h1>

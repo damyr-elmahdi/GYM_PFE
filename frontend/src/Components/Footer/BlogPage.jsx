@@ -39,7 +39,7 @@ const BlogPage = () => {
 
     const handleBackClick = () => {
         handleScrollToBottom();
-        navigate('/');  // Navigate to home page
+        navigate('/');  
     };
 
     return (
@@ -47,7 +47,7 @@ const BlogPage = () => {
             <div className="max-w-6xl mx-auto">
                 <button
                     className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[-0px] ml-[-0px] hover:scale-105"
-                    onClick={handleBackClick}  // Custom click handler
+                    onClick={handleBackClick} 
                 > &larr; Back
                 </button>
                 <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">Gym Blog</h1>

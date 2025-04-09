@@ -12,7 +12,7 @@ export default function Calculator() {
     const [fats, setFats] = useState(null);
     const [showResults, setShowResults] = useState(false);
 
-    // State to store previous results
+    
     const [savedResults, setSavedResults] = useState(
         JSON.parse(localStorage.getItem("savedResults")) || []
     );
@@ -70,7 +70,6 @@ export default function Calculator() {
         setSavedResults(updatedResults);
         localStorage.setItem("savedResults", JSON.stringify(updatedResults));
 
-        // Clear form after saving
         setAge("");
         setWeight("");
         setHeight("");

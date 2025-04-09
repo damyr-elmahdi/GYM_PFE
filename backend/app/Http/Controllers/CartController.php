@@ -47,20 +47,20 @@ class CartController extends Controller
         
         $user = Auth::user();
         
-        // Check if product exists and has stock
+        
         $product = Product::findOrFail($request->product_id);
         
-        // Check if product is already in cart
+       
         $cartItem = CartItem::where('user_id', $user->id)
             ->where('product_id', $request->product_id)
             ->first();
             
         if ($cartItem) {
-            // Update quantity if product already in cart
+            
             $cartItem->quantity += $request->quantity;
             $cartItem->save();
         } else {
-            // Create new cart item
+           
             $cartItem = CartItem::create([
                 'user_id' => $user->id,
                 'product_id' => $request->product_id,

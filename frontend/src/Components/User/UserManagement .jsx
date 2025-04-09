@@ -18,7 +18,7 @@ const UserManagement = () => {
     role: "client"
   });
 
-  // Fetch users
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -33,7 +33,7 @@ const UserManagement = () => {
       }
 
       const data = await response.json();
-      setUsers(data.data || data); // Handle pagination response
+      setUsers(data.data || data); 
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -47,25 +47,25 @@ const UserManagement = () => {
     fetchUsers();
   }, [token]);
 
-  // Handle form input changes
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Start editing a user
+  
   const handleEdit = (user) => {
     setEditingUser(user.id);
     setFormData({
       name: user.name,
       email: user.email,
-      password: "", // Empty password field for editing
+      password: "", 
       role: user.role
     });
     setIsCreating(false);
   };
 
-  // Start creating a new user
+  
   const handleNew = () => {
     setEditingUser(null);
     setFormData({
@@ -77,13 +77,13 @@ const UserManagement = () => {
     setIsCreating(true);
   };
 
-  // Cancel editing/creating
+  
   const handleCancel = () => {
     setEditingUser(null);
     setIsCreating(false);
   };
 
-  // Delete a user
+ 
   const handleDelete = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) {
       return;
@@ -101,7 +101,7 @@ const UserManagement = () => {
         throw new Error("Failed to delete user");
       }
 
-      // Refresh the user list
+      
       fetchUsers();
     } catch (err) {
       setError(err.message);
@@ -109,7 +109,7 @@ const UserManagement = () => {
     }
   };
 
-  // Submit the form (create or update)
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -117,7 +117,7 @@ const UserManagement = () => {
       const url = editingUser ? `/api/users/${editingUser}` : '/api/users';
       const method = editingUser ? "PUT" : "POST";
       
-      // Don't send empty password when updating
+      
       const submitData = {...formData};
       if (editingUser && !submitData.password) {
         delete submitData.password;
@@ -137,7 +137,7 @@ const UserManagement = () => {
         throw new Error(errorData.message || "Operation failed");
       }
 
-      // Reset form and refresh users
+     
       setEditingUser(null);
       setIsCreating(false);
       fetchUsers();
@@ -147,7 +147,7 @@ const UserManagement = () => {
     }
   };
 
-  // Back to dashboard
+  
   const handleBack = () => {
     navigate("/admin/dashboard");
   };
@@ -176,7 +176,6 @@ const UserManagement = () => {
         </div>
       )}
 
-      {/* User Form */}
       {(isCreating || editingUser) && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
           <h2 className="text-xl font-semibold mb-4">
@@ -250,7 +249,7 @@ const UserManagement = () => {
         </div>
       )}
 
-      {/* Users Table */}
+     
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">User List</h2>
         {loading ? (

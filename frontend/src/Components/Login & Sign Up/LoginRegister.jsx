@@ -13,14 +13,14 @@ const LoginRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
 
-  // Login form state
+
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
   const [loginErrors, setLoginErrors] = useState({});
 
-  // Register form state
+
   const [registerData, setRegisterData] = useState({
     name: "",
     email: "",
@@ -29,7 +29,7 @@ const LoginRegister = () => {
   });
   const [registerErrors, setRegisterErrors] = useState({});
 
-  // Toggle password visibility
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -110,10 +110,10 @@ const LoginRegister = () => {
         setToken(data.token);
         toast.success("Registration successful!");
 
-        // Adding setTimeout to delay navigation
+        
         setTimeout(() => {
-          navigate("/"); // Navigate after a delay to show success message
-        }, 1500); // 1.5-second delay
+          navigate("/"); 
+        }, 1500); 
       }
     } catch (error) {
       console.error("Registration error:", error);
@@ -167,7 +167,7 @@ const LoginRegister = () => {
 
               <div className="inpbox">
                 <input
-                  type={showPassword ? "text" : "password"} // Toggle input type
+                  type={showPassword ? "text" : "password"} 
                   placeholder="Password"
                   value={loginData.password}
                   onChange={(e) =>
@@ -176,7 +176,7 @@ const LoginRegister = () => {
                 />
 
                 <i
-                  className={`bx ${showPassword ? "bxs-hide" : "bxs-show"}`} // Toggle eye icon
+                  className={`bx ${showPassword ? "bxs-hide" : "bxs-show"}`} 
                   onClick={togglePasswordVisibility}
                   style={{ cursor: "pointer" }}
                 ></i>
@@ -241,7 +241,7 @@ const LoginRegister = () => {
               </div>
               <div className="inpbox">
                 <input
-                  type={showPassword ? "text" : "password"} // Toggle input type
+                  type={showPassword ? "text" : "password"} 
                   placeholder="Password"
                   value={registerData.password}
                   onChange={(e) =>
@@ -253,7 +253,7 @@ const LoginRegister = () => {
                 />
 
                 <i
-                  className={`bx ${showPassword ? "bxs-hide" : "bxs-show"}`} // Toggle eye icon
+                  className={`bx ${showPassword ? "bxs-hide" : "bxs-show"}`} 
                   onClick={togglePasswordVisibility}
                   style={{ cursor: "pointer" }}
                 ></i>
@@ -261,7 +261,7 @@ const LoginRegister = () => {
 
               <div className="inpbox">
                 <input
-                  type={showPassword ? "text" : "password"} // Toggle input type
+                  type={showPassword ? "text" : "password"} 
                   placeholder="Confirm Password"
                   value={registerData.password_confirmation}
                   onChange={(e) =>
@@ -273,7 +273,7 @@ const LoginRegister = () => {
                 />
 
                 <i
-                  className={`bx ${showPassword ? "bxs-hide" : "bxs-show"}`} // Toggle eye icon
+                  className={`bx ${showPassword ? "bxs-hide" : "bxs-show"}`} 
                   onClick={togglePasswordVisibility}
                   style={{ cursor: "pointer" }}
                 ></i>

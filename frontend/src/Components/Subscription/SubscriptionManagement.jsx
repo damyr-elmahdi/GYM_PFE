@@ -17,7 +17,7 @@ const SubscriptionManagement = () => {
       try {
         setLoading(true);
         
-        // Fetch subscription details
+       
         const subscriptionResponse = await fetch("/api/my-subscription", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -29,7 +29,7 @@ const SubscriptionManagement = () => {
           setSubscription(subscriptionData);
         }
         
-        // Fetch available plans
+        
         const plansResponse = await fetch("/api/plans");
         if (plansResponse.ok) {
           const plansData = await plansResponse.json();
@@ -69,12 +69,12 @@ const SubscriptionManagement = () => {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: subscription.id }) // Include the subscription ID in the request body
+        body: JSON.stringify({ id: subscription.id }) 
       });
   
       if (response.ok) {
         toast.success("Subscription cancelled successfully");
-        // Update the local subscription state to reflect cancellation
+        
         setSubscription({
           ...subscription,
           status: 'cancelled',
@@ -107,7 +107,7 @@ const SubscriptionManagement = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
+     
       <header className="bg-blue-600 text-white p-4 shadow-md">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold">Manage Your Subscription</h1>
@@ -115,7 +115,7 @@ const SubscriptionManagement = () => {
       </header>
 
       <div className="container mx-auto py-8 px-4">
-        {/* Current Subscription */}
+       
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Current Subscription</h2>
           
@@ -165,7 +165,7 @@ const SubscriptionManagement = () => {
           )}
         </div>
 
-        {/* Upgrade Options */}
+       
         {subscription && (
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Upgrade Options</h2>
@@ -201,7 +201,7 @@ const SubscriptionManagement = () => {
           </div>
         )}
 
-        {/* Cancel Subscription */}
+       
         {subscription && subscription.status === 'active' && (
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Cancel Subscription</h2>
@@ -217,7 +217,7 @@ const SubscriptionManagement = () => {
           </div>
         )}
 
-        {/* Back Button */}
+       
         <div className="mt-8">
           <button
             onClick={() => navigate('/client/dashboard')}
@@ -227,7 +227,7 @@ const SubscriptionManagement = () => {
           </button>
         </div>
 
-        {/* Cancel Confirmation Dialog */}
+       
         {cancelDialogOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-md w-full">

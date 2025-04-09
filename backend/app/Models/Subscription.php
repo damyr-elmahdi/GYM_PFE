@@ -26,20 +26,20 @@ class Subscription extends Model
         'end_date'
     ];
 
-    // Relationship with User
+    
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Scope for active subscriptions
+   
     public function scopeActive($query)
     {
         return $query->where('status', 'active')
                      ->where('end_date', '>=', now());
     }
 
-    // Default plans - used as fallback
+  
     public static function getDefaultPlans()
     {
         return [
@@ -74,16 +74,14 @@ class Subscription extends Model
         ];
     }
 
-    // Get plan details including custom plans
+    
     public static function getPlanDetails()
     {
-        // Use cache to avoid frequent database queries for plan data
+     
         return Cache::remember('subscription_plans', 60 * 60, function () {
             $plans = self::getDefaultPlans();
             
-            // Check if plan_details table exists
             if (DB::getSchemaBuilder()->hasTable('plan_details')) {
-                // Fetch custom plans from the database
                 $customPlans = DB::table('plan_details')->get();
                 
                 foreach ($customPlans as $plan) {
@@ -99,7 +97,6 @@ class Subscription extends Model
         });
     }
 
-    // Clear plan cache
     public static function clearPlanCache()
     {
         Cache::forget('subscription_plans');

@@ -52,7 +52,6 @@ const ClientExerciseList = () => {
       const data = await response.json();
       console.log("Fetched favorites:", data);
 
-      // Extract just the favorite exercise IDs
       const favoriteIds = data.map((exercise) => exercise.idExercice);
       setFavorites(favoriteIds);
     } catch (error) {
@@ -76,7 +75,7 @@ const ClientExerciseList = () => {
         throw new Error(data.message || "Failed to toggle favorite");
       }
 
-      // Update favorites state
+    
       if (data.isFavorite) {
         setFavorites([...favorites, id]);
       } else {
@@ -87,7 +86,7 @@ const ClientExerciseList = () => {
     }
   };
 
-  // Filter exercises based on selected filter
+
   const filteredExercises =
     filter === "all"
       ? exercises
@@ -184,7 +183,7 @@ const ClientExerciseList = () => {
                     alt={exercise.nom}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/400x300"; // Fallback image
+                      e.target.src = "https://via.placeholder.com/400x300"; 
                     }}
                   />
                 )}

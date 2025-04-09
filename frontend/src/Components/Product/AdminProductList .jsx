@@ -8,7 +8,7 @@ const AdminProductList = () => {
   const [error, setError] = useState("");
 
   const handleBackClick = () => {
-    navigate('/admin/dashboard');  // Navigate to home page
+    navigate('/admin/dashboard');  
   };
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const AdminProductList = () => {
         throw new Error("Failed to delete product");
       }
 
-      // Remove product from state
+    
       setProducts(products.filter(product => product.id !== id));
       alert("Product deleted successfully");
     } catch (err) {
@@ -77,7 +77,7 @@ const AdminProductList = () => {
         <div className="flex justify-between items-center mb-6">
           <button
             className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[10px] ml-[-10px] hover:scale-105"
-            onClick={handleBackClick}  // Custom click handler
+            onClick={handleBackClick}  
           > &larr; Back
           </button>
           <h1 className="text-2xl font-bold text-gray-800 w-[979px] flex justify-center">Product Management</h1>

@@ -40,7 +40,7 @@ export default function AppProvider({ children }) {
       console.error("Error in getUser:", error);
       setError(error.message);
       
-      // Handle invalid token by clearing it
+     
       if (error.message.includes("401")) {
         console.log("Invalid token detected, clearing token");
         localStorage.removeItem("token");
@@ -60,7 +60,7 @@ export default function AppProvider({ children }) {
     }
   }, [token]);
 
-  // Function to handle logout
+ 
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);

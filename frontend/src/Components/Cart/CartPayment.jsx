@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
 import { toast } from "react-toastify";
 
-// SVG Icons for credit cards
+
 const CardIcons = {
   visa: (
     <svg className="w-10 h-10" viewBox="0 0 780 500" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -46,7 +46,7 @@ const CartPayment = () => {
   });
 
   useEffect(() => {
-    // Get cart data if not passed through location state
+
     if (!location.state || !location.state.planPrice) {
       fetchCartItems();
     } else {
@@ -54,7 +54,7 @@ const CartPayment = () => {
     }
   }, [location.state]);
 
-  // Detect card type from number
+
   useEffect(() => {
     const cardNumber = formData.card_number.replace(/\s/g, '');
     
@@ -93,7 +93,7 @@ const CartPayment = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    // Format card number with spaces
+  
     if (name === 'card_number') {
       const formatted = value
         .replace(/\s/g, '')
@@ -105,7 +105,7 @@ const CartPayment = () => {
         [name]: formatted
       });
     } else if (name === 'card_expiry') {
-      // Format expiry date with slash
+
       const cleaned = value.replace(/\D/g, '');
       let formatted = cleaned;
       
@@ -132,22 +132,21 @@ const CartPayment = () => {
     try {
       setLoading(true);
       
-      // Create shipping address string
+    
       const shippingAddress = `${formData.shipping_address}, ${formData.city}, ${formData.state} ${formData.zip_code}, ${formData.country}`;
-      
-      // Determine if this is a subscription or a regular purchase
+  
       const isSubscription = location.state && location.state.planType && location.state.planType !== 'cart-purchase';
       
-      // Choose the appropriate endpoint
+
       const endpoint = isSubscription ? "/api/subscribe" : "/api/checkout";
       
-      // Prepare the request body
+      
       const requestBody = {
         payment_method: formData.payment_method,
         shipping_address: shippingAddress
       };
       
-      // Add plan-specific data if this is a subscription
+     
       if (isSubscription) {
         requestBody.plan_type = location.state.planType;
         requestBody.plan_name = location.state.planName;
@@ -157,7 +156,7 @@ const CartPayment = () => {
       console.log("Sending request to:", endpoint);
       console.log("Request data:", JSON.stringify(requestBody, null, 2));
       
-      // Submit order to backend
+      
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -176,12 +175,12 @@ const CartPayment = () => {
         throw new Error(errorMessage);
       }
       
-      // Show success message
+   
       toast.success(isSubscription 
         ? "Subscription successful! Your subscription has been activated." 
         : "Payment successful! Your order has been placed.");
       
-      // Navigate to dashboard
+     
       setTimeout(() => {
         navigate("/client/dashboard");
       }, 2000);
@@ -195,7 +194,7 @@ const CartPayment = () => {
   };
 
   const validateForm = () => {
-    // Basic validation
+ 
     if (!formData.card_number || formData.card_number.replace(/\s/g, '').length < 16) {
       toast.error("Please enter a valid card number");
       return false;
@@ -249,7 +248,7 @@ const CartPayment = () => {
     );
   }
 
-  // Determine if this is a subscription or regular purchase
+ 
   const isSubscription = location.state && location.state.planType && location.state.planType !== 'cart-purchase';
   const pageTitle = isSubscription ? "Subscription Checkout" : "Product Checkout";
   const paymentType = isSubscription ? location.state.planName : "Product Purchase";
@@ -273,7 +272,7 @@ const CartPayment = () => {
           <div className="p-6">
             <h2 className="text-xl font-semibold mb-6">Payment Information</h2>
             
-            {/* Card Icons */}
+            
             <div className="flex space-x-3 mb-6">
               <div className={`transition-opacity ${selectedCard === 'visa' ? 'opacity-100' : 'opacity-40'}`}>
                 {CardIcons.visa}

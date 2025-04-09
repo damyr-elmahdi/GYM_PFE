@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
 
-// Create the translations object with all text content in all languages
+
 export const translations = {
   en: {
     // Header
@@ -235,17 +235,17 @@ export const translations = {
   }
 };
 
-// Create the context
+
 export const LanguageContext = createContext();
 
-// Custom hook to use the language context
+
 export const useLanguage = () => useContext(LanguageContext);
 
-// Language provider component
+
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('en'); // Default language is English
+  const [language, setLanguage] = useState('en'); 
   
-  // Function to cycle through languages
+
   const toggleLanguage = () => {
     setLanguage(prevLang => {
       switch(prevLang) {
@@ -257,14 +257,14 @@ export const LanguageProvider = ({ children }) => {
     });
   };
   
-  // Function to set a specific language
+
   const setSpecificLanguage = (lang) => {
     if(['en', 'fr', 'ar'].includes(lang)) {
       setLanguage(lang);
     }
   };
   
-  // Get translations for the current language
+
   const t = translations[language];
   
   return (

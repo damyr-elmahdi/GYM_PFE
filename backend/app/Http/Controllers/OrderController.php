@@ -18,11 +18,11 @@ class OrderController extends Controller
             'shipping_address' => 'required|string',
         ]);
         
-        // Start a database transaction
+   
         return DB::transaction(function () use ($request) {
             $user = $request->user();
             
-            // Get the user's cart items
+
             $cartItems = CartItem::where('user_id', $user->id)
                 ->with('product')
                 ->get();
@@ -33,22 +33,21 @@ class OrderController extends Controller
                 ], 400);
             }
             
-            // Calculate the total
+        
             $total = 0;
             foreach ($cartItems as $item) {
                 $total += $item->product->prix * $item->quantity;
             }
-            
-            // Create a new order
+    
             $order = Order::create([
                 'user_id' => $user->id,
                 'total' => $total,
-                'status' => 'paid', // Could be 'processing', 'pending', etc. depending on your workflow
+                'status' => 'paid',
                 'payment_method' => $request->payment_method,
                 'shipping_address' => $request->shipping_address
             ]);
             
-            // Create order items for each cart item
+
             foreach ($cartItems as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -57,13 +56,13 @@ class OrderController extends Controller
                     'price' => $item->product->prix
                 ]);
                 
-                // Update product stock
+               
                 $product = Product::find($item->product_id);
                 $product->stock = $product->stock - $item->quantity;
                 $product->save();
             }
             
-            // Clear the user's cart after successful order creation
+           
             CartItem::where('user_id', $user->id)->delete();
             
             return response()->json([
@@ -75,7 +74,7 @@ class OrderController extends Controller
     
     public function getOrderHistory(Request $request)
     {
-        // Get all orders for the user with their items and products
+       
         $orderItems = OrderItem::whereHas('order', function ($query) use ($request) {
             $query->where('user_id', $request->user()->id);
         })

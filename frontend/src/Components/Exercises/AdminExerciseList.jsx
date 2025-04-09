@@ -16,7 +16,7 @@ const AdminExerciseList = () => {
 
   const handleBackClick = () => {
     handleScrollToBottom();
-    navigate('/admin/dashboard');  // Navigate to home page
+    navigate('/admin/dashboard');  
   };
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const AdminExerciseList = () => {
         throw new Error(errorData.message || "Failed to delete exercise");
       }
 
-      // Remove the deleted exercise from state
+     
       setExercises(exercises.filter((exercise) => exercise.idExercice !== id));
       alert("Exercise deleted successfully");
     } catch (error) {
@@ -98,7 +98,7 @@ const AdminExerciseList = () => {
       <div className="flex justify-between items-center mb-4">
         <button
           className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[-10px] ml-[10px] hover:scale-105"
-          onClick={handleBackClick}  // Custom click handler
+          onClick={handleBackClick}  
         > &larr; Back
         </button>
         <h2 className="text-2xl font-bold w-[1200px] text-center">Manage Exercises</h2>
@@ -126,7 +126,7 @@ const AdminExerciseList = () => {
                     alt={exercise.nom}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/400x300"; // Fallback image
+                      e.target.src = "https://via.placeholder.com/400x300"; 
                     }}
                   />
                 )}

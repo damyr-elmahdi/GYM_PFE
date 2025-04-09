@@ -53,9 +53,9 @@ const Cart = () => {
       setOrderHistory(data);
     } catch (err) {
       console.error("Error loading order history:", err);
-      // Set order history to empty array when there's an error
+   
       setOrderHistory([]);
-      // Don't show the error to users unless it's critical
+  
     } finally {
       setHistoryLoading(false);
     }
@@ -76,7 +76,6 @@ const Cart = () => {
         throw new Error("Failed to update quantity");
       }
 
-      // Update cart items locally
       setCartItems(
         cartItems.map((item) =>
           item.id === itemId ? { ...item, quantity } : item
@@ -100,7 +99,7 @@ const Cart = () => {
         throw new Error("Failed to remove item from cart");
       }
 
-      // Remove item from cart locally
+    
       setCartItems(cartItems.filter((item) => item.id !== itemId));
       toast.success("Item removed from cart");
     } catch (err) {
@@ -125,7 +124,7 @@ const Cart = () => {
         throw new Error("Failed to clear cart");
       }
 
-      // Clear cart items locally
+      
       setCartItems([]);
       toast.success("Cart cleared successfully");
     } catch (err) {
@@ -140,7 +139,7 @@ const Cart = () => {
     );
   };
 
-  // Group history items by order
+ 
   const groupedHistory = orderHistory.reduce((acc, item) => {
     if (!acc[item.order_id]) {
       acc[item.order_id] = {
@@ -174,7 +173,7 @@ const Cart = () => {
           </div>
         )}
 
-        {/* Current Cart */}
+       
         <div className="bg-white shadow-md rounded-lg overflow-hidden mb-8">
           {cartItems.length === 0 ? (
             <div className="p-6 text-center">
@@ -284,7 +283,7 @@ const Cart = () => {
           )}
         </div>
 
-        {/* Order History */}
+      
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <h2 className="text-xl font-bold text-gray-800 p-6 border-b">
             Order History
@@ -355,7 +354,7 @@ const Cart = () => {
                   <div className="mt-4 flex justify-end">
                     <button
                       onClick={() => {
-                        // Add functionality to reorder these items
+               
                         toast.info("Reorder functionality coming soon!");
                       }}
                       className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded"

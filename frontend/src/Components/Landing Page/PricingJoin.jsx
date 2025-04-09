@@ -34,10 +34,9 @@ const PriceJoin = () => {
                 const data = await response.json();
                 
                 const translatedPlans = Object.entries(data).map(([key, plan]) => {
-                    // Translate features based on current language
+                  
                     const translatedFeatures = plan.features.map(feature => {
-                        // Here you would need to have translations for each feature
-                        // This is a simplified example
+                       
                         return language === 'fr' && key === 'basic' ? 
                             feature.replace('Access', 'Accès').replace('classes', 'cours') : 
                             feature;
@@ -67,7 +66,7 @@ const PriceJoin = () => {
             return;
         }
 
-        // Navigate to payment page with plan information
+        
         navigate('/payment', {
             state: {
                 planType,

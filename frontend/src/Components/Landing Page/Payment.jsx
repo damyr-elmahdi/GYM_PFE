@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AppContext";
 import { toast } from 'react-toastify';
 
-// SVG Icons for credit cards
+
 const CardIcons = {
   visa: (
     <svg className="w-10 h-10" viewBox="0 0 780 500" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,13 +41,13 @@ const Payment = () => {
   const [loading, setLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState('');
 
-  // Redirect if no plan selected
+
   if (!planType) {
     navigate('/pricing');
     return null;
   }
 
-  // Detect card type from number
+  
   useEffect(() => {
     const cardNumber = formData.cardNumber.replace(/\s/g, '');
 
@@ -63,7 +63,7 @@ const Payment = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Format card number with spaces
+
     if (name === 'cardNumber') {
       const formatted = value
         .replace(/\s/g, '')
@@ -75,7 +75,7 @@ const Payment = () => {
         [name]: formatted
       });
     } else if (name === 'expiryDate') {
-      // Format expiry date with slash
+      
       const cleaned = value.replace(/\D/g, '');
       let formatted = cleaned;
 
@@ -100,7 +100,7 @@ const Payment = () => {
     setLoading(true);
 
     try {
-      // Step 1: Process payment
+     
       const paymentResponse = await fetch('/api/process-payment', {
         method: 'POST',
         headers: {
@@ -119,7 +119,7 @@ const Payment = () => {
         throw new Error(paymentData.message || 'Payment processing failed');
       }
 
-      // Step 2: Create subscription
+ 
       const subscriptionResponse = await fetch('/api/subscribe', {
         method: 'POST',
         headers: {
@@ -140,7 +140,7 @@ const Payment = () => {
 
       toast.success(`Successfully subscribed to ${planName}!`);
 
-      // Fixed navigation - directly navigate without setTimeout
+
       navigate('/client/dashboard', { replace: true });
 
     } catch (error) {
@@ -161,7 +161,7 @@ const Payment = () => {
 
   const handleBackClick = () => {
     handleScrollToBottom();
-    nav('/');  // Navigate to home page
+    nav('/'); 
   };
 
   return (
@@ -169,7 +169,7 @@ const Payment = () => {
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
         <button
           className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[-30px] ml-[-420px] hover:scale-105"
-          onClick={handleBackClick}  // Custom click handler
+          onClick={handleBackClick}  
         > &larr; Back
         </button>
         <div className="text-center mb-6">
@@ -178,7 +178,7 @@ const Payment = () => {
             Subscribe to {planName} for ${planPrice}/month
           </p>
 
-          {/* Card Icons */}
+     
           <div className="flex justify-center space-x-3 mt-4">
             <div className={`transition-opacity ${selectedCard === 'visa' ? 'opacity-100' : 'opacity-40'}`}>
               {CardIcons.visa}

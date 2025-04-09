@@ -11,7 +11,7 @@ import { useLanguage } from "../../Context/LanguageContext";
 const Client = () => {
   const { t, language } = useLanguage();
 
-  // Sample client testimonials data with multi-language support
+
   const clientData = [
     {
       name: {
@@ -87,12 +87,12 @@ const Client = () => {
     }
   ];
 
-  // Safely access language-specific content with fallback to English
+
   const getLocalizedContent = (item, field) => {
     if (item && item[field] && item[field][language]) {
       return item[field][language];
     }
-    // Fallback to English if the translation isn't available
+ 
     return item && item[field] ? item[field].en : "";
   };
 

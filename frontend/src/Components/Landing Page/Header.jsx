@@ -14,7 +14,7 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
-  // Set document direction based on language
+ 
   useEffect(() => {
     document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = language;
@@ -37,7 +37,7 @@ const Header = () => {
     navigate("/pricing");
   };
 
-  // Add language-specific classes
+
   const getDirectionClass = () => {
     return language === 'ar' ? 'rtl-text' : '';
   };

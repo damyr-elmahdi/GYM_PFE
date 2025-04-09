@@ -95,7 +95,7 @@ class ExerciseController extends Controller
             $exercise->partieCorps = $request->partieCorps;
 
             if ($request->hasFile('image')) {
-                // Delete old image if exists
+              
                 if ($exercise->image) {
                     Storage::disk('public')->delete($exercise->image);
                 }
@@ -104,7 +104,7 @@ class ExerciseController extends Controller
             }
 
             if ($request->hasFile('partieCorpsPic')) {
-                // Delete old image if exists
+   
                 if ($exercise->partieCorpsPic) {
                     Storage::disk('public')->delete($exercise->partieCorpsPic);
                 }
@@ -132,7 +132,7 @@ class ExerciseController extends Controller
         try {
             $exercise = Exercise::where('idExercice', $id)->firstOrFail();
             
-            // Delete associated files
+           
             if ($exercise->image) {
                 Storage::disk('public')->delete($exercise->image);
             }

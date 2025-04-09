@@ -15,13 +15,13 @@ class CartItem extends Model
         'quantity'
     ];
 
-    // Relationship with product
+
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    // Relationship with user
+    
     public function user()
     {
         return $this->belongsTo(User::class);

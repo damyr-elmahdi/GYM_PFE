@@ -28,10 +28,10 @@ class ProductController extends Controller
             'description' => 'required|string',
             'categorie' => 'required|string|max:100',
             'stock' => 'required|integer|min:0',
-            'image' => 'required|image|max:2048', // Max 2MB
+            'image' => 'required|image|max:2048', 
         ]);
 
-        // Handle image upload
+       
         $imagePath = $request->file('image')->store('products', 'public');
         
         $product = Product::create([
@@ -56,12 +56,12 @@ class ProductController extends Controller
             'description' => 'sometimes|required|string',
             'categorie' => 'sometimes|required|string|max:100',
             'stock' => 'sometimes|required|integer|min:0',
-            'image' => 'sometimes|nullable|image|max:2048', // Max 2MB, but now nullable
+            'image' => 'sometimes|nullable|image|max:2048', 
         ]);
 
-        // Handle image upload if provided
+        
         if ($request->hasFile('image')) {
-            // Delete old image
+            
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
@@ -70,7 +70,7 @@ class ProductController extends Controller
             $product->image = $imagePath;
         }
         
-        // Update other fields
+       
         $product->nom = $request->input('nom', $product->nom);
         $product->prix = $request->input('prix', $product->prix);
         $product->description = $request->input('description', $product->description);
@@ -86,7 +86,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         
-        // Delete image from storage
+        
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }

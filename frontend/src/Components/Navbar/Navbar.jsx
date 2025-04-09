@@ -4,11 +4,11 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../../Assets/logo1.png";
 
 export default function Navbar() {
-    const location = useLocation(); // This will give the current route
-    const [active, setActive] = useState(location.pathname); // Set the active link to current path
+    const location = useLocation(); 
+    const [active, setActive] = useState(location.pathname); 
 
     useEffect(() => {
-        setActive(location.pathname); // Update active link when route changes
+        setActive(location.pathname); 
     }, [location]);
 
     return (

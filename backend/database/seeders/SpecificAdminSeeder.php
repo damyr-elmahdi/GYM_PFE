@@ -10,7 +10,7 @@ class SpecificAdminSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create the first admin
+   
         User::updateOrCreate(
             ['email' => 'MohmmedElmahdi@gmail.com'],
             [
@@ -20,7 +20,7 @@ class SpecificAdminSeeder extends Seeder
             ]
         );
 
-        // Create the second admin
+      
         User::updateOrCreate(
             ['email' => 'ElmahdiDamyr@gmail.com'],
             [

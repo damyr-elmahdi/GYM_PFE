@@ -14,7 +14,7 @@ class FavoriteExerciseController extends Controller
             $user = $request->user();
             $exercise = Exercise::findOrFail($id);
             
-            // Check if the exercise is already favorited
+        
             if ($user->favoriteExercises()->where('exercise_id', $id)->exists()) {
                 $user->favoriteExercises()->detach($id);
                 return response()->json([

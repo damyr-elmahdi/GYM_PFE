@@ -20,14 +20,14 @@ export default function HeaderBody() {
                 </ul>
                 <div className="icon-profile">
                     <a href="#"><i class="bi bi-person" onClick={handleClick}></i></a>
-                    {/* <button className="logout-button-body">Logout</button> */}
+                   
                 </div>
             </div>
 
             {
                 show && (
                     <>
-                        {/* <div className='add-d'>hello</div> */}
+                       
                         <div className='result-profile'>
                             <div>Hello   ....</div>
 

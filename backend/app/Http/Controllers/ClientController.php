@@ -10,7 +10,7 @@ class ClientController extends Controller
         return response()->json([
             'message' => 'Client dashboard data',
             'data' => [
-                // Client-specific data...
+               
             ]
         ]);
     }

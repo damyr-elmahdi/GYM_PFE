@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\Schema;
 
 class SubscriptionController extends Controller
 {
-    // Get available plans
+    
     public function getPlans()
     {
         return response()->json(Subscription::getPlanDetails());
     }
 
-    // Create a subscription for a user
+   
     public function createSubscription(Request $request)
     {
         $validatedData = $request->validate([
@@ -53,7 +53,6 @@ class SubscriptionController extends Controller
         return response()->json($subscription, 201);
     }
 
-    // Get user's current subscription
     public function getUserSubscription(Request $request)
     {
         $user = $request->user();
@@ -68,7 +67,7 @@ class SubscriptionController extends Controller
         return response()->json($subscription);
     }
 
-    // Admin methods to manage subscriptions
+    
     public function adminGetSubscriptions()
     {
         $subscriptions = Subscription::with('user')
@@ -78,7 +77,6 @@ class SubscriptionController extends Controller
         return response()->json($subscriptions);
     }
 
-    // Cancel a subscription
     public function cancelSubscription(Request $request, $id)
     {
         $subscription = Subscription::findOrFail($id);
@@ -99,7 +97,7 @@ class SubscriptionController extends Controller
         
         $subscription = Subscription::findOrFail($validatedData['id']);
         
-        // Check if subscription belongs to user
+       
         if ($subscription->user_id !== $user->id) {
             return response()->json([
                 'message' => 'Unauthorized to cancel this subscription'
@@ -117,7 +115,7 @@ class SubscriptionController extends Controller
         ]);
     }
 
-    // Admin methods to manage plans
+  
     public function createPlan(Request $request)
 {
     $validatedData = $request->validate([
@@ -128,7 +126,7 @@ class SubscriptionController extends Controller
         'features.*' => 'string'
     ]);
 
-    // Check if "plan_details" table exists, create if not
+
     if (!DB::getSchemaBuilder()->hasTable('plan_details')) {
         Schema::create('plan_details', function (Blueprint $table) {
             $table->id();
@@ -140,7 +138,7 @@ class SubscriptionController extends Controller
         });
     }
     
-    // Insert new plan
+    
     DB::table('plan_details')->insert([
         'plan_type' => $validatedData['plan_type'],
         'name' => $validatedData['name'],
@@ -150,7 +148,6 @@ class SubscriptionController extends Controller
         'updated_at' => now()
     ]);
 
-    // Clear the cached plans in the application
     Subscription::clearPlanCache();
 
     return response()->json([
@@ -173,18 +170,18 @@ public function updatePlan(Request $request, $planType)
         'features.*' => 'string'
     ]);
 
-    // Check if the plan exists
+    
     $plan = DB::table('plan_details')->where('plan_type', $planType)->first();
 
     if (!$plan) {
-        // If the plan doesn't exist in the database, check the default plans
+       
         $defaultPlans = Subscription::getDefaultPlans();
         
         if (!isset($defaultPlans[$planType])) {
             return response()->json(['message' => 'Plan not found'], 404);
         }
         
-        // Insert the plan into the database so we can update it
+       
         DB::table('plan_details')->insert([
             'plan_type' => $planType,
             'name' => $defaultPlans[$planType]['name'],
@@ -195,7 +192,7 @@ public function updatePlan(Request $request, $planType)
         ]);
     }
 
-    // Update the plan
+    
     DB::table('plan_details')
         ->where('plan_type', $planType)
         ->update([
@@ -205,7 +202,7 @@ public function updatePlan(Request $request, $planType)
             'updated_at' => now()
         ]);
 
-    // Clear the cached plans in the application
+   
     Subscription::clearPlanCache();
 
     return response()->json([

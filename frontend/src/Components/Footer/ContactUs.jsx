@@ -13,7 +13,7 @@ const ContactUs = () => {
 
     const navigate = useNavigate();
 
-    // Handle form input changes
+  
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -22,7 +22,7 @@ const ContactUs = () => {
         });
     };
 
-    // Handle form submission
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!formData.name || !formData.email || !formData.message) {
@@ -31,11 +31,10 @@ const ContactUs = () => {
         } else {
             setError('');
             setSuccess('Your message has been sent successfully!');
-            // Add API call to send the message
+           
         }
     };
 
-    // Scroll to bottom function
     const handleScrollToBottom = () => {
         window.scrollTo({
             top: document.documentElement.scrollHeight,
@@ -43,20 +42,20 @@ const ContactUs = () => {
         });
     };
 
-    // Handle "Back" button click with scroll to bottom and navigation
+    
     const handleBackClick = () => {
         handleScrollToBottom();
-        navigate('/');  // Navigate to home page
+        navigate('/');  
     };
 
     return (
         <div className="contact-container">
             <div className="contact-form">
                 <h2>Contact Us</h2>
-                {/* Update the back button to trigger the scroll and navigation */}
+              
                 <button
                     className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[-58px] ml-[-20px] hover:scale-105"
-                    onClick={handleBackClick}  // Custom click handler
+                    onClick={handleBackClick}  
                 >
                     &larr; Back
                 </button>

@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        // Get all users with pagination
+        
         $users = User::orderBy('created_at', 'desc')->paginate(10);
         return response()->json($users);
     }
@@ -55,7 +55,7 @@ class UserController extends Controller
             'role' => 'required|in:admin,client'
         ]);
         
-        // Only update password if provided
+        
         if ($request->has('password') && !empty($request->password)) {
             $request->validate([
                 'password' => 'min:6'
@@ -75,7 +75,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         
-        // Prevent deleting your own account
+       
         if (auth()->id()== $id) {
             return response()->json([
                 'message' => 'You cannot delete your own account'

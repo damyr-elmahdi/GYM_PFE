@@ -26,33 +26,32 @@ class CheckoutController extends Controller
             'shipping_address' => 'required|string',
         ]);
 
-        // Get authenticated user
+ 
         $user = Auth::user();
         
-        // Begin transaction
+ 
         DB::beginTransaction();
         
         try {
-            // Log the checkout attempt
+           
             Log::info('Checkout attempt by user: ' . $user->id . ' with payment method: ' . $request->payment_method);
             
-            // Get user's cart items
+            
             $cartItems = CartItem::where('user_id', $user->id)
                 ->with('product')
                 ->get();
             
             Log::info('Cart items found: ' . $cartItems->count());
                 
-            // Check if cart is empty
+        
             if ($cartItems->isEmpty()) {
                 Log::warning('Empty cart checkout attempt by user: ' . $user->id);
                 return response()->json(['message' => 'Cart is empty'], 400);
             }
             
-            // Calculate total price
             $totalPrice = 0;
             foreach ($cartItems as $item) {
-                // Check if product exists and has price
+             
                 if (!$item->product) {
                     Log::error('Product not found for cart item: ' . $item->id);
                     throw new \Exception('Product not found for one of your cart items');
@@ -63,7 +62,7 @@ class CheckoutController extends Controller
             
             Log::info('Total price calculated: ' . $totalPrice);
             
-            // Create order
+           
             try {
                 $order = Order::create([
                     'user_id' => $user->id,
@@ -80,7 +79,7 @@ class CheckoutController extends Controller
                 throw new \Exception('Failed to create order: ' . $e->getMessage());
             }
             
-            // Create order items
+           
             try {
                 foreach ($cartItems as $item) {
                     OrderItem::create([
@@ -97,7 +96,7 @@ class CheckoutController extends Controller
                 throw new \Exception('Failed to create order items: ' . $e->getMessage());
             }
             
-            // Clear cart after successful order
+           
             try {
                 CartItem::where('user_id', $user->id)->delete();
                 Log::info('Cart cleared for user: ' . $user->id);
@@ -105,8 +104,7 @@ class CheckoutController extends Controller
                 Log::error('Failed to clear cart: ' . $e->getMessage());
                 throw new \Exception('Failed to clear cart: ' . $e->getMessage());
             }
-            
-            // Commit transaction
+      
             DB::commit();
             
             return response()->json([
@@ -116,14 +114,14 @@ class CheckoutController extends Controller
             ], 201);
             
         } catch (\Exception $e) {
-            // Rollback transaction on error
+        
             DB::rollBack();
             
-            // Log the detailed error
+          
             Log::error('Checkout Error: ' . $e->getMessage());
             Log::error('Error trace: ' . $e->getTraceAsString());
             
-            // Return a more specific error message
+            
             return response()->json([
                 'message' => 'Failed to process checkout',
                 'error' => $e->getMessage()
@@ -140,7 +138,7 @@ class CheckoutController extends Controller
     {
         $user = Auth::user();
         
-        // Get all orders with items and product details
+    
         $orderItems = OrderItem::whereHas('order', function($query) use ($user) {
             $query->where('user_id', $user->id);
         })

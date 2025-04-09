@@ -50,7 +50,7 @@ const PricingManagement = () => {
     const { name, value } = e.target;
 
     if (name === "price") {
-      // Ensure price is a valid number
+     
       const numValue = parseFloat(value);
       if (!isNaN(numValue) || value === "") {
         setFormData({ ...formData, [name]: value });
@@ -115,7 +115,7 @@ const PricingManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
+  
     if (!formData.name || !formData.plan_type || !formData.price) {
       toast.error("Please fill all required fields");
       return;
@@ -195,7 +195,7 @@ const PricingManagement = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
+
       <header className="bg-[#001F3F] text-white p-4 flex justify-between items-center shadow-md">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold">Pricing Management</h1>

@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const ProductForm = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Get product ID from URL if in edit mode
+  const { id } = useParams(); 
   const isEditMode = !!id;
   
   const [loading, setLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(isEditMode); // Loading state for form data
+  const [formLoading, setFormLoading] = useState(isEditMode); 
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     nom: "",
@@ -20,7 +20,7 @@ const ProductForm = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [originalImagePath, setOriginalImagePath] = useState(null);
 
-  // Fetch product data if in edit mode
+
   useEffect(() => {
     if (isEditMode) {
       fetchProductData();
@@ -41,17 +41,17 @@ const ProductForm = () => {
 
       const product = await response.json();
       
-      // Update form data with fetched product
+
       setFormData({
         nom: product.nom,
         prix: product.prix,
         description: product.description,
         categorie: product.categorie,
         stock: product.stock,
-        image: null, // Image file will be null initially as we can't fetch the file itself
+        image: null, 
       });
       
-      // Set the original image path for display
+      
       setOriginalImagePath(product.image);
       setImagePreview(`http://localhost:8000/storage/${product.image}`);
     } catch (err) {
@@ -67,7 +67,7 @@ const ProductForm = () => {
     if (name === "image") {
       setFormData({ ...formData, image: files[0] });
       
-      // Create preview
+      
       const reader = new FileReader();
       reader.onload = () => {
         setImagePreview(reader.result);
@@ -83,7 +83,7 @@ const ProductForm = () => {
     setLoading(true);
     setError("");
 
-    // Create form data for file upload
+    
     const productData = new FormData();
     productData.append("nom", formData.nom);
     productData.append("prix", formData.prix);
@@ -91,7 +91,7 @@ const ProductForm = () => {
     productData.append("categorie", formData.categorie);
     productData.append("stock", formData.stock);
     
-    // Only append image if a new one was selected
+   
     if (formData.image) {
       productData.append("image", formData.image);
     }
@@ -99,16 +99,16 @@ const ProductForm = () => {
     try {
       const url = isEditMode ? `/api/products/${id}` : "/api/products";
       
-      // For PUT requests with FormData in Laravel, we need to use POST with _method
+
       if (isEditMode) {
         productData.append('_method', 'PUT');
       }
       
       const response = await fetch(url, {
-        method: isEditMode ? "POST" : "POST", // Always POST, but with _method: PUT for updates
+        method: isEditMode ? "POST" : "POST", 
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-          // Do NOT set Content-Type header for FormData
+         
         },
         body: productData,
       });
@@ -118,7 +118,7 @@ const ProductForm = () => {
         throw new Error(errorData.message || `Failed to ${isEditMode ? 'update' : 'add'} product`);
       }
 
-      // Product operation successful
+   
       alert(`Product ${isEditMode ? 'updated' : 'added'} successfully!`);
       navigate("/admin/products");
     } catch (err) {
@@ -235,7 +235,7 @@ const ProductForm = () => {
               name="image"
               accept="image/*"
               onChange={handleChange}
-              required={!isEditMode} // Only required for new products
+              required={!isEditMode} 
             />
             {imagePreview && (
               <div className="mt-3">

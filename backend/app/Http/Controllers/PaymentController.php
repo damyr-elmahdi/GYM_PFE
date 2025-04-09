@@ -13,8 +13,7 @@ class PaymentController extends Controller
             'amount' => 'required|numeric'
         ]);
         
-        // In a real application, you would integrate with a payment processor here
-        // For now, we'll simulate a successful payment
+
         
         return response()->json([
             'success' => true,

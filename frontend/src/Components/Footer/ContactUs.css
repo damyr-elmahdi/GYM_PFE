@@ -45,14 +45,14 @@ textarea {
     box-sizing: border-box;
     transition: border-color 0.3s;
     resize: none;
-    /* Disable manual resizing */
+   
     min-height: 100px;
-    /* Set a minimum height */
+   
     overflow-y: hidden;
-    /* Prevent scrolling */
+
 }
 
-/* Auto-grow the textarea as the user types */
+
 textarea:focus {
     border-color: #001F3F;
     outline: none;

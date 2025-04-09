@@ -43,7 +43,7 @@ import NetworkPage from "./Components/Footer/NetworkPage";
 import PriceJoin from "./Components/Landing Page/PricingJoin";
 import { LanguageProvider } from "./Context/LanguageContext";
 
-// import ForgetPassword from "./Components/Login & Sign Up/ForgetPassword";
+
 
 const NotFoundPage = () => (
   <div className="flex justify-center items-center h-screen">
@@ -58,7 +58,7 @@ export default function App() {
     <AppProvider>
       <LanguageProvider>
         <Routes>
-          {/* Landing Page Route */}
+         
           <Route
             path="/"
             element={
@@ -74,10 +74,10 @@ export default function App() {
             }
           />
 
-          {/* Login/Register Route */}
+          
           <Route path="/login-register" element={<LoginRegister />} />
 
-          {/* Admin Routes */}
+          
           <Route
             path="/admin/dashboard"
             element={
@@ -145,10 +145,10 @@ export default function App() {
             }
           />
 
-          {/* Payment Route */}
+         
           <Route path="/payment" element={<Payment />} />
 
-          {/* Client Routes */}
+          
           <Route
             path="/client/dashboard"
             element={
@@ -158,7 +158,6 @@ export default function App() {
             }
           />
 
-          {/* Profile Settings Route */}
           <Route
             path="/client/profile"
             element={
@@ -185,7 +184,7 @@ export default function App() {
             }
           />
 
-          {/* Subscription Management Route */}
+        
           <Route
             path="/client/subscription"
             element={
@@ -195,7 +194,7 @@ export default function App() {
             }
           />
 
-          {/* Client Product Routes */}
+        
           <Route
             path="/client/products"
             element={
@@ -230,11 +229,10 @@ export default function App() {
           />
           <Route path="/cartpayment" element={<CartPayment />} />
 
-          {/* Public Pricing Route */}
+         
           <Route path="/pricing" element={<Price />} />
           <Route path="/pricing-join" element={<PriceJoin />} />
 
-          {/* Footer Pages */}
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-conditions" element={<TermsAndConditions />} />
@@ -247,7 +245,7 @@ export default function App() {
           <Route path="/franchise-page" element={<FranchisePage />} />
           <Route path="/partnership-page" element={<PartnershipPage />} />
           <Route path="/netwok-page" element={<NetworkPage />} />
-          {/* Fallback Route for Unmatched Paths */}
+        
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </LanguageProvider>

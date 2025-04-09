@@ -38,7 +38,7 @@ const Price = () => {
       return;
     }
     
-    // Navigate to payment page with plan information
+    
     navigate('/payment', { 
       state: { 
         planType, 

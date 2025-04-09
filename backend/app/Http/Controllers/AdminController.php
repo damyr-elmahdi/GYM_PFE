@@ -10,7 +10,7 @@ class AdminController extends Controller
         return response()->json([
             'message' => 'Admin dashboard data',
             'data' => [
-                // Admin-specific data...
+               
             ]
         ]);
     }

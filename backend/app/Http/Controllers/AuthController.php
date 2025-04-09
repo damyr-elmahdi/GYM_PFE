@@ -15,7 +15,7 @@ class AuthController extends Controller
             'password' => 'required|confirmed'
         ]);
         
-        // Force the role to be 'client' for all registrations
+        
         $fields['role'] = 'client';
         
         $user = User::create($fields);

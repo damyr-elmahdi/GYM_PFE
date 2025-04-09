@@ -29,7 +29,7 @@ const ClientDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch subscription details
+       
         const subscriptionResponse = await fetch("/api/my-subscription", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ const ClientDashboard = () => {
           const subscriptionData = await subscriptionResponse.json();
           setSubscription(subscriptionData);
 
-          // Calculate days left in subscription
+         
           if (subscriptionData.end_date) {
             const endDate = new Date(subscriptionData.end_date);
             const today = new Date();
@@ -49,7 +49,7 @@ const ClientDashboard = () => {
           }
         }
 
-        // Fetch cart items count
+       
         const cartResponse = await fetch("/api/cart", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -61,7 +61,7 @@ const ClientDashboard = () => {
           setCartItemCount(cartData.items?.length || 0);
         }
 
-        // Fetch favorite exercises count
+        
         const favoritesResponse = await fetch("/api/favorites", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ const ClientDashboard = () => {
           setStats(prev => ({ ...prev, favoriteExercises: favoritesData.length || 0 }));
         }
 
-        // Fetch purchased products count
+        
         const ordersResponse = await fetch("/api/order-history", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ const ClientDashboard = () => {
 
         if (ordersResponse.ok) {
           const ordersData = await ordersResponse.json();
-          // Calculate total purchased products across all orders
+          
           let totalPurchases = 0;
           ordersData.forEach(order => {
             order.items?.forEach(item => {
@@ -104,7 +104,7 @@ const ClientDashboard = () => {
     }
   }, [token]);
 
-  // Close dropdown when clicking outside
+  
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -151,7 +151,7 @@ const ClientDashboard = () => {
     navigate("/client/cart");
   };
 
-  // Custom tab renderer to avoid HeaderBody duplication
+
   const renderTabContent = (index) => {
     switch (index) {
       case 1:
@@ -169,7 +169,7 @@ const ClientDashboard = () => {
 
   const renderDashboardContent = () => (
     <>
-      {/* Subscription Section */}
+      
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
           Your Subscription
@@ -253,7 +253,7 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-      {/* Quick Actions */}
+     
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Quick Actions
@@ -306,7 +306,7 @@ const ClientDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
+      
       <header className="bg-[#001F3F] text-white p-4 flex justify-between items-center shadow-md">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold">Client Dashboard</h1>
@@ -318,7 +318,7 @@ const ClientDashboard = () => {
           </Link>
         </div>
         <div className="flex items-center space-x-4">
-          {/* Cart Button */}
+          
           <button
             onClick={navigateToCart}
             className="bg-[#6A9AB0] hover:bg-[#EAD8B1] text-white px-3 py-2 rounded-lg transition duration-300 flex items-center space-x-2"
@@ -332,7 +332,7 @@ const ClientDashboard = () => {
             )}
           </button>
 
-          {/* Profile Dropdown Container */}
+         
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={toggleProfileDropdown}
@@ -343,7 +343,7 @@ const ClientDashboard = () => {
               </div>
             </button>
 
-            {/* Profile Dropdown */}
+            
             {showProfileDropdown && (
               <div className="absolute right-0 top-12 bg-white shadow-lg rounded-lg w-64 z-50">
                 <div className="p-4 border-b">
@@ -389,7 +389,7 @@ const ClientDashboard = () => {
         </div>
       </header>
 
-      {/* TabMenu Navigation */}
+     
       <div className="bg-white shadow-md">
         <div className="container mx-auto px-4">
           <ul className="flex border-b">
@@ -437,7 +437,7 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-      {/* Dashboard Content */}
+      
       <div className="p-6">
         {renderTabContent(activeTab)}
       </div>
@@ -445,7 +445,7 @@ const ClientDashboard = () => {
   );
 };
 
-// Profile component for editing user information
+
 const ProfileSettings = () => {
   const { user, token } = useContext(AppContext);
   const [formData, setFormData] = useState({
@@ -460,7 +460,7 @@ const ProfileSettings = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch user profile data
+   
     const fetchProfile = async () => {
       try {
         const response = await fetch("/api/profile", {

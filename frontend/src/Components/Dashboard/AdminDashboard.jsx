@@ -20,7 +20,7 @@ const AdminDashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        // Fetch dashboard stats
+      
         const statsResponse = await fetch("/api/admin/dashboard", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
     const fetchSubscriptions = async () => {
       try {
         setSubscriptionsLoading(true);
-        // Fetch subscriptions
+       
         const response = await fetch("/api/admin/subscriptions", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ const AdminDashboard = () => {
 
       if (response.ok) {
         toast.success("Subscription cancelled successfully");
-        // Remove the cancelled subscription from the list
+        
         setSubscriptions(subscriptions.filter(sub => sub.id !== subscriptionId));
       } else {
         const errorData = await response.json();
@@ -128,7 +128,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
+    
       <header className="bg-[#001F3F] text-white p-4 flex justify-between items-center shadow-md">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
@@ -150,9 +150,9 @@ const AdminDashboard = () => {
         </div>
       </header>
 
-      {/* Dashboard Content */}
+     
       <div className="p-6">
-        {/* Stats Panel */}
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold text-gray-700">Total Clients</h3>
@@ -188,7 +188,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Subscriptions Section */}
+       
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Subscriptions Management</h2>
           {subscriptionsLoading ? (
@@ -249,7 +249,7 @@ const AdminDashboard = () => {
           )}
         </div>
 
-        {/* Admin Tools */}
+        
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">
             Admin Controls

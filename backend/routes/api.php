@@ -24,7 +24,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-// User management routes (admin only)
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{id}', [UserController::class, 'show']);
@@ -39,17 +38,16 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-// Admin routes
+
 Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
 });
 
-// Client routes
+
 Route::prefix('client')->middleware(['auth:sanctum', 'role:client'])->group(function () {
     Route::get('/dashboard', [ClientController::class, 'dashboard']);
 });
 
-// Admin dashboard route
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return response()->json([
@@ -63,7 +61,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     });
 });
 
-// Client dashboard route
+
 Route::middleware(['auth:sanctum', 'role:client'])->group(function () {
     Route::get('/client/dashboard', function () {
         $user = request()->user();
@@ -71,25 +69,25 @@ Route::middleware(['auth:sanctum', 'role:client'])->group(function () {
             'message' => 'Client dashboard data',
             'data' => [
                 'yourPosts' => \App\Models\Post::where('user_id', $user->id)->count(),
-                'notifications' => 5, // You would fetch actual notifications here
-                'messages' => 8, // You would fetch actual messages here
+                'notifications' => 5, 
+                'messages' => 8, 
             ]
         ]);
     });
 });
 
-// Exercise routes
+
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/exercises', [ExerciseController::class, 'store']);
     Route::put('/exercises/{id}', [ExerciseController::class, 'update']);
     Route::delete('/exercises/{id}', [ExerciseController::class, 'destroy']);
 });
 
-// Public exercise routes
+
 Route::get('/exercises', [ExerciseController::class, 'index']);
 Route::get('/exercises/{id}', [ExerciseController::class, 'show']);
 
-// Favorite exercise routes (for clients)
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/exercises/{id}/favorite', [FavoriteExerciseController::class, 'toggleFavorite']);
     Route::get('/favorites', [FavoriteExerciseController::class, 'getFavorites']);
@@ -101,7 +99,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/profile', [ProfileController::class, 'update']);
 });
 
-// Product management routes (admin only)
+
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
@@ -111,33 +109,33 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
 
 
-// Public product routes
+
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    // Cart Routes
+    
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart/add', [CartController::class, 'addToCart']);
     Route::put('/cart/{id}', [CartController::class, 'updateCartItem']);
     Route::delete('/cart/{id}', [CartController::class, 'removeCartItem']);
     Route::delete('/cart', [CartController::class, 'clearCart']);
 
-    // Checkout Routes
+   
     Route::post('/checkout', [CheckoutController::class, 'checkout']);
     Route::get('/order-history', [CheckoutController::class, 'getOrderHistory']);
 });
 
-// Subscription management - Public routes
+
 Route::get('/plans', [SubscriptionController::class, 'getPlans']);
 
-// Subscription management - Client routes
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/subscribe', [SubscriptionController::class, 'createSubscription']);
     Route::get('/my-subscription', [SubscriptionController::class, 'getUserSubscription']);
     Route::post('/my-subscription/cancel', [SubscriptionController::class, 'cancelUserSubscription']);
 });
-// Admin dashboard route
+
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return response()->json([
@@ -150,12 +148,12 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
         ]);
     });
 });
-// Subscription management - Admin routes
+
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/subscriptions', [SubscriptionController::class, 'adminGetSubscriptions']);
     Route::delete('/admin/subscriptions/{id}', [SubscriptionController::class, 'cancelSubscription']);
 
-    // Plan management routes
+    
     Route::post('/admin/plans', [SubscriptionController::class, 'createPlan']);
     Route::put('/admin/plans/{planType}', [SubscriptionController::class, 'updatePlan']);
     Route::delete('/admin/plans/{planType}', [SubscriptionController::class, 'deletePlan']);

@@ -40,7 +40,7 @@ const CartView = () => {
       setLoading(false);
     }
   };
-  // Improved error handling for fetchOrderHistory
+
   const fetchOrderHistory = async () => {
     try {
       const response = await fetch("/api/order-history", {
@@ -57,9 +57,9 @@ const CartView = () => {
       setOrderHistory(data);
     } catch (err) {
       console.error("Error loading order history:", err);
-      // Set order history to empty array when there's an error
+   
       setOrderHistory([]);
-      // Don't show the error to users unless it's critical
+   
     } finally {
       setHistoryLoading(false);
     }
@@ -83,7 +83,7 @@ const CartView = () => {
         throw new Error(errorData.message || "Failed to update quantity");
       }
 
-      // Refresh cart after update
+    
       fetchCartItems();
       toast.success("Cart updated successfully");
     } catch (err) {
@@ -104,7 +104,7 @@ const CartView = () => {
         throw new Error("Failed to remove item from cart");
       }
 
-      // Refresh cart after removal
+
       fetchCartItems();
       toast.success("Item removed from cart");
     } catch (err) {
@@ -169,7 +169,7 @@ const CartView = () => {
     }
   };
 
-  // Group history items by order
+
   const groupedHistory = orderHistory.reduce((acc, item) => {
     if (!acc[item.order_id]) {
       acc[item.order_id] = {
@@ -190,11 +190,9 @@ const CartView = () => {
     return <div className="text-center p-6">Loading your cart...</div>;
   }
 
-  // const navigate = useNavigate();  // Initialize navigate function
 
-  // Define the custom click handler
   const handleBackClick = () => {
-    navigate('/client/dashboard');  // Navigate to client/dashboard
+    navigate('/client/dashboard');  
   };
 
   return (
@@ -202,7 +200,7 @@ const CartView = () => {
       <div className="max-w-6xl mx-auto">
         <button
           className="absolute text-black px-4 py-2 rounded-lg transition-transform duration-300 mt-[0px] ml-[0px] hover:scale-105"
-          onClick={handleBackClick}  // Custom click handler
+          onClick={handleBackClick} 
         > &larr; Back
         </button>
         <h1 className="text-3xl font-bold text-gray-800 mb-6 flex justify-center">
@@ -215,7 +213,7 @@ const CartView = () => {
           </div>
         )}
 
-        {/* Current Cart */}
+      
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
           <h2 className="text-xl font-bold text-gray-800 p-6 border-b">
             Current Cart
@@ -370,7 +368,7 @@ const CartView = () => {
           )}
         </div>
 
-        {/* Order History */}
+       
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <h2 className="text-xl font-bold text-gray-800 p-6 border-b">
             Your Previous Orders

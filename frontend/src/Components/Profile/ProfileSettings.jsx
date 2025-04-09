@@ -25,7 +25,7 @@ const ProfileSettings = () => {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    // Fetch user profile data
+    
     const fetchProfile = async () => {
       try {
         const response = await fetch("/api/profile", {
@@ -49,7 +49,7 @@ const ProfileSettings = () => {
             gender: profileData.gender || ""
           });
         } else {
-          // If profile doesn't exist yet, initialize with user data
+          
           setFormData(prev => ({
             ...prev,
             name: user?.name || "",
@@ -131,7 +131,7 @@ const ProfileSettings = () => {
         <div className="bg-white shadow-md rounded-lg p-6">
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Personal Information */}
+             
               <div className="md:col-span-2">
                 <h2 className="text-xl font-semibold border-b pb-2 mb-4">Personal Information</h2>
               </div>
@@ -226,7 +226,7 @@ const ProfileSettings = () => {
                 ></textarea>
               </div>
               
-              {/* Fitness Information */}
+              
               <div className="md:col-span-2 mt-4">
                 <h2 className="text-xl font-semibold border-b pb-2 mb-4">Fitness Information</h2>
               </div>
