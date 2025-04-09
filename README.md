@@ -1,69 +1,57 @@
-# Instructions de configuration de la base de données du projet
+Projet Laravel - Système de gestion scolaire
 
-## Instructions d'importation de la base de données
+Ce projet est une application web développée avec le framework Laravel pour la gestion des utilisateurs (administrateurs, professeurs, étudiants) d'un établissement scolaire.
 
-Ce projet nécessite une base de données MySQL pour fonctionner correctement. J'ai inclus la structure et le contenu de la base de données dans cette soumission pour garantir que le projet fonctionne sans configuration supplémentaire.
+📦 Contenu partagé (déjà installé)
+- Le dossier `vendor/` est inclus : les dépendances PHP sont déjà installées
+- Le dossier `node_modules/` est exclu (non nécessaire pour le partage)
 
-### Option 1 : Configuration automatique (Recommandée)
+🔧 Étapes d'installation POUR LES NOUVEAUX UTILISATEURS
 
-1. Placez tous les fichiers du projet dans votre répertoire de serveur web (par exemple, htdocs pour XAMPP, www pour WAMP)
-2. Accédez au projet dans votre navigateur (par exemple, http://localhost/nom-du-projet)
-3. Le script de configuration créera et remplira automatiquement la base de données
-4. Vous serez redirigé vers la page de connexion une fois la configuration terminée
+1. Pré-requis :
+- PHP >= 8.0
+- Composer (seulement si vendor/ manquant)
+- Serveur local (XAMPP/WAMP/MAMP)
+- MySQL/MariaDB
+- phpMyAdmin (optionnel)
 
-### Option 2 : Importation manuelle de la base de données
+2. Copier le projet :
+- Copiez l'intégralité du dossier du projet (y compris `vendor/`)
 
-Si la configuration automatique ne fonctionne pas, suivez ces étapes :
+3. Configurer l'environnement :
+- Créez un fichier `.env` à partir de `.env.example`
+- Modifiez ces paramètres :
 
-1. **Créer la base de données**
-   - Ouvrez phpMyAdmin (généralement à http://localhost/phpmyadmin)
-   - Cliquez sur "Nouvelle" dans la barre latérale gauche pour créer une nouvelle base de données
-   - Nommez la base de données `project_db` (ou utilisez le nom spécifié dans le fichier `config.php`)
-   - Cliquez sur "Créer"
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=scholify2
+DB_USERNAME=root
+DB_PASSWORD=
 
-2. **Importer le contenu de la base de données**
-   - Sélectionnez votre base de données nouvellement créée dans la barre latérale gauche
-   - Cliquez sur l'onglet "Importer" en haut
-   - Cliquez sur "Choisir un fichier" et sélectionnez le fichier `database.sql` inclus dans cette soumission
-   - Faites défiler vers le bas et cliquez sur "Exécuter" pour importer la structure et les données de la base de données
+4. Générer la clé d'application (OBLIGATOIRE) :
+php artisan key:generate
 
-3. **Vérifier la connexion à la base de données**
-   - Ouvrez le fichier `config.php` dans le répertoire racine du projet
-   - Assurez-vous que les paramètres de connexion à la base de données correspondent à votre environnement :
-     ```php
-     $dbHost = 'localhost';
-     $dbUser = 'root';  // Nom d'utilisateur par défaut pour XAMPP/WAMP
-     $dbPass = '';      // Mot de passe par défaut pour XAMPP/WAMP (vide)
-     $dbName = 'project_db';
-     ```
-   - Enregistrez les modifications si nécessaire
+5. Démarrer le serveur :
+php artisan serve
 
-## Identifiants de connexion par défaut
+⚡ Raccourci d'installation (si vendor/ est présent) :
+1. Copier le projet + créer .env
+2. php artisan key:generate
+3. php artisan serve
 
-Une fois la base de données configurée, vous pouvez accéder au système en utilisant :
+📁 Structure importante :
+- vendor/ : Dépendances PHP (ne pas supprimer)
+- .env : Configuration locale (à créer)
+- database/base_de_donnees.sql : Importez-la dans phpMyAdmin
 
-- **Nom d'utilisateur :** admin
-- **Mot de passe :** admin123
+👥 Comptes par défaut (si la DB est importée) :
+Admin : root / password : 
 
-## Dépannage
+📞 Support :
+Contactez : 0679992416 - mahdidamyr@gmail.com
 
-Si vous rencontrez des problèmes de connexion à la base de données :
-
-1. Vérifiez que votre serveur web (Apache) et les services MySQL sont en cours d'exécution
-2. Vérifiez que le nom de la base de données correspond à celui du fichier `config.php`
-3. Assurez-vous que l'utilisateur MySQL dispose des autorisations appropriées pour accéder à la base de données
-4. Vérifiez les messages d'erreur dans le journal d'erreurs du projet
-
-## Structure du projet
-
-- `/index.php` - Point d'entrée principal de l'application
-- `/config.php` - Paramètres de configuration de la base de données
-- `/database.sql` - Dump complet de la base de données avec structure et données
-- `/includes/` - Contient des fonctions d'aide et des composants
-- `/assets/` - Fichiers CSS, JavaScript et images
-
-## Prérequis
-
-- PHP 7.4 ou supérieur
-- MySQL 5.7 ou supérieur
-- Serveur web (Apache/Nginx)
+Notes :
+- Si vendor/ est absent, exécutez `composer install`
+- Ne partagez jamais votre fichier .env !
+- node_modules/ n'est pas nécessaire pour le fonctionnement de base
