@@ -1,57 +1,115 @@
-Projet Laravel - Système de gestion scolaire
+# Complete Libraries List - Scholify Project
 
-Ce projet est une application web développée avec le framework Laravel pour la gestion des utilisateurs (administrateurs, professeurs, étudiants) d'un établissement scolaire.
+## Backend Libraries (Laravel/PHP)
+*Note: Complete list would require composer.json file*
 
-📦 Contenu partagé (déjà installé)
-- Le dossier `vendor/` est inclus : les dépendances PHP sont déjà installées
-- Le dossier `node_modules/` est exclu (non nécessaire pour le partage)
+### Core Framework
+- **Laravel** - PHP web application framework
+- **PHP** >= 8.0 - Server-side scripting language
 
-🔧 Étapes d'installation POUR LES NOUVEAUX UTILISATEURS
+### Likely Backend Dependencies (Standard Laravel)
+- Illuminate packages (Laravel core components)
+- Symfony components
+- Monolog (logging)
+- SwiftMailer/Symfony Mailer
+- Carbon (date manipulation)
+- Doctrine DBAL
+- And other Composer dependencies in vendor/
 
-1. Pré-requis :
-- PHP >= 8.0
-- Composer (seulement si vendor/ manquant)
-- Serveur local (XAMPP/WAMP/MAMP)
-- MySQL/MariaDB
-- phpMyAdmin (optionnel)
+---
 
-2. Copier le projet :
-- Copiez l'intégralité du dossier du projet (y compris `vendor/`)
+##Frontend Libraries (React/JavaScript)
 
-3. Configurer l'environnement :
-- Créez un fichier `.env` à partir de `.env.example`
-- Modifiez ces paramètres :
+### Core Framework & Build Tools
+- **React** ^19.0.0 - JavaScript library for building user interfaces
+- **React DOM** ^19.0.0 - React package for working with the DOM
+- **Vite** ^6.2.0 - Frontend build tool and dev server
+- **@vitejs/plugin-react** ^4.3.4 - Vite plugin for React support
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=scholify2
-DB_USERNAME=root
-DB_PASSWORD=
+### Routing & Navigation
+- **react-router-dom** ^7.3.0 - Declarative routing for React
 
-4. Générer la clé d'application (OBLIGATOIRE) :
+### HTTP Client
+- **axios** ^1.8.3 - Promise-based HTTP client for API calls
+
+### UI Components & Interactions
+- **react-tabs** ^6.1.0 - Tab components for React
+- **swiper** ^11.2.5 - Touch slider/carousel component
+- **framer-motion** ^12.6.3 - Animation and gesture library
+
+### Notifications & Feedback
+- **react-toastify** ^11.0.5 - Toast notification library
+
+### Icons & Visual Elements
+- **react-icons** ^5.5.0 - Popular icon library for React
+- **boxicons** ^2.1.4 - Simple vector iconset
+- **remixicon** ^4.6.0 - Neutral-style system symbols
+
+### Animations & Effects
+- **scrollreveal** ^4.0.9 - JavaScript library for scroll animations
+
+### Styling & CSS
+- **Tailwind CSS** ^3.4.17 - Utility-first CSS framework
+- **PostCSS** ^8.5.3 - CSS post-processor
+- **Autoprefixer** ^10.4.21 - PostCSS plugin for vendor prefixes
+
+### Development Tools
+- **ESLint** ^9.21.0 - JavaScript linting utility
+- **@eslint/js** ^9.21.0 - ESLint JavaScript rules
+- **eslint-plugin-react-hooks** ^5.1.0 - ESLint rules for React Hooks
+- **eslint-plugin-react-refresh** ^0.4.19 - ESLint plugin for React Refresh
+- **globals** ^15.15.0 - Global identifiers for ESLint
+- **@types/react** ^19.0.10 - TypeScript definitions for React
+- **@types/react-dom** ^19.0.4 - TypeScript definitions for React DOM
+
+---
+
+## Database & Server
+- **MySQL/MariaDB** - Database management system
+- **phpMyAdmin** - Web-based MySQL administration tool (optional)
+
+---
+
+## Development Environment
+- **XAMPP/WAMP/MAMP** - Local development server stack
+- **Composer** - PHP dependency manager
+- **Node.js & npm** - JavaScript runtime and package manager
+
+---
+
+## Library Categories Summary
+
+### Frontend (React): 15 production dependencies
+- **UI/UX**: 7 libraries (icons, animations, components)
+- **Core**: 2 libraries (React, React DOM)
+- **Utilities**: 6 libraries (routing, HTTP, notifications, etc.)
+
+### Development: 12 dev dependencies
+- **Build Tools**: 2 libraries (Vite, plugins)
+- **Styling**: 3 libraries (Tailwind, PostCSS, Autoprefixer)
+- **Code Quality**: 7 libraries (ESLint and related plugins)
+
+### Backend: Laravel ecosystem
+- **Core**: Laravel framework with standard dependencies
+- **Database**: MySQL/MariaDB integration
+
+---
+
+## Quick Setup Commands
+
+### Frontend Dependencies
+```bash
+cd frontend
+npm install
+```
+
+### Backend Dependencies (if vendor/ missing)
+```bash
+composer install
+```
+
+### Environment Setup
+```bash
+cp .env.example .env
 php artisan key:generate
-
-5. Démarrer le serveur :
-php artisan serve
-
-⚡ Raccourci d'installation (si vendor/ est présent) :
-1. Copier le projet + créer .env
-2. php artisan key:generate
-3. php artisan serve
-
-📁 Structure importante :
-- vendor/ : Dépendances PHP (ne pas supprimer)
-- .env : Configuration locale (à créer)
-- database/base_de_donnees.sql : Importez-la dans phpMyAdmin
-
-👥 Comptes par défaut (si la DB est importée) :
-Admin : root / password : 
-
-📞 Support :
-Contactez : 0679992416 - mahdidamyr@gmail.com
-
-Notes :
-- Si vendor/ est absent, exécutez `composer install`
-- Ne partagez jamais votre fichier .env !
-- node_modules/ n'est pas nécessaire pour le fonctionnement de base
+```
